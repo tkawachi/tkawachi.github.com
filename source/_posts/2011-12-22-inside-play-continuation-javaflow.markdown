@@ -195,7 +195,7 @@ Continuation object を得てから Job などの完了後に再開している�
 ## java.lang.Error: Internal error が出るんですが…
 
 `await()` は code coverage module の [cobertura](http://www.playframework.org/modules/cobertura) と一緒に使っちゃダメです。
-両者共に bytecode を変更するのですが、秘孔を付くと起動時に妙な例外と共に落ちます([レポート済み](https://play.lighthouseapp.com/projects/57987/tickets/1189-continuationenhancer-causes-javalangerror-internal-error-with-cobertura))。v1.3 が修正 milestone とされていますがまだバグは健在のようです。
+両者共に bytecode を変更するのですが、秘孔を突くと起動時に妙な例外と共に落ちます([レポート済み](https://play.lighthouseapp.com/projects/57987/tickets/1189-continuationenhancer-causes-javalangerror-internal-error-with-cobertura))。v1.3 が修正 milestone とされていますがまだバグは健在のようです。
 
 他の bytecode 変換モジュールを使ってエラーが起きた場合にも、`ContinuationEnhancer` の存在を頭の隅で覚えておくと良いかもしれません。
 
