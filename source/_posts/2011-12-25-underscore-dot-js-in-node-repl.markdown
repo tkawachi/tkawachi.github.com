@@ -34,8 +34,9 @@ underscore.js の挙動を試そうと node をインタラクティブに起動
 > The special variable _ (underscore) contains the result of the last expression.
 
 気づいてしまえばなんてこと無いです。
+node の REPL (Read-Eval-Print-Loop) が最後の式の値を自動的に `_` に代入するとのこと。
 
-一つ解せないのは expression の評価値が undefined の場合には _ に保持されないっぽいこと。
+一つ解せないのは expression の評価値が undefined の場合には _ に代入されないこと。
 Node v0.4.7 で確認しました。最新版でどうなっているかは知りません。
 
     $ node
