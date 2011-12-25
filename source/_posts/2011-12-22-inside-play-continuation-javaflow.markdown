@@ -14,6 +14,7 @@ Play! 1.x 系 では version 1.2 から continuation (継続)が導入されま�
 Continuation の実装として [JavaFlow](http://commons.apache.org/sandbox/javaflow/) が使われています。
 JavaFlow の日本語記事はほとんど見当たらない様子ですので、 Play! の continuation 理解を深めるためにも、JavaFlow を触ってみたいと思います。
 
+<!-- more -->
 ## JavaFlow の入手
 
 [Downloadページ](http://commons.apache.org/sandbox/javaflow/downloads.html)
