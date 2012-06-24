@@ -41,4 +41,4 @@ US などの iTunes store からダウンロードできる [Spotify](http://www
 
 Mac 版 Spotify のブラウザっぽいものは CEF なのかな。
 
-Google Breakpad, Nu, MAObjCRuntime, KKGridView あたりはすぐ使うかも。用調査。
+Google Breakpad, Nu, MAObjCRuntime, KKGridView あたりはすぐ使うかも。要調査。
