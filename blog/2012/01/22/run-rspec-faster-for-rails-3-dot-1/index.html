@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Run rspec faster for Rails 3.1 - tkawachi Blog</title>
+  <meta name="author" content="KAWACHI Takashi">
+
+  
+  <meta name="description" content="個人プロジェクトで Rails 3.1 のアプリケーションを書いていたのだが、rake spec の
+実行が遅くてイライラしていた。
+1回の実行に 10 秒程度が掛かっていた。
+テスト実行は 0.5 ms 以下で終了していたので、残りの 9.5 s 以上は framework の開始 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">tkawachi Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tkawachi.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Run Rspec Faster for Rails 3.1</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-22T21:07:00+09:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>個人プロジェクトで Rails 3.1 のアプリケーションを書いていたのだが、<code>rake spec</code> の
+実行が遅くてイライラしていた。
+1回の実行に 10 秒程度が掛かっていた。
+テスト実行は 0.5 ms 以下で終了していたので、残りの 9.5 s 以上は framework の開始
+などに費やされていると想像される。</p>
+
+<p>この状態で皆が満足するはずが無いと思い、少し調べたところ
+<a href="http://spork.rubyforge.org/">spork</a> が求めるもののようだ。
+これはテスト用サーバを別プロセスで起動しておき、drb で rspec などによるテスト実行を
+キックできるもののようだ。</p>
+
+<p>また <a href="https://github.com/guard/guard-spork">guard-spork</a> を使えば、
+spork を用いたテストの実行をファイル書き換え時に行うことができるようだ。
+またテスト結果の通知を Growl で行うことも出来るようだ。</p>
+
+<!-- more -->
+
+
+<h2>How to setup</h2>
+
+<p>Growl でテスト結果を通知するための gem が幾つか存在するのだが、今日(2012/1/22)
+の時点では</p>
+
+<ul>
+<li><code>growl</code> は Growl v1.3 に対応していない</li>
+<li><a href="https://github.com/scottdavis/growl_notify"><code>growl_notify</code></a> は deprecated</li>
+<li><code>ruby_gntp</code> は Growl v1.3 とともに動いた</li>
+</ul>
+
+
+<p>というわけで <code>ruby_gntp</code> が良さそうだった。</p>
+
+<p>Gemfile の :development, :test 周りを以下のように変更する。</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;spork&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;guard&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;rb-fsevent&#39;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;ruby_gntp&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;guard-rspec&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;guard-spork&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;rspec-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 2.6&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;webrat&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下を実行。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle install
+</span><span class='line'><span class="nv">$ </span>spork --bootstrap
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>spec/spec_helper.rb</code> が spork によって書き換えられているので編集する。
+今までのコードを <code>Spork.prefork do … end</code> の中に入れてあげれば OK。
+<code>.rspec</code> を編集し、<code>--drb</code> という行を追加する。</p>
+
+<p>ここまでで spork が動作する。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>spork
+</span><span class='line'><span class="c"># 別のターミナルで</span>
+</span><span class='line'><span class="nv">$ </span>rspec .
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>続いて guard の設定。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>guard init spork
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>guard init rspec
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これで guard + spork が動作する。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>guard start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>あとはソースコードを書き換えたら自動でテストが実行され、結果が Growl で通知される。</p>
+
+<p>ようやくテストを書くことが出来る。(実は今まで書いてなかった笑)</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-22T21:07:00+09:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/rspec/'>Rspec</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/" title="Previous Post: Trying Micro Cloud Foundry 1.1.0 その2">&laquo; Trying Micro Cloud Foundry 1.1.0 その2</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/06/25/open-sources-used-by-spotify/" title="Next Post: Open sources used by spotify">Open sources used by spotify &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/">Sending git revision to Exceptional.io</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/25/open-sources-used-by-spotify/">Open sources used by spotify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/">Run rspec faster for Rails 3.1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/">Trying Micro Cloud Foundry 1.1.0 その2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/">Trying Micro Cloud Foundry 1.1.0</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - KAWACHI Takashi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tkawachiblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

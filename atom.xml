@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[tkawachi Blog]]></title>
+  <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.com/"/>
+  <updated>2012-09-13T20:56:17+09:00</updated>
+  <id>http://tkawachi.github.com/</id>
+  <author>
+    <name><![CDATA[KAWACHI Takashi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Sending git revision to Exceptional.io]]></title>
+    <link href="http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/"/>
+    <updated>2012-09-13T20:44:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io</id>
+    <content type="html"><![CDATA[<p><a href="https://www.exceptional.io">Exceptional.io</a> は Ruby アプリケーションで起きた例外を集約して管理するサービスだ。</p>
+
+<p>例外が起きた時に困るのが、それってどのバージョンで起きたバグ？ってことがわからないこと。
+日付が記録されているので調べればわからなくはないけど、面倒だよね。</p>
+
+<p>Exceptional.io では付加情報を付け加えて送ることができるので、以下の utility class をつかって git の revision 情報を取得し、それを送るようにしてみた。</p>
+
+<div><script src='https://gist.github.com/3713816.js?file='></script>
+<noscript><pre><code># coding: UTF-8
+class GitUtil
+  class &lt;&lt; self
+    # Current source code revision
+    def revision
+      rev = capistrano_revision
+      rev = command_revision unless rev
+      rev.try(:chomp)
+    end
+
+    private
+    def capistrano_revision
+      begin
+        revision_file = &quot;#{Rails.root}/REVISION&quot;
+        return File.read(revision_file) if File.exists? revision_file
+      rescue IOError =&gt; e
+        Rails.logger.info(e)
+      end
+      nil
+    end
+
+    def command_revision
+      rev = `cd '#{Rails.root}' &amp;&amp; git rev-list --max-count=1 HEAD`
+      $? == 0 ? rev : nil
+    end
+  end
+end</code></pre></noscript></div>
+
+
+<p>あとは</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Exceptional</span><span class="o">.</span><span class="n">context</span><span class="p">({</span><span class="n">git_revision</span><span class="p">:</span> <span class="no">GitUtil</span><span class="o">.</span><span class="n">revision</span><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>こんな感じのコードを例外送出前に呼んでおくと、付加情報と共に送られていく。</p>
+
+<p>これでどのコミットからどのコミットまで例外が起きてたかわかるようになった。便利便利。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Open sources used by spotify]]></title>
+    <link href="http://tkawachi.github.com/blog/2012/06/25/open-sources-used-by-spotify/"/>
+    <updated>2012-06-25T00:49:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2012/06/25/open-sources-used-by-spotify</id>
+    <content type="html"><![CDATA[<p>US などの iTunes store からダウンロードできる <a href="http://www.spotify.com/">Spotify</a> の iOS アプリの出来がとても良い。
+アプリ内に用意されている Lisence のページを見ていたら、利用している open source ソフトウェアの一覧が並んでいたので、ちゃんと出来てるアプリに使われているものはきっとちゃんとしているだろうということでメモしておく。</p>
+
+<ul>
+<li><a href="http://www.boost.org/">Boost</a></li>
+<li><a href="http://expat.sourceforge.net/">Expat</a></li>
+<li><a href="http://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible">FastDelegate</a> C++ の member function pointer に代わる何か？</li>
+<li><a href="http://sourceforge.net/projects/giflib/">giflib</a> GIF</li>
+<li><a href="http://libjpeg.sourceforge.net/">libjpeg</a> JPEG</li>
+<li><a href="http://www.libpng.org/pub/png/libpng.html">libpng</a> PNG</li>
+<li><a href="http://xiph.org/ogg/">libogg</a> Ogg</li>
+<li><a href="http://xiph.org/vorbis/">libvorbis</a> Vorbis</li>
+<li><a href="http://wss.co.uk/pinknoise/tremolo/">Tremolo</a> Tremolo is an ARM optimised version of the Tremor lib from xiph.org. For those that don&#8217;t know, the Tremor lib is an integer only library for doing Ogg Vorbis decompression.</li>
+<li><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html">Mersenne Twister</a> Mersenne Twister(以下MT)は、松本眞 ・西村拓士（アルファベット順）により1996年から1997年に渡って 開発された疑似乱数生成アルゴリズムです。</li>
+<li><a href="https://ccrma.stanford.edu/software/snd/">Snd</a> Snd is a sound editor. Spotify では resampling にコードを流量。</li>
+<li><a href="http://zlib.net/">zlib</a></li>
+<li><a href="http://nsis.sourceforge.net/Main_Page">NSIS</a> Windows のインストーラ作成システム。</li>
+<li><a href="http://sourceforge.net/projects/wtl/">Windows Template Library</a> Windows Template Library (WTL) is a C++ library for developing Windows applications and UI components. It extends ATL (Active Template Library) and provides a set of classes for controls, dialogs, frame windows, GDI objects, and more.</li>
+<li><a href="http://growl.info/">Growl</a></li>
+<li><a href="http://www.lua.org/">Lua</a></li>
+<li><a href="http://programming.nu/index">Nu</a> Nu is an interpreted object-oriented language. Its syntax comes from Lisp, but Nu is semantically closer to Ruby than Lisp. Nu is implemented in Objective-C and is designed to take full advantange of the Objective-C runtime and the many mature class libraries written in Objective-C.</li>
+<li><a href="http://stig.github.com/json-framework/">SBJSON</a></li>
+<li><a href="http://allseeing-i.com/ASIHTTPRequest/">ASIHTTPRequest</a></li>
+<li><a href="https://github.com/mikeash/MAObjCRuntime">MAObjCRuntime</a> MAObjCRuntime is an ObjC wrapper around the Objective-C runtime APIs. If that&#8217;s confusing, it provides a nice object-oriented interface around (some of) the C functions in /usr/include/objc.</li>
+<li><a href="http://code.google.com/p/google-breakpad/">Google Breakpad</a> An open-source multi-platform crash reporting system</li>
+<li><a href="http://zendold.lojcomm.com.br/icarousel/">iCarousel</a> iCarousel is an open source (free) javascript tool for creating carousel like widgets.</li>
+<li><a href="https://github.com/jdg/MBProgressHUD">MBProgressHUD</a> MBProgressHUD is an iOS drop-in class that displays a translucent HUD with an indicator and/or labels while work is being done in a background thread</li>
+<li><a href="https://github.com/kolinkrewinkel/KKGridView">KKGridView</a> High-performance iOS grid view (MIT license). iOS6 では iOS SDK に類似の view controller を入れたので不要に。</li>
+<li><a href="https://github.com/robbiehanson/KissXML">KissXML</a> KissXML provides a drop-in replacement for Apple&#8217;s NSXML class culster in environments without NSXML (e.g. iOS).</li>
+<li><a href="https://github.com/booyah/protobuf-objc">ProtobufObjc</a></li>
+<li><a href="https://github.com/facebook/facebook-ios-sdk">Facebook</a></li>
+<li><a href="http://www.chromium.org/">Chronium</a></li>
+<li><a href="http://code.google.com/p/chromiumembedded/">CEF</a> The Chromium Embedded Framework (CEF) is an open source project founded by Marshall Greenblatt in 2008 to develop a Web browser control based on the Google Chromium project. CEF currently supports a range of programming languages and operating systems and can be easily integrated into both new and existing applications.</li>
+</ul>
+
+
+<p>Mac 版 Spotify のブラウザっぽいものは CEF なのかな。</p>
+
+<p>Google Breakpad, Nu, MAObjCRuntime, KKGridView あたりはすぐ使うかも。要調査。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Run rspec faster for Rails 3.1]]></title>
+    <link href="http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/"/>
+    <updated>2012-01-22T21:07:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1</id>
+    <content type="html"><![CDATA[<p>個人プロジェクトで Rails 3.1 のアプリケーションを書いていたのだが、<code>rake spec</code> の
+実行が遅くてイライラしていた。
+1回の実行に 10 秒程度が掛かっていた。
+テスト実行は 0.5 ms 以下で終了していたので、残りの 9.5 s 以上は framework の開始
+などに費やされていると想像される。</p>
+
+<p>この状態で皆が満足するはずが無いと思い、少し調べたところ
+<a href="http://spork.rubyforge.org/">spork</a> が求めるもののようだ。
+これはテスト用サーバを別プロセスで起動しておき、drb で rspec などによるテスト実行を
+キックできるもののようだ。</p>
+
+<p>また <a href="https://github.com/guard/guard-spork">guard-spork</a> を使えば、
+spork を用いたテストの実行をファイル書き換え時に行うことができるようだ。
+またテスト結果の通知を Growl で行うことも出来るようだ。</p>
+
+<!-- more -->
+
+
+<h2>How to setup</h2>
+
+<p>Growl でテスト結果を通知するための gem が幾つか存在するのだが、今日(2012/1/22)
+の時点では</p>
+
+<ul>
+<li><code>growl</code> は Growl v1.3 に対応していない</li>
+<li><a href="https://github.com/scottdavis/growl_notify"><code>growl_notify</code></a> は deprecated</li>
+<li><code>ruby_gntp</code> は Growl v1.3 とともに動いた</li>
+</ul>
+
+
+<p>というわけで <code>ruby_gntp</code> が良さそうだった。</p>
+
+<p>Gemfile の :development, :test 周りを以下のように変更する。</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;spork&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;guard&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;rb-fsevent&#39;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;ruby_gntp&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;guard-rspec&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;guard-spork&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;rspec-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 2.6&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;webrat&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>以下を実行。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle install
+</span><span class='line'><span class="nv">$ </span>spork --bootstrap
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>spec/spec_helper.rb</code> が spork によって書き換えられているので編集する。
+今までのコードを <code>Spork.prefork do … end</code> の中に入れてあげれば OK。
+<code>.rspec</code> を編集し、<code>--drb</code> という行を追加する。</p>
+
+<p>ここまでで spork が動作する。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>spork
+</span><span class='line'><span class="c"># 別のターミナルで</span>
+</span><span class='line'><span class="nv">$ </span>rspec .
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>続いて guard の設定。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>guard init spork
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>guard init rspec
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これで guard + spork が動作する。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>guard start
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>あとはソースコードを書き換えたら自動でテストが実行され、結果が Growl で通知される。</p>
+
+<p>ようやくテストを書くことが出来る。(実は今まで書いてなかった笑)</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Trying Micro Cloud Foundry 1.1.0 その2]]></title>
+    <link href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/"/>
+    <updated>2012-01-03T19:31:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2</id>
+    <content type="html"><![CDATA[<p><a href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/">前回</a>
+は残念ながらインストールの途中で止まってしまいましたが、解決方法がわかりました。</p>
+
+<p>デフォルトで Bridge network になっているのですが、私の環境
+(VMware 4.1.1, Mac OS X Lion, WiFi)では VM で network が利用不可のようです。
+昔から無線で Bridge networking はハマることが多いです。
+以下の手順で回避できました。
+(
+<a href="http://support.cloudfoundry.com/entries/20382148-unable-to-cloudfoundry-com">ここ</a>
+や
+<a href="http://support.cloudfoundry.com/entries/20387172-unable-to-contact-cloudfoundry-com-to-redeem-configuration-token">ここ</a>
+を参考にしました。
+)</p>
+
+<!-- more -->
+
+
+<ol>
+<li>立ち上げて password 設定、network 設定で DHCP を指定、proxy を none に指定</li>
+<li>ここで Alt+F2 を押して別コンソールに移動。<code>root</code> ユーザでログイン。パスワードは前ステップで指定したもの。</li>
+<li>VMware の設定で Network Adapter を NAT に設定。</li>
+<li><code>/etc/init.d/networking restart</code> を実行。IP が取れることを確認。</li>
+<li>Alt+F1 を押して元のコンソールに移動。続きを実行。</li>
+</ol>
+
+
+<p>今度は数分で完了しました。</p>
+
+<p>Network につながらない場合のメッセージを見て、つながらなくても動くと理解しましたが、そうではないようです。</p>
+
+<p>続いては Host から <code>vmc</code> コマンドです。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vmc target http://api.kawachi.cloudfoundry.me
+</span><span class='line'>Successfully targeted to [http://api.kawachi.cloudfoundry.me]
+</span><span class='line'>
+</span><span class='line'>$ vmc register
+</span><span class='line'>Email: hoho@fufu.com
+</span><span class='line'>Password: ******
+</span><span class='line'>Verify Password: ******
+</span><span class='line'>Creating New User: OK</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>api.kawachi.cloudfoundry.me</code> は <code>kawachi.cloudfoundry.me</code> の CNAME で、
+<code>kawachi.cloudfoundry.me</code> は VM が持つ IP アドレスになっているようです。</p>
+
+<p>あとは <code>cloudfoundry.com</code> と同様に利用出来るとのこと。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Trying Micro Cloud Foundry 1.1.0]]></title>
+    <link href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/"/>
+    <updated>2012-01-03T14:19:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0</id>
+    <content type="html"><![CDATA[<p>前々から気になっていた Micro Cloud Foundry を試してみます。
+Cloud Foundry は VMware 社が開発している open source の PaaS です。
+Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめたものです。</p>
+
+<p>参考にしたのは <a href="http://support.cloudfoundry.com/entries/20316811-micro-cloud-foundry-installation-setup">Micro Cloud Foundry Installation &amp; Setup</a>。</p>
+
+<!-- more -->
+
+
+<p>まず仮想マシンを <a href="http://www.cloudfoundry.com/">Clound Foundry のページ</a>
+からダウンロードします。
+1GBあるので結構時間がかかります。
+BitTorrent で配布してくれとリクエストをだしておきました。</p>
+
+<p>ダウンロード後、展開して <code>micro.vmx</code> を  VMware Fusion 4.1.1 で開こうとするとエラーになる。
+どうやら <code>.vmx</code> が Steinberg VST Mixer Settings に関連付けられていることが問題のようだ。
+以前 Cubase というアプリをインストールしたが、それが干渉している模様。
+<a href="http://communities.vmware.com/thread/239695">VMware のコミュニティページ</a>
+を参考にして <code>micro/</code> ディレクトリを <code>micro.vmwarevm/</code> に改名して
+ダブルクリックすることで起動できた。</p>
+
+<p>あとは
+<a href="http://support.cloudfoundry.com/entries/20316811-micro-cloud-foundry-installation-setup">参考ページ</a>
+通り、、と行きたいところですが問題発生。</p>
+
+<p><code>Enter Micro Cloud Foundry configuration token:</code> と聞かれたところで
+自分の token を入力しても
+<code>Unable to contact cloudfoundry.com to redeem configuration token</code>
+というエラーが表示される。
+ネットワークの設定がうまくいっていないのか、はたまた <code>cloudfoundry.com</code> が
+ダウンしているのか。
+<code>Configure vcap.me instead?</code> と聞かれたのでとりあえず y した。</p>
+
+<pre><code>Micro Cloud Foundry is now bound to localhost (127.0.0.1)
+You must use ssh tunneling to access it
+Press return to continue 
+</code></pre>
+
+<p>と表示された。return を押して続き。</p>
+
+<p>下の画面のとおり「5分かかるよ」と言われた。</p>
+
+<p><img src="https://lh3.googleusercontent.com/-ScF3kpSyiJ0/TwKwn8CpQiI/AAAAAAAAGSM/n1Lcx5EFHw0/s800/Screen%252520Shot%2525202012-01-03%252520at%25252016.30.13.png"></p>
+
+<p>がしかし、待っても待っても返ってこない。1時間以上は待ったが。
+どうしたことだろう？</p>
+
+<p>とりあえず今回はここまで。次回はなんとか動かしたい。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Compile ruby 1.9.3 on Mac OS X Lion using RVM]]></title>
+    <link href="http://tkawachi.github.com/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/"/>
+    <updated>2011-12-27T23:52:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion</id>
+    <content type="html"><![CDATA[<p>仕事で Ruby を使うことになったので、家の Lion ちゃんにも ruby インストール
+しとこうと思ったらエラーになる。
+rvm の version は 1.10.0。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm install 1.9.3
+</span><span class='line'>Installing Ruby from source to: /Users/kawachi/.rvm/rubies/ruby-1.9.3-p0, this may take a while depending on your cpu(s)...
+</span><span class='line'>
+</span><span class='line'>ruby-1.9.3-p0 - #fetching
+</span><span class='line'>ruby-1.9.3-p0 - #extracted to /Users/kawachi/.rvm/src/ruby-1.9.3-p0 (already extracted)
+</span><span class='line'>Fetching yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/archives
+</span><span class='line'>Extracting yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/src
+</span><span class='line'>Configuring yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
+</span><span class='line'>Compiling yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
+</span><span class='line'>Installing yaml to /Users/kawachi/.rvm/usr
+</span><span class='line'>ruby-1.9.3-p0 - #configuring
+</span><span class='line'>ERROR: Error running ' ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr ', please read /Users/kawachi/.rvm/log/ruby-1.9.3-p0/configure.log
+</span><span class='line'>ERROR: There has been an error while running configure. Halting the installation.</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>~/.rvm/log/ruby-1.9.3-p0/configure.log</code> はこんな感じ。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[2011-12-27 23:50:52]  ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr 
+</span><span class='line'>configure: WARNING: unrecognized options: --with-libyaml-dir
+</span><span class='line'>checking build system type... x86_64-apple-darwin11.2.0
+</span><span class='line'>checking host system type... x86_64-apple-darwin11.2.0
+</span><span class='line'>checking target system type... x86_64-apple-darwin11.2.0
+</span><span class='line'>checking whether the C compiler works... no
+</span><span class='line'>configure: error: in `/Users/kawachi/.rvm/src/ruby-1.9.3-p0':
+</span><span class='line'>configure: error: C compiler cannot create executablesSee `config.log' for more details</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>CC=gcc</code> を指定すると少し変わる。</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ CC=gcc rvm install 1.9.3
+</span><span class='line'>ERROR: The provided CC(gcc) is LLVM based, it is not yet fully supported by ruby and gems, please read `rvm requirements`.</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>rvm requirements</code> を読むといろいろ書いてある。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  Notes for Darwin ( Mac OS X )
+</span><span class='line'>    For Snow Leopard: Xcode Version 3.2.1 (1613) or later, such as 3.2.6 or Xcode 4.1.
+</span><span class='line'>    [ Please note that Xcode 3.x will *not* work on OS X Lion. The 'cross-over' is Xcode 4.1. ]
+</span><span class='line'>
+</span><span class='line'>    You should download the Xcode tools from developer.apple.com, since the Snow Leopard dvd install contained bugs.
+</span><span class='line'>    You can find Xcode 4.1 for OS X Lion at:
+</span><span class='line'>    https://developer.apple.com/downloads/download.action?path=Developer_Tools/xcode_4.1_for_lion/xcode_4.1_for_lion.dmg
+</span><span class='line'>
+</span><span class='line'>    ** Lion Users: Xcode Version 4.2.x for OS X Lion works only for ruby 1.9.3-p0 (or higher).
+</span><span class='line'>                   It currently fails to build several other rubies and gems, as well as several Homebrew and
+</span><span class='line'>                   Macports packages. Xcode Version 4.1 (4B110) works.
+</span><span class='line'>    ** NOTE: Currently, Node.js is having issues building with osx-gcc-installer. This is _not_ an RVM issue. This is
+</span><span class='line'>       because Node.js depends on the Carbon headers. ox-gcc-installer does not install these to the system.
+</span><span class='line'>       This issue only affects users using osx-gcc-installer, and not Xcode. The only fix is to install Xcode over osx-gcc-installer.
+</span><span class='line'>
+</span><span class='line'>    For MacRuby: Install LLVM first.
+</span><span class='line'>    For JRuby:  Install the JDK. See http://developer.apple.com/java/download/  # Current Java version 1.6.0_26
+</span><span class='line'>    For IronRuby: Install Mono &gt;= 2.6
+</span><span class='line'>      For Ruby 1.9.3: Install libksba # If using Homebrew, 'brew install libksba'</span></code></pre></td></tr></table></div></figure>
+
+
+<p>なんかいろいろ書いてある。
+自分の環境 (Lion, Xcode 4.2.1) に関連しそうなのは、</p>
+
+<ul>
+<li>Lion で Xcode 4.1 だとうまくいく</li>
+<li>Lion の Xcode 4.2 でコンパイルできるのは ruby 1.9.3-p0 とそれ以降</li>
+<li>Ruby 1.9.3 をインストールする前に libksba をインストールせよ</li>
+</ul>
+
+
+<p>たしかに Xcode 4.2 なので LLVM しかないけど、
+ruby 1.9.3-p0 はコンパイルできるんじゃないの？
+RVM で止められてる気がする。。。</p>
+
+<p><code>~/.rvm/scripts/functions/build</code> を参照すると、
+<code>CC</code> 環境変数が存在するときは <code>--version</code> 付きで実行して LLVM だったら <code>exit 1</code> してる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>--- .rvm/scripts/functions/build.orig   2011-12-28 00:29:10.000000000 +0900
+</span><span class='line'>+++ .rvm/scripts/functions/build        2011-12-28 00:29:32.000000000 +0900
+</span><span class='line'>@@ -29,7 +29,7 @@
+</span><span class='line'>       else
+</span><span class='line'>         rvm_error "The autodetected CC(${CC:-}) is LLVM based, it is not yet fully supported by ruby and gems, please read \`rvm requirements\`, and set CC=/path/to/gcc ."
+</span><span class='line'>       fi
+</span><span class='line'>-      exit 1
+</span><span class='line'>+      #exit 1
+</span><span class='line'>     fi
+</span><span class='line'> 
+</span><span class='line'>   fi</span></code></pre></td></tr></table></div></figure>
+
+
+<p>とりあえず上記のとおりコメントアウトしてみたら
+<code>$ CC=gcc rvm install 1.9.3</code> で compile できた。</p>
+
+<p>正しいやり方でないような気はするけど、まいっか。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[underscore.js in node REPL]]></title>
+    <link href="http://tkawachi.github.com/blog/2011/12/25/underscore-dot-js-in-node-repl/"/>
+    <updated>2011-12-25T01:04:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2011/12/25/underscore-dot-js-in-node-repl</id>
+    <content type="html"><![CDATA[<p>underscore.js の挙動を試そうと node をインタラクティブに起動して以下のように試したところ <code>_</code> が配列で置き換えられてしまう。</p>
+
+<pre><code>$ node
+&gt; var _ = require('underscore');
+&gt; _([1,2,3,2,1]).uniq();
+[ 1, 2, 3 ]
+&gt; _
+[ 1, 2, 3 ]
+</code></pre>
+
+<p>なぜ？どうして？
+しばらく悩んじゃいました。</p>
+
+<!-- more -->
+
+
+<p>あれこれやっているうちに、以下のように console.log() で結果をだすと問題ないことがわかった。</p>
+
+<pre><code>$ node
+&gt; var _ = require('underscore');
+&gt; console.log(_([1,2,3,2,1]).uniq());
+[ 1, 2, 3 ]
+&gt; _
+{ [Function]
+  _: [Circular],
+  VERSION: '1.2.3',
+(略)
+</code></pre>
+
+<p>正解は<a href="http://nodejs.org/docs/latest/api/repl.html#rEPL_Features">これ</a>！</p>
+
+<blockquote><p>The special variable _ (underscore) contains the result of the last expression.</p></blockquote>
+
+<p>気づいてしまえばなんてこと無いです。
+node の REPL (Read-Eval-Print-Loop) が最後の式の値を自動的に <code>_</code> に代入するとのこと。</p>
+
+<p>一つ解せないのは expression の評価値が undefined の場合には _ に代入されないこと。
+Node v0.4.7 で確認しました。最新版でどうなっているかは知りません。</p>
+
+<pre><code>$ node
+&gt; 1
+1
+&gt; _
+1
+&gt; undefined
+&gt; _
+1
+</code></pre>
+
+<p>まあこの挙動のおかげで <code>console.log()</code> で <code>_</code> が置き換えられなかったわけですけどね。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[.インストール]]></title>
+    <link href="http://tkawachi.github.com/blog/2011/12/24/dotinstall/"/>
+    <updated>2011-12-24T15:48:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2011/12/24/dotinstall</id>
+    <content type="html"><![CDATA[<p><a href="http://dotinstall.com/">.インストール</a>というサイトを同僚から教えてもらった。
+百式の<a href="https://twitter.com/#!/taguchi">@taguchi</a>さんが運営しているらしい。
+プログラムが3分でマスターできるサイトとあっては登録せざるを得ない。</p>
+
+<p>レッスンは PHP, MySQL, JavaScript, CSS, JQuery などの各テーマごとに 1回3分の動画、10回前後で構成される。</p>
+
+<p>実際にいくつか動画を楽しんだ。3分というのは気軽に見れる分、集中してみるには少し短い気もする。とにかく短時間なので各テーマの雰囲気をつかむのにはもってこいだ。
+「HTML5で作る「シンプルメモ帳」」全8回を全て見たが30分もかかっていない。</p>
+
+<p>今は内容が少ないがこれから充実していくことを期待しています。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Inside Play! continuation -- JavaFlow]]></title>
+    <link href="http://tkawachi.github.com/blog/2011/12/22/inside-play-continuation-javaflow/"/>
+    <updated>2011-12-22T21:47:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2011/12/22/inside-play-continuation-javaflow</id>
+    <content type="html"><![CDATA[<p>Play! 1.x 系 では version 1.2 から continuation (継続)が導入されました。
+これを使ってController処理を一時中断、終わったら再開して応答を返す、なんてことをしているみたいです。
+これによって、HTTP処理スレッドは他のリクエストの処理にかかることができ、不要な待ち時間を少なくすることができるようです。
+興味深いですね。</p>
+
+<p>Continuation の実装として <a href="http://commons.apache.org/sandbox/javaflow/">JavaFlow</a> が使われています。
+JavaFlow の日本語記事はほとんど見当たらない様子ですので、 Play! の continuation 理解を深めるためにも、JavaFlow を触ってみたいと思います。</p>
+
+<!-- more -->
+
+
+<h2>JavaFlow の入手</h2>
+
+<p><a href="http://commons.apache.org/sandbox/javaflow/downloads.html">Downloadページ</a>
+を見てみると、現時点でリリース版は無いことがわかります。(なんと！)
+「初版もリリースされていないライブラリを使っていたのか」と思う気持ちを押さえて <code>svn co</code> しましょう。</p>
+
+<pre><code>$ svn co http://svn.apache.org/repos/asf/commons/sandbox/javaflow/trunk/ javaflow
+</code></pre>
+
+<p><code>pom.xml</code> が含まれているので Maven project ですね。依存関係を全て含んだ .jar を作りたかったので
+<a href="http://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven">ここ</a>
+を参考にして pom.xml を書き換えて <code>mvn</code> を実行しました。</p>
+
+<pre><code>$ svn diff pom.xmlIndex: pom.xml
+===================================================================
+--- pom.xml     (revision 1221696)
++++ pom.xml     (working copy)
+@@ -128,6 +128,14 @@
+
+   &lt;build&gt;
+     &lt;plugins&gt;
++      &lt;plugin&gt;
++        &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
++        &lt;configuration&gt;
++          &lt;descriptorRefs&gt;
++                &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
++          &lt;/descriptorRefs&gt;
++        &lt;/configuration&gt;
++      &lt;/plugin&gt;
+       &lt;plugin&gt;     
+         &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+         &lt;configuration&gt;
+
+$ mvn package assembly:single
+</code></pre>
+
+<p><code>target/commons-javaflow-1.0-SNAPSHOT-jar-with-dependencies.jar</code> が生成されました。</p>
+
+<h2>JavaFlow を使う2つの方法</h2>
+
+<p>JavaFlow を使って continuation を実行するには bytecode を enhance する必要があります。これは推測ですが、Call stack を保存・復元する必要があり、Java に用意されている言語機能ではそれが実現不能だからではないでしょうか。</p>
+
+<p>JavaFlow のドキュメントによると、2つの方法で bytecode を enhance できるようです。</p>
+
+<ul>
+<li><a href="http://commons.apache.org/sandbox/javaflow/antTask.html">JavaFlow の ant task</a> を使ってコンパイル時に enhance する</li>
+<li><code>org.apache.commons.javaflow.ContinuationClassLoader</code> を使って class を load する。</li>
+</ul>
+
+
+<p>Play! では後者に近い方法を利用しています。
+<a href="https://github.com/playframework/play/blob/master/framework/src/play/classloading/enhancers/ContinuationEnhancer.java"><code>play.classloading.enhancers.ContinuationEnhancer</code></a> が JavaFlow  の <code>ContinuationClassLoader</code> と同じようなことをしています。
+(Play! には JavaFlow 及び依存ライブラリの .jar が含まれているのですが、ant task も ContinuationClassLoader も何故か .jar 中に存在しなかったため、ソースからコンパイルしたのでした。)</p>
+
+<p>今回は ant task を使ってみようと思います。</p>
+
+<h2>Sample continuation</h2>
+
+<p>ここから <a href="http://commons.apache.org/sandbox/javaflow/tutorial.html">JavaFlow の tutorial</a> 相当のコードを動かしてみます。
+compile できるようになるまで案外苦労しました。</p>
+
+<p><code>build.xml</code> はこんな感じ。</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project name="JavaFlowTest" default="run"&gt;
+
+  &lt;!-- javaflow の jar file の位置に応じて変更してください --&gt;
+  &lt;property name="javaflow-jar" value="lib/commons-javaflow-1.0-SNAPSHOT-jar-with-dependencies.jar" /&gt;
+
+  &lt;taskdef name="javaflow"
+    classname="org.apache.commons.javaflow.ant.AntRewriteTask"&gt;
+    &lt;classpath&gt;
+      &lt;path location="${javaflow-jar}" /&gt;
+    &lt;/classpath&gt;
+  &lt;/taskdef&gt;
+
+  &lt;target name="compile" depends="clean"&gt;
+    &lt;!--
+    複数回 javaflow task で bytecode 変換しようとするとエラーになるようなので
+    depends="clean" しておく。
+    --&gt;
+    &lt;mkdir dir="build/classes"/&gt;
+    &lt;javac srcdir="src" destdir="build/classes" classpath="${javaflow-jar}"
+      includeantruntime="false" /&gt;
+    &lt;javaflow srcdir="build/classes" destdir="build/classes"&gt;
+      &lt;include name="cont/**/*.class" /&gt;
+    &lt;/javaflow&gt;
+  &lt;/target&gt;
+
+  &lt;target name="run" depends="compile"&gt;
+    &lt;java fork="true" classname="Main"&gt;
+      &lt;classpath&gt;
+        &lt;path location="${javaflow-jar}" /&gt;
+        &lt;path location="build/classes" /&gt;
+      &lt;/classpath&gt;
+    &lt;/java&gt;
+  &lt;/target&gt;
+
+  &lt;target name="clean"&gt;
+    &lt;delete dir="build" /&gt;
+  &lt;/target&gt;
+
+&lt;/project&gt;
+</code></pre>
+
+<p><a href="http://commons.apache.org/sandbox/javaflow/antTask.html">JavaFlow のドキュメント</a>
+には <code>&lt;javaflow /&gt;</code> task の attribute は srcdir および dstdir と書いてあるが、そのまま実行するとエラーとなった。dstdir は destdir が正しいようです。後ほどバグレポートしておこう。</p>
+
+<p><code>src/cont/MyRunnable.java</code> は 0 から 9 までを印字します。ただし1回ループを回るごとに <code>Continuation.suspend()</code> します。</p>
+
+<pre><code>package cont;
+import org.apache.commons.javaflow.Continuation;
+
+public class MyRunnable implements Runnable {
+  public void run() {
+    System.out.println("started!");
+    for( int i=0; i&lt;10; i++ )
+      echo(i);
+  }
+  private void echo(int x) {
+    System.out.println(x);
+    Continuation.suspend();
+  }
+}
+</code></pre>
+
+<p><code>src/Main.java</code> は <code>cont.MyRunnable</code> を <code>Continuation</code> として実行する。ただし5回実行した後の状態を取っておき、最後にもう一度実行しています。</p>
+
+<pre><code>import org.apache.commons.javaflow.Continuation;
+import cont.MyRunnable;
+
+public class Main {
+  public static void main(String[] args) {
+    Continuation beginContinuation = Continuation.startSuspendedWith(new MyRunnable());
+    Continuation c = beginContinuation;
+    System.out.println("Loop 5 times");
+    for (int i = 0; i &lt; 5; i++) {
+      c = Continuation.continueWith(c);
+    }
+    Continuation fifthContinuation = c;
+    System.out.println("Run the rest");
+    while (c != null) {
+      c = Continuation.continueWith(c);
+    }
+    System.out.println("Run from fifthContinuation again!");
+    c = fifthContinuation;
+    while (c != null) {
+      c = Continuation.continueWith(c);
+    }
+  }
+}
+</code></pre>
+
+<p>実行結果はこうなりました。</p>
+
+<pre><code>$ ant
+…省略…
+run: 
+     [java] Loop 5 times
+     [java] started!
+     [java] 0
+     [java] 1
+     [java] 2
+     [java] 3
+     [java] 4
+     [java] Run the rest
+     [java] 5
+     [java] 6
+     [java] 7
+     [java] 8
+     [java] 9
+     [java] Run from fifthContinuation again!
+     [java] 5
+     [java] 6
+     [java] 7
+     [java] 8
+     [java] 9
+
+BUILD SUCCESSFUL
+Total time: 2 seconds
+</code></pre>
+
+<p>5回回した時点の Continuation オブジェクトをとっておいて後から好きなときに実行出来ることがわかります。</p>
+
+<p>Play! では <code>await()</code> 実行時に <code>Continuation.suspend()</code> を呼び出しています。
+Continuation object を得てから Job などの完了後に再開しているのでしょう。</p>
+
+<h2>java.lang.Error: Internal error が出るんですが…</h2>
+
+<p><code>await()</code> は code coverage module の <a href="http://www.playframework.org/modules/cobertura">cobertura</a> と一緒に使っちゃダメです。
+両者共に bytecode を変更するのですが、秘孔を突くと起動時に妙な例外と共に落ちます(<a href="https://play.lighthouseapp.com/projects/57987/tickets/1189-continuationenhancer-causes-javalangerror-internal-error-with-cobertura">レポート済み</a>)。v1.3 が修正 milestone とされていますがまだバグは健在のようです。</p>
+
+<p>他の bytecode 変換モジュールを使ってエラーが起きた場合にも、<code>ContinuationEnhancer</code> の存在を頭の隅で覚えておくと良いかもしれません。</p>
+
+<h2>明日は</h2>
+
+<p><a href="https://twitter.com/#!/i2key">@i2key</a> さんです。お楽しみに！</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Node.js | tkawachi Blog]]></title>
+  <link href="http://tkawachi.github.com/blog/categories/node-js/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.com/"/>
+  <updated>2012-09-13T20:56:17+09:00</updated>
+  <id>http://tkawachi.github.com/</id>
+  <author>
+    <name><![CDATA[KAWACHI Takashi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[underscore.js in node REPL]]></title>
+    <link href="http://tkawachi.github.com/blog/2011/12/25/underscore-dot-js-in-node-repl/"/>
+    <updated>2011-12-25T01:04:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2011/12/25/underscore-dot-js-in-node-repl</id>
+    <content type="html"><![CDATA[<p>underscore.js の挙動を試そうと node をインタラクティブに起動して以下のように試したところ <code>_</code> が配列で置き換えられてしまう。</p>
+
+<pre><code>$ node
+&gt; var _ = require('underscore');
+&gt; _([1,2,3,2,1]).uniq();
+[ 1, 2, 3 ]
+&gt; _
+[ 1, 2, 3 ]
+</code></pre>
+
+<p>なぜ？どうして？
+しばらく悩んじゃいました。</p>
+
+<!-- more -->
+
+
+<p>あれこれやっているうちに、以下のように console.log() で結果をだすと問題ないことがわかった。</p>
+
+<pre><code>$ node
+&gt; var _ = require('underscore');
+&gt; console.log(_([1,2,3,2,1]).uniq());
+[ 1, 2, 3 ]
+&gt; _
+{ [Function]
+  _: [Circular],
+  VERSION: '1.2.3',
+(略)
+</code></pre>
+
+<p>正解は<a href="http://nodejs.org/docs/latest/api/repl.html#rEPL_Features">これ</a>！</p>
+
+<blockquote><p>The special variable _ (underscore) contains the result of the last expression.</p></blockquote>
+
+<p>気づいてしまえばなんてこと無いです。
+node の REPL (Read-Eval-Print-Loop) が最後の式の値を自動的に <code>_</code> に代入するとのこと。</p>
+
+<p>一つ解せないのは expression の評価値が undefined の場合には _ に代入されないこと。
+Node v0.4.7 で確認しました。最新版でどうなっているかは知りません。</p>
+
+<pre><code>$ node
+&gt; 1
+1
+&gt; _
+1
+&gt; undefined
+&gt; _
+1
+</code></pre>
+
+<p>まあこの挙動のおかげで <code>console.log()</code> で <code>_</code> が置き換えられなかったわけですけどね。</p>
+]]></content>
+  </entry>
+  
+</feed>

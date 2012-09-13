@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Rspec | tkawachi Blog]]></title>
+  <link href="http://tkawachi.github.com/blog/categories/rspec/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.com/"/>
+  <updated>2012-09-13T20:56:17+09:00</updated>
+  <id>http://tkawachi.github.com/</id>
+  <author>
+    <name><![CDATA[KAWACHI Takashi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Run rspec faster for Rails 3.1]]></title>
+    <link href="http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/"/>
+    <updated>2012-01-22T21:07:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1</id>
+    <content type="html"><![CDATA[<p>個人プロジェクトで Rails 3.1 のアプリケーションを書いていたのだが、<code>rake spec</code> の
+実行が遅くてイライラしていた。
+1回の実行に 10 秒程度が掛かっていた。
+テスト実行は 0.5 ms 以下で終了していたので、残りの 9.5 s 以上は framework の開始
+などに費やされていると想像される。</p>
+
+<p>この状態で皆が満足するはずが無いと思い、少し調べたところ
+<a href="http://spork.rubyforge.org/">spork</a> が求めるもののようだ。
+これはテスト用サーバを別プロセスで起動しておき、drb で rspec などによるテスト実行を
+キックできるもののようだ。</p>
+
+<p>また <a href="https://github.com/guard/guard-spork">guard-spork</a> を使えば、
+spork を用いたテストの実行をファイル書き換え時に行うことができるようだ。
+またテスト結果の通知を Growl で行うことも出来るようだ。</p>
+
+<!-- more -->
+
+
+<h2>How to setup</h2>
+
+<p>Growl でテスト結果を通知するための gem が幾つか存在するのだが、今日(2012/1/22)
+の時点では</p>
+
+<ul>
+<li><code>growl</code> は Growl v1.3 に対応していない</li>
+<li><a href="https://github.com/scottdavis/growl_notify"><code>growl_notify</code></a> は deprecated</li>
+<li><code>ruby_gntp</code> は Growl v1.3 とともに動いた</li>
+</ul>
+
+
+<p>というわけで <code>ruby_gntp</code> が良さそうだった。</p>
+
+<p>Gemfile の :development, :test 周りを以下のように変更する。</p>
+
+<p>``` ruby Gemfile
+group :development do
+  gem 'spork'
+  gem 'guard'
+  gem 'rb-fsevent', :require => false
+  gem 'ruby_gntp'
+  gem 'guard-rspec'
+  gem 'guard-spork'
+end</p>
+
+<p>group :development, :test do
+  gem 'rspec-rails', '~> 2.6'
+  gem 'webrat'
+end
+```</p>
+
+<p>以下を実行。</p>
+
+<p><code>sh
+$ bundle install
+$ spork --bootstrap
+</code></p>
+
+<p><code>spec/spec_helper.rb</code> が spork によって書き換えられているので編集する。
+今までのコードを <code>Spork.prefork do … end</code> の中に入れてあげれば OK。
+<code>.rspec</code> を編集し、<code>--drb</code> という行を追加する。</p>
+
+<p>ここまでで spork が動作する。
+``` sh
+$ spork</p>
+
+<h1>別のターミナルで</h1>
+
+<p>$ rspec .
+```</p>
+
+<p>続いて guard の設定。</p>
+
+<p><code>sh
+$ bundle exec guard init spork
+$ bundle exec guard init rspec
+</code></p>
+
+<p>これで guard + spork が動作する。</p>
+
+<p><code>sh
+$ bundle exec guard start
+</code></p>
+
+<p>あとはソースコードを書き換えたら自動でテストが実行され、結果が Growl で通知される。</p>
+
+<p>ようやくテストを書くことが出来る。(実は今まで書いてなかった笑)</p>
+]]></content>
+  </entry>
+  
+</feed>

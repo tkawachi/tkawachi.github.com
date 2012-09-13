@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Inside Play! continuation -- JavaFlow - tkawachi Blog</title>
+  <meta name="author" content="KAWACHI Takashi">
+
+  
+  <meta name="description" content="Play! 1.x 系 では version 1.2 から continuation (継続)が導入されました。
+これを使ってController処理を一時中断、終わったら再開して応答を返す、なんてことをしているみたいです。
+これによって、 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2011/12/22/inside-play-continuation-javaflow/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">tkawachi Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tkawachi.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Inside Play! Continuation -- JavaFlow</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-22T21:47:00+09:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Play! 1.x 系 では version 1.2 から continuation (継続)が導入されました。
+これを使ってController処理を一時中断、終わったら再開して応答を返す、なんてことをしているみたいです。
+これによって、HTTP処理スレッドは他のリクエストの処理にかかることができ、不要な待ち時間を少なくすることができるようです。
+興味深いですね。</p>
+
+<p>Continuation の実装として <a href="http://commons.apache.org/sandbox/javaflow/">JavaFlow</a> が使われています。
+JavaFlow の日本語記事はほとんど見当たらない様子ですので、 Play! の continuation 理解を深めるためにも、JavaFlow を触ってみたいと思います。</p>
+
+<!-- more -->
+
+
+<h2>JavaFlow の入手</h2>
+
+<p><a href="http://commons.apache.org/sandbox/javaflow/downloads.html">Downloadページ</a>
+を見てみると、現時点でリリース版は無いことがわかります。(なんと！)
+「初版もリリースされていないライブラリを使っていたのか」と思う気持ちを押さえて <code>svn co</code> しましょう。</p>
+
+<pre><code>$ svn co http://svn.apache.org/repos/asf/commons/sandbox/javaflow/trunk/ javaflow
+</code></pre>
+
+<p><code>pom.xml</code> が含まれているので Maven project ですね。依存関係を全て含んだ .jar を作りたかったので
+<a href="http://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven">ここ</a>
+を参考にして pom.xml を書き換えて <code>mvn</code> を実行しました。</p>
+
+<pre><code>$ svn diff pom.xmlIndex: pom.xml
+===================================================================
+--- pom.xml     (revision 1221696)
++++ pom.xml     (working copy)
+@@ -128,6 +128,14 @@
+
+   &lt;build&gt;
+     &lt;plugins&gt;
++      &lt;plugin&gt;
++        &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
++        &lt;configuration&gt;
++          &lt;descriptorRefs&gt;
++                &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
++          &lt;/descriptorRefs&gt;
++        &lt;/configuration&gt;
++      &lt;/plugin&gt;
+       &lt;plugin&gt;     
+         &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+         &lt;configuration&gt;
+
+$ mvn package assembly:single
+</code></pre>
+
+<p><code>target/commons-javaflow-1.0-SNAPSHOT-jar-with-dependencies.jar</code> が生成されました。</p>
+
+<h2>JavaFlow を使う2つの方法</h2>
+
+<p>JavaFlow を使って continuation を実行するには bytecode を enhance する必要があります。これは推測ですが、Call stack を保存・復元する必要があり、Java に用意されている言語機能ではそれが実現不能だからではないでしょうか。</p>
+
+<p>JavaFlow のドキュメントによると、2つの方法で bytecode を enhance できるようです。</p>
+
+<ul>
+<li><a href="http://commons.apache.org/sandbox/javaflow/antTask.html">JavaFlow の ant task</a> を使ってコンパイル時に enhance する</li>
+<li><code>org.apache.commons.javaflow.ContinuationClassLoader</code> を使って class を load する。</li>
+</ul>
+
+
+<p>Play! では後者に近い方法を利用しています。
+<a href="https://github.com/playframework/play/blob/master/framework/src/play/classloading/enhancers/ContinuationEnhancer.java"><code>play.classloading.enhancers.ContinuationEnhancer</code></a> が JavaFlow  の <code>ContinuationClassLoader</code> と同じようなことをしています。
+(Play! には JavaFlow 及び依存ライブラリの .jar が含まれているのですが、ant task も ContinuationClassLoader も何故か .jar 中に存在しなかったため、ソースからコンパイルしたのでした。)</p>
+
+<p>今回は ant task を使ってみようと思います。</p>
+
+<h2>Sample continuation</h2>
+
+<p>ここから <a href="http://commons.apache.org/sandbox/javaflow/tutorial.html">JavaFlow の tutorial</a> 相当のコードを動かしてみます。
+compile できるようになるまで案外苦労しました。</p>
+
+<p><code>build.xml</code> はこんな感じ。</p>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project name="JavaFlowTest" default="run"&gt;
+
+  &lt;!-- javaflow の jar file の位置に応じて変更してください --&gt;
+  &lt;property name="javaflow-jar" value="lib/commons-javaflow-1.0-SNAPSHOT-jar-with-dependencies.jar" /&gt;
+
+  &lt;taskdef name="javaflow"
+    classname="org.apache.commons.javaflow.ant.AntRewriteTask"&gt;
+    &lt;classpath&gt;
+      &lt;path location="${javaflow-jar}" /&gt;
+    &lt;/classpath&gt;
+  &lt;/taskdef&gt;
+
+  &lt;target name="compile" depends="clean"&gt;
+    &lt;!--
+    複数回 javaflow task で bytecode 変換しようとするとエラーになるようなので
+    depends="clean" しておく。
+    --&gt;
+    &lt;mkdir dir="build/classes"/&gt;
+    &lt;javac srcdir="src" destdir="build/classes" classpath="${javaflow-jar}"
+      includeantruntime="false" /&gt;
+    &lt;javaflow srcdir="build/classes" destdir="build/classes"&gt;
+      &lt;include name="cont/**/*.class" /&gt;
+    &lt;/javaflow&gt;
+  &lt;/target&gt;
+
+  &lt;target name="run" depends="compile"&gt;
+    &lt;java fork="true" classname="Main"&gt;
+      &lt;classpath&gt;
+        &lt;path location="${javaflow-jar}" /&gt;
+        &lt;path location="build/classes" /&gt;
+      &lt;/classpath&gt;
+    &lt;/java&gt;
+  &lt;/target&gt;
+
+  &lt;target name="clean"&gt;
+    &lt;delete dir="build" /&gt;
+  &lt;/target&gt;
+
+&lt;/project&gt;
+</code></pre>
+
+<p><a href="http://commons.apache.org/sandbox/javaflow/antTask.html">JavaFlow のドキュメント</a>
+には <code>&lt;javaflow /&gt;</code> task の attribute は srcdir および dstdir と書いてあるが、そのまま実行するとエラーとなった。dstdir は destdir が正しいようです。後ほどバグレポートしておこう。</p>
+
+<p><code>src/cont/MyRunnable.java</code> は 0 から 9 までを印字します。ただし1回ループを回るごとに <code>Continuation.suspend()</code> します。</p>
+
+<pre><code>package cont;
+import org.apache.commons.javaflow.Continuation;
+
+public class MyRunnable implements Runnable {
+  public void run() {
+    System.out.println("started!");
+    for( int i=0; i&lt;10; i++ )
+      echo(i);
+  }
+  private void echo(int x) {
+    System.out.println(x);
+    Continuation.suspend();
+  }
+}
+</code></pre>
+
+<p><code>src/Main.java</code> は <code>cont.MyRunnable</code> を <code>Continuation</code> として実行する。ただし5回実行した後の状態を取っておき、最後にもう一度実行しています。</p>
+
+<pre><code>import org.apache.commons.javaflow.Continuation;
+import cont.MyRunnable;
+
+public class Main {
+  public static void main(String[] args) {
+    Continuation beginContinuation = Continuation.startSuspendedWith(new MyRunnable());
+    Continuation c = beginContinuation;
+    System.out.println("Loop 5 times");
+    for (int i = 0; i &lt; 5; i++) {
+      c = Continuation.continueWith(c);
+    }
+    Continuation fifthContinuation = c;
+    System.out.println("Run the rest");
+    while (c != null) {
+      c = Continuation.continueWith(c);
+    }
+    System.out.println("Run from fifthContinuation again!");
+    c = fifthContinuation;
+    while (c != null) {
+      c = Continuation.continueWith(c);
+    }
+  }
+}
+</code></pre>
+
+<p>実行結果はこうなりました。</p>
+
+<pre><code>$ ant
+…省略…
+run: 
+     [java] Loop 5 times
+     [java] started!
+     [java] 0
+     [java] 1
+     [java] 2
+     [java] 3
+     [java] 4
+     [java] Run the rest
+     [java] 5
+     [java] 6
+     [java] 7
+     [java] 8
+     [java] 9
+     [java] Run from fifthContinuation again!
+     [java] 5
+     [java] 6
+     [java] 7
+     [java] 8
+     [java] 9
+
+BUILD SUCCESSFUL
+Total time: 2 seconds
+</code></pre>
+
+<p>5回回した時点の Continuation オブジェクトをとっておいて後から好きなときに実行出来ることがわかります。</p>
+
+<p>Play! では <code>await()</code> 実行時に <code>Continuation.suspend()</code> を呼び出しています。
+Continuation object を得てから Job などの完了後に再開しているのでしょう。</p>
+
+<h2>java.lang.Error: Internal error が出るんですが…</h2>
+
+<p><code>await()</code> は code coverage module の <a href="http://www.playframework.org/modules/cobertura">cobertura</a> と一緒に使っちゃダメです。
+両者共に bytecode を変更するのですが、秘孔を突くと起動時に妙な例外と共に落ちます(<a href="https://play.lighthouseapp.com/projects/57987/tickets/1189-continuationenhancer-causes-javalangerror-internal-error-with-cobertura">レポート済み</a>)。v1.3 が修正 milestone とされていますがまだバグは健在のようです。</p>
+
+<p>他の bytecode 変換モジュールを使ってエラーが起きた場合にも、<code>ContinuationEnhancer</code> の存在を頭の隅で覚えておくと良いかもしれません。</p>
+
+<h2>明日は</h2>
+
+<p><a href="https://twitter.com/#!/i2key">@i2key</a> さんです。お楽しみに！</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-22T21:47:00+09:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2011/12/22/inside-play-continuation-javaflow/" data-via="" data-counturl="http://tkawachi.github.com/blog/2011/12/22/inside-play-continuation-javaflow/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/12/24/dotinstall/" title="Next Post: .インストール">.インストール &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/">Sending git revision to Exceptional.io</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/25/open-sources-used-by-spotify/">Open sources used by spotify</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/">Run rspec faster for Rails 3.1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/">Trying Micro Cloud Foundry 1.1.0 その2</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/">Trying Micro Cloud Foundry 1.1.0</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - KAWACHI Takashi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tkawachiblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2011/12/22/inside-play-continuation-javaflow/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2011/12/22/inside-play-continuation-javaflow/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

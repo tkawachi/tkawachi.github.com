@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Lion | tkawachi Blog]]></title>
+  <link href="http://tkawachi.github.com/blog/categories/lion/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.com/"/>
+  <updated>2012-09-13T20:56:17+09:00</updated>
+  <id>http://tkawachi.github.com/</id>
+  <author>
+    <name><![CDATA[KAWACHI Takashi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Compile ruby 1.9.3 on Mac OS X Lion using RVM]]></title>
+    <link href="http://tkawachi.github.com/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/"/>
+    <updated>2011-12-27T23:52:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion</id>
+    <content type="html"><![CDATA[<p>仕事で Ruby を使うことになったので、家の Lion ちゃんにも ruby インストール
+しとこうと思ったらエラーになる。
+rvm の version は 1.10.0。</p>
+
+<p>```
+$ rvm install 1.9.3
+Installing Ruby from source to: /Users/kawachi/.rvm/rubies/ruby-1.9.3-p0, this may take a while depending on your cpu(s)...</p>
+
+<p>ruby-1.9.3-p0 - #fetching
+ruby-1.9.3-p0 - #extracted to /Users/kawachi/.rvm/src/ruby-1.9.3-p0 (already extracted)
+Fetching yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/archives
+Extracting yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/src
+Configuring yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
+Compiling yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
+Installing yaml to /Users/kawachi/.rvm/usr
+ruby-1.9.3-p0 - #configuring
+ERROR: Error running ' ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr ', please read /Users/kawachi/.rvm/log/ruby-1.9.3-p0/configure.log
+ERROR: There has been an error while running configure. Halting the installation.
+```</p>
+
+<p><code>~/.rvm/log/ruby-1.9.3-p0/configure.log</code> はこんな感じ。</p>
+
+<p><code>
+[2011-12-27 23:50:52]  ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr
+configure: WARNING: unrecognized options: --with-libyaml-dir
+checking build system type... x86_64-apple-darwin11.2.0
+checking host system type... x86_64-apple-darwin11.2.0
+checking target system type... x86_64-apple-darwin11.2.0
+checking whether the C compiler works... no
+configure: error: in `/Users/kawachi/.rvm/src/ruby-1.9.3-p0':
+configure: error: C compiler cannot create executablesSee `config.log' for more details
+</code></p>
+
+<p><code>CC=gcc</code> を指定すると少し変わる。</p>
+
+<!-- more -->
+
+
+<p><code>
+$ CC=gcc rvm install 1.9.3
+ERROR: The provided CC(gcc) is LLVM based, it is not yet fully supported by ruby and gems, please read `rvm requirements`.
+</code></p>
+
+<p><code>rvm requirements</code> を読むといろいろ書いてある。</p>
+
+<p>```
+  Notes for Darwin ( Mac OS X )</p>
+
+<pre><code>For Snow Leopard: Xcode Version 3.2.1 (1613) or later, such as 3.2.6 or Xcode 4.1.
+[ Please note that Xcode 3.x will *not* work on OS X Lion. The 'cross-over' is Xcode 4.1. ]
+
+You should download the Xcode tools from developer.apple.com, since the Snow Leopard dvd install contained bugs.
+You can find Xcode 4.1 for OS X Lion at:
+https://developer.apple.com/downloads/download.action?path=Developer_Tools/xcode_4.1_for_lion/xcode_4.1_for_lion.dmg
+
+** Lion Users: Xcode Version 4.2.x for OS X Lion works only for ruby 1.9.3-p0 (or higher).
+               It currently fails to build several other rubies and gems, as well as several Homebrew and
+               Macports packages. Xcode Version 4.1 (4B110) works.
+** NOTE: Currently, Node.js is having issues building with osx-gcc-installer. This is _not_ an RVM issue. This is
+   because Node.js depends on the Carbon headers. ox-gcc-installer does not install these to the system.
+   This issue only affects users using osx-gcc-installer, and not Xcode. The only fix is to install Xcode over osx-gcc-installer.
+
+For MacRuby: Install LLVM first.
+For JRuby:  Install the JDK. See http://developer.apple.com/java/download/  # Current Java version 1.6.0_26
+For IronRuby: Install Mono &gt;= 2.6
+    For Ruby 1.9.3: Install libksba # If using Homebrew, 'brew install libksba'
+</code></pre>
+
+<p>```</p>
+
+<p>なんかいろいろ書いてある。
+自分の環境 (Lion, Xcode 4.2.1) に関連しそうなのは、</p>
+
+<ul>
+<li>Lion で Xcode 4.1 だとうまくいく</li>
+<li>Lion の Xcode 4.2 でコンパイルできるのは ruby 1.9.3-p0 とそれ以降</li>
+<li>Ruby 1.9.3 をインストールする前に libksba をインストールせよ</li>
+</ul>
+
+
+<p>たしかに Xcode 4.2 なので LLVM しかないけど、
+ruby 1.9.3-p0 はコンパイルできるんじゃないの？
+RVM で止められてる気がする。。。</p>
+
+<p><code>~/.rvm/scripts/functions/build</code> を参照すると、
+<code>CC</code> 環境変数が存在するときは <code>--version</code> 付きで実行して LLVM だったら <code>exit 1</code> してる。</p>
+
+<p>```
+--- .rvm/scripts/functions/build.orig   2011-12-28 00:29:10.000000000 +0900
++++ .rvm/scripts/functions/build        2011-12-28 00:29:32.000000000 +0900
+@@ -29,7 +29,7 @@</p>
+
+<pre><code>   else
+     rvm_error "The autodetected CC(${CC:-}) is LLVM based, it is not yet fully supported by ruby and gems, please read \`rvm requirements\`, and set CC=/path/to/gcc ."
+   fi
+</code></pre>
+
+<ul>
+<li>   exit 1</li>
+<li>   #exit 1
+ fi</li>
+</ul>
+
+
+<p>   fi
+```</p>
+
+<p>とりあえず上記のとおりコメントアウトしてみたら
+<code>$ CC=gcc rvm install 1.9.3</code> で compile できた。</p>
+
+<p>正しいやり方でないような気はするけど、まいっか。</p>
+]]></content>
+  </entry>
+  
+</feed>
