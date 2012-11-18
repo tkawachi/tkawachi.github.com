@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Rails - tkawachi Blog</title>
+  <title>Generating HTML from DocBook - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Category: Rails">
+  <meta name="description" content="これまで DocBook には縁がなかったのですが、とある DocBook 形式の .xml ファイルを HTML に変換したくなりました。
+DocBook project で用意されている xslt を xlstproc コマンドであててあげれば良いようです。 今作業している MacOS X ( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.comblog/categories/rails/">
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -73,36 +74,113 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Rails</h1>
+    
+      <h1 class="entry-title">Generating HTML From DocBook</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-19T00:28:00+09:00" pubdate data-updated="true">Nov 19<span>th</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>これまで DocBook には縁がなかったのですが、とある DocBook 形式の .xml ファイルを HTML に変換したくなりました。
+DocBook project で用意されている xslt を xlstproc コマンドであててあげれば良いようです。</p>
 
-  
-  <h2>2012</h2>
+<p>今作業している MacOS X (Mountain Lion) には xsltproc が /usr/bin/ にインストールされているようです。
+DocBook 用の xslt をインストールするのに Homebrew を使います。</p>
 
-<article>
-  
-<h1><a href="/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/">Run rspec faster for Rails 3.1</a></h1>
-<time datetime="2012-01-22T21:07:00+09:00" pubdate><span class='month'>Jan</span> <span class='day'>22</span> <span class='year'>2012</span></time>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>brew install docbook
+</span><span class='line'><span class="nv">$ </span>xsltproc -o book.html <span class="se">\</span>
+</span><span class='line'>  /usr/local/Cellar/docbook/5.0/docbook/xsl-ns/1.77.1/xhtml5/docbook.xsl <span class="se">\</span>
+</span><span class='line'>  book.xml
+</span></code></pre></td></tr></table></div></figure>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/rspec/'>Rspec</a></span>
-</footer>
 
-
-</article>
-
+<p>こんなかんじで無事に book.xml から book.html を生成することができました。
+DocBook って難しくて怖いイメージがあったんですが意外に簡単にでした。</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-19T00:28:00+09:00" pubdate data-updated="true">Nov 19<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/docbook/'>DocBook</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/11/18/how-to-restrict-s3-for-folder-access/" title="Previous Post: IAMユーザのS3アクセスをフォルダレベルで制限する">&laquo; IAMユーザのS3アクセスをフォルダレベルで制限する</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -158,7 +236,10 @@
       var disqus_shortname = 'tkawachiblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

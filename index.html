@@ -9,8 +9,8 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="AWS の IAM でユーザを作り、S3 bucket の特定の path 以下にのみアクセスを与えるということを設定したかったのですが、情報を見つけられず時間をつかってしまったので共有しておきます。
-(参考: Giving a user permission to acceess just a &hellip;">
+  <meta name="description" content="これまで DocBook には縁がなかったのですが、とある DocBook 形式の .xml ファイルを HTML に変換したくなりました。
+DocBook project で用意されている xslt を xlstproc コマンドであててあげれば良いようです。 今作業している MacOS X ( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -75,6 +75,60 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/11/19/generating-html-from-docbook/">Generating HTML From DocBook</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-11-19T00:28:00+09:00" pubdate data-updated="true">Nov 19<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>これまで DocBook には縁がなかったのですが、とある DocBook 形式の .xml ファイルを HTML に変換したくなりました。
+DocBook project で用意されている xslt を xlstproc コマンドであててあげれば良いようです。</p>
+
+<p>今作業している MacOS X (Mountain Lion) には xsltproc が /usr/bin/ にインストールされているようです。
+DocBook 用の xslt をインストールするのに Homebrew を使います。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>brew install docbook
+</span><span class='line'><span class="nv">$ </span>xsltproc -o book.html <span class="se">\</span>
+</span><span class='line'>  /usr/local/Cellar/docbook/5.0/docbook/xsl-ns/1.77.1/xhtml5/docbook.xsl <span class="se">\</span>
+</span><span class='line'>  book.xml
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>こんなかんじで無事に book.xml から book.html を生成することができました。
+DocBook って難しくて怖いイメージがあったんですが意外に簡単にでした。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -663,54 +717,9 @@ rvm の version は 1.10.0。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/22/inside-play-continuation-javaflow/">Inside Play! Continuation &#8211; JavaFlow</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-22T21:47:00+09:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Play! 1.x 系 では version 1.2 から continuation (継続)が導入されました。
-これを使ってController処理を一時中断、終わったら再開して応答を返す、なんてことをしているみたいです。
-これによって、HTTP処理スレッドは他のリクエストの処理にかかることができ、不要な待ち時間を少なくすることができるようです。
-興味深いですね。</p>
-
-<p>Continuation の実装として <a href="http://commons.apache.org/sandbox/javaflow/">JavaFlow</a> が使われています。
-JavaFlow の日本語記事はほとんど見当たらない様子ですので、 Play! の continuation 理解を深めるためにも、JavaFlow を触ってみたいと思います。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/12/22/inside-play-continuation-javaflow/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -721,6 +730,10 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/11/19/generating-html-from-docbook/">Generating HTML from DocBook</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2012/11/18/how-to-restrict-s3-for-folder-access/">IAMユーザのS3アクセスをフォルダレベルで制限する</a>
@@ -736,10 +749,6 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
     
       <li class="post">
         <a href="/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/">Run rspec faster for Rails 3.1</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/">Trying Micro Cloud Foundry 1.1.0 その2</a>
       </li>
     
   </ul>

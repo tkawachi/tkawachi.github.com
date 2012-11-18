@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-11-18T23:37:11+09:00</updated>
+  <updated>2012-11-19T00:37:38+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Generating HTML from DocBook]]></title>
+    <link href="http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook/"/>
+    <updated>2012-11-19T00:28:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook</id>
+    <content type="html"><![CDATA[<p>これまで DocBook には縁がなかったのですが、とある DocBook 形式の .xml ファイルを HTML に変換したくなりました。
+DocBook project で用意されている xslt を xlstproc コマンドであててあげれば良いようです。</p>
+
+<p>今作業している MacOS X (Mountain Lion) には xsltproc が /usr/bin/ にインストールされているようです。
+DocBook 用の xslt をインストールするのに Homebrew を使います。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>brew install docbook
+</span><span class='line'><span class="nv">$ </span>xsltproc -o book.html <span class="se">\</span>
+</span><span class='line'>  /usr/local/Cellar/docbook/5.0/docbook/xsl-ns/1.77.1/xhtml5/docbook.xsl <span class="se">\</span>
+</span><span class='line'>  book.xml
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>こんなかんじで無事に book.xml から book.html を生成することができました。
+DocBook って難しくて怖いイメージがあったんですが意外に簡単にでした。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IAMユーザのS3アクセスをフォルダレベルで制限する]]></title>

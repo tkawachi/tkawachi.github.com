@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Rails - tkawachi Blog</title>
+  <title>tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Category: Rails">
+  <meta name="description" content="Play! 1.x 系 では version 1.2 から continuation (継続)が導入されました。
+これを使ってController処理を一時中断、終わったら再開して応答を返す、なんてことをしているみたいです。
+これによって、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.comblog/categories/rails/">
+  <link rel="canonical" href="http://tkawachi.github.com/blog/page/2/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -72,40 +74,64 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div>
-<article role="article">
+      <div class="blog-index">
   
+  
+  
+    <article>
+      
   <header>
-    <h1 class="entry-title">Category: Rails</h1>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/22/inside-play-continuation-javaflow/">Inside Play! Continuation &#8211; JavaFlow</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-22T21:47:00+09:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2011</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+  <div class="entry-content"><p>Play! 1.x 系 では version 1.2 から continuation (継続)が導入されました。
+これを使ってController処理を一時中断、終わったら再開して応答を返す、なんてことをしているみたいです。
+これによって、HTTP処理スレッドは他のリクエストの処理にかかることができ、不要な待ち時間を少なくすることができるようです。
+興味深いですね。</p>
 
-  
-  <h2>2012</h2>
-
-<article>
-  
-<h1><a href="/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/">Run rspec faster for Rails 3.1</a></h1>
-<time datetime="2012-01-22T21:07:00+09:00" pubdate><span class='month'>Jan</span> <span class='day'>22</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/rspec/'>Rspec</a></span>
-</footer>
-
-
-</article>
+<p>Continuation の実装として <a href="http://commons.apache.org/sandbox/javaflow/">JavaFlow</a> が使われています。
+JavaFlow の日本語記事はほとんど見当たらない様子ですので、 Play! の continuation 理解を深めるためにも、JavaFlow を触ってみたいと思います。</p>
 
 </div>
-
   
-</article>
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/12/22/inside-play-continuation-javaflow/">Read on &rarr;</a>
+    </footer>
+  
 
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
 </div>
-
 <aside class="sidebar">
   
     <section>
@@ -142,7 +168,6 @@
 
   
 </aside>
-
 
     </div>
   </div>
