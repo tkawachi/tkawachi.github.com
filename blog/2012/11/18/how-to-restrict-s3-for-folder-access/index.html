@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Sending git revision to Exceptional.io - tkawachi Blog</title>
+  <title>IAMユーザのS3アクセスをフォルダレベルで制限する - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Exceptional.io は Ruby アプリケーションで起きた例外を集約して管理するサービスだ。 例外が起きた時に困るのが、それってどのバージョンで起きたバグ？ってことがわからないこと。
-日付が記録されているので調べればわからなくはないけど、面倒だよね。 Exceptional.io &hellip;">
+  <meta name="description" content="AWS の IAM でユーザを作り、S3 bucket の特定の path 以下にのみアクセスを与えるということを設定したかったのですが、情報を見つけられず時間をつかってしまったので共有しておきます。
+(参考: Giving a user permission to acceess just a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/">
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/11/18/how-to-restrict-s3-for-folder-access/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -78,7 +78,7 @@
   
   <header>
     
-      <h1 class="entry-title">Sending Git Revision to Exceptional.io</h1>
+      <h1 class="entry-title">IAMユーザのS3アクセスをフォルダレベルで制限する</h1>
     
     
       <p class="meta">
@@ -94,60 +94,65 @@
   
 
 
-<time datetime="2012-09-13T20:44:00+09:00" pubdate data-updated="true">Sep 13<span>th</span>, 2012</time>
+<time datetime="2012-11-18T19:29:00+09:00" pubdate data-updated="true">Nov 18<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><a href="https://www.exceptional.io">Exceptional.io</a> は Ruby アプリケーションで起きた例外を集約して管理するサービスだ。</p>
+<div class="entry-content"><p>AWS の IAM でユーザを作り、S3 bucket の特定の path 以下にのみアクセスを与えるということを設定したかったのですが、情報を見つけられず時間をつかってしまったので共有しておきます。
+(参考: <a href="https://forums.aws.amazon.com/message.jspa?messageID=245525">Giving a user permission to acceess just a folder within a bucket</a>)</p>
 
-<p>例外が起きた時に困るのが、それってどのバージョンで起きたバグ？ってことがわからないこと。
-日付が記録されているので調べればわからなくはないけど、面倒だよね。</p>
+<p>まず最初に S3 の IAM policy に関するAWS の公式ドキュメントは
+<a href="http://docs.amazonwebservices.com/AmazonS3/latest/dev/UsingIAMPolicies.html">Using IAM Policies</a>
+です。
+Bucket レベルの指定は arn:aws:s3:::bucket_name に対して行い、 object レベルの指定は arn:aws:s3:::bucket_name/key_name に対して行います。</p>
 
-<p>Exceptional.io では付加情報を付け加えて送ることができるので、以下の utility class をつかって git の revision 情報を取得し、それを送るようにしてみた。</p>
+<p>同ページ内の Example 5: Allow a partner to drop files into a specific portion of the corporate bucket がやりたいこととほぼ同じ設定になります。</p>
 
-<div><script src='https://gist.github.com/3713816.js?file='></script>
-<noscript><pre><code># coding: UTF-8
-class GitUtil
-  class &lt;&lt; self
-    # Current source code revision
-    def revision
-      rev = capistrano_revision
-      rev = command_revision unless rev
-      rev.try(:chomp)
-    end
+<p>Object レベルの指定で path 以下にアクセスを制限したいときは * が使えます。
+my_bucket bucket の shared/ 以下に s3:PutObject を許可するには、以下のような statement を追加します。</p>
 
-    private
-    def capistrano_revision
-      begin
-        revision_file = &quot;#{Rails.root}/REVISION&quot;
-        return File.read(revision_file) if File.exists? revision_file
-      rescue IOError =&gt; e
-        Rails.logger.info(e)
-      end
-      nil
-    end
-
-    def command_revision
-      rev = `cd '#{Rails.root}' &amp;&amp; git rev-list --max-count=1 HEAD`
-      $? == 0 ? rev : nil
-    end
-  end
-end</code></pre></noscript></div>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "Effect":"Allow",
+</span><span class='line'>  "Action":"s3:PutObject",
+</span><span class='line'>  "Resource":"arn:aws:s3:::my_bucket/shared/*"
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<p>あとは</p>
+<p>上記は object レベルでの指定になります。
+S3を利用するアプリケーションによっては object レベルの API だけではなく bucket レベルでの API も使うものがあります。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Exceptional</span><span class="o">.</span><span class="n">context</span><span class="p">({</span><span class="n">git_revision</span><span class="p">:</span> <span class="no">GitUtil</span><span class="o">.</span><span class="n">revision</span><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>Bucket レベルの指定で path 以下にアクセスを制限したいときは Condition, StringLike を使います。
+s3:ListBucket, s3:GetBucketLocation を許可するには、以下の様な statement を追加します。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "Effect": "Allow",
+</span><span class='line'>  "Action": ["s3:ListBucket", "s3:GetBucketLocation"],
+</span><span class='line'>  "Resource": "arn:aws:s3:::my_bucket",
+</span><span class='line'>  "Condition": {
+</span><span class='line'>    "StringLike": {
+</span><span class='line'>    "s3:prefix": "shared/*"
+</span><span class='line'>  }
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<p>こんな感じのコードを例外送出前に呼んでおくと、付加情報と共に送られていく。</p>
-
-<p>これでどのコミットからどのコミットまで例外が起きてたかわかるようになった。便利便利。</p>
+<p>上記の方法でアプリケーションが利用する API に応じて object レベル, bucket レベルの action を許可すれば、今回の目的が達成できます。</p>
 </div>
 
 
@@ -170,15 +175,21 @@ end</code></pre></noscript></div>
   
 
 
-<time datetime="2012-09-13T20:44:00+09:00" pubdate data-updated="true">Sep 13<span>th</span>, 2012</time>
+<time datetime="2012-11-18T19:29:00+09:00" pubdate data-updated="true">Nov 18<span>th</span>, 2012</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aws/'>AWS</a>, <a class='category' href='/blog/categories/iam/'>IAM</a>, <a class='category' href='/blog/categories/s3/'>S3</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/11/18/how-to-restrict-s3-for-folder-access/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/11/18/how-to-restrict-s3-for-folder-access/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -191,10 +202,8 @@ end</code></pre></noscript></div>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/06/25/open-sources-used-by-spotify/" title="Previous Post: Open sources used by spotify">&laquo; Open sources used by spotify</a>
+        <a class="basic-alignment left" href="/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/" title="Previous Post: Sending git revision to Exceptional.io">&laquo; Sending git revision to Exceptional.io</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/11/18/how-to-restrict-s3-for-folder-access/" title="Next Post: IAMユーザのS3アクセスをフォルダレベルで制限する">IAMユーザのS3アクセスをフォルダレベルで制限する &raquo;</a>
       
     </p>
   </footer>
@@ -261,8 +270,8 @@ end</code></pre></noscript></div>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/';
-        var disqus_url = 'http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/';
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/11/18/how-to-restrict-s3-for-folder-access/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2012/11/18/how-to-restrict-s3-for-folder-access/';
         var disqus_script = 'embed.js';
       
     (function () {

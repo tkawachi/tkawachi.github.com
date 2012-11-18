@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Sending git revision to Exceptional.io - tkawachi Blog</title>
+  <title>Category: S3 - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Exceptional.io は Ruby アプリケーションで起きた例外を集約して管理するサービスだ。 例外が起きた時に困るのが、それってどのバージョンで起きたバグ？ってことがわからないこと。
-日付が記録されているので調べればわからなくはないけど、面倒だよね。 Exceptional.io &hellip;">
+  <meta name="description" content="Category: S3">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/">
+  <link rel="canonical" href="http://tkawachi.github.comblog/categories/s3/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -74,137 +73,36 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">Sending Git Revision to Exceptional.io</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-13T20:44:00+09:00" pubdate data-updated="true">Sep 13<span>th</span>, 2012</time>
-        
-      </p>
+    <h1 class="entry-title">Category: S3</h1>
     
   </header>
-
-
-<div class="entry-content"><p><a href="https://www.exceptional.io">Exceptional.io</a> は Ruby アプリケーションで起きた例外を集約して管理するサービスだ。</p>
-
-<p>例外が起きた時に困るのが、それってどのバージョンで起きたバグ？ってことがわからないこと。
-日付が記録されているので調べればわからなくはないけど、面倒だよね。</p>
-
-<p>Exceptional.io では付加情報を付け加えて送ることができるので、以下の utility class をつかって git の revision 情報を取得し、それを送るようにしてみた。</p>
-
-<div><script src='https://gist.github.com/3713816.js?file='></script>
-<noscript><pre><code># coding: UTF-8
-class GitUtil
-  class &lt;&lt; self
-    # Current source code revision
-    def revision
-      rev = capistrano_revision
-      rev = command_revision unless rev
-      rev.try(:chomp)
-    end
-
-    private
-    def capistrano_revision
-      begin
-        revision_file = &quot;#{Rails.root}/REVISION&quot;
-        return File.read(revision_file) if File.exists? revision_file
-      rescue IOError =&gt; e
-        Rails.logger.info(e)
-      end
-      nil
-    end
-
-    def command_revision
-      rev = `cd '#{Rails.root}' &amp;&amp; git rev-list --max-count=1 HEAD`
-      $? == 0 ? rev : nil
-    end
-  end
-end</code></pre></noscript></div>
-
-
-<p>あとは</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Exceptional</span><span class="o">.</span><span class="n">context</span><span class="p">({</span><span class="n">git_revision</span><span class="p">:</span> <span class="no">GitUtil</span><span class="o">.</span><span class="n">revision</span><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>こんな感じのコードを例外送出前に呼んでおくと、付加情報と共に送られていく。</p>
-
-<p>これでどのコミットからどのコミットまで例外が起きてたかわかるようになった。便利便利。</p>
-</div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
-
-      
-
-
-
-
-
+  <div id="blog-archives" class="category">
 
 
 
   
+  <h2>2012</h2>
+
+<article>
+  
+<h1><a href="/blog/2012/11/18/how-to-restrict-s3-for-folder-access/">IAMユーザのS3アクセスをフォルダレベルで制限する</a></h1>
+<time datetime="2012-11-18T19:29:00+09:00" pubdate><span class='month'>Nov</span> <span class='day'>18</span> <span class='year'>2012</span></time>
+
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/aws/'>AWS</a>, <a class='category' href='/blog/categories/iam/'>IAM</a>, <a class='category' href='/blog/categories/s3/'>S3</a></span>
+</footer>
 
 
-<time datetime="2012-09-13T20:44:00+09:00" pubdate data-updated="true">Sep 13<span>th</span>, 2012</time>
-      
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/" >Tweet</a>
-  
-  
-  <div class="g-plusone" data-size="medium"></div>
-  
-  
-    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2012/06/25/open-sources-used-by-spotify/" title="Previous Post: Open sources used by spotify">&laquo; Open sources used by spotify</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2012/11/18/how-to-restrict-s3-for-folder-access/" title="Next Post: IAMユーザのS3アクセスをフォルダレベルで制限する">IAMユーザのS3アクセスをフォルダレベルで制限する &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
-  <section>
-    <h1>Comments</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </div>
-  </section>
+
+  
+</article>
 
 </div>
 
@@ -260,10 +158,7 @@ end</code></pre></noscript></div>
       var disqus_shortname = 'tkawachiblog';
       
         
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/';
-        var disqus_url = 'http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/';
-        var disqus_script = 'embed.js';
+        var disqus_script = 'count.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
