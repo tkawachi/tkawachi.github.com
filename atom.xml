@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-11-19T00:37:38+09:00</updated>
+  <updated>2012-11-21T12:23:20+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -47,6 +47,11 @@ DocBook って難しくて怖いイメージがあったんですが意外に簡
     <id>http://tkawachi.github.com/blog/2012/11/18/how-to-restrict-s3-for-folder-access</id>
     <content type="html"><![CDATA[<p>AWS の IAM でユーザを作り、S3 bucket の特定の path 以下にのみアクセスを与えるということを設定したかったのですが、情報を見つけられず時間をつかってしまったので共有しておきます。
 (参考: <a href="https://forums.aws.amazon.com/message.jspa?messageID=245525">Giving a user permission to acceess just a folder within a bucket</a>)</p>
+
+<p>現状 AWS では bucket 数上限が 100, IAM ユーザ数制限が 5000 になっています。
+利用者1人に 1 IAM ユーザを発行すると 5000 人で使えるわけですが、
+bucket 毎に共有設定を行った場合は 100 共有までです。
+同一 bucket 内で path を切り替えて共有した場合は bucket 数上限は関係なくなるので嬉しい、というわけです。</p>
 
 <p>まず最初に S3 の IAM policy に関するAWS の公式ドキュメントは
 <a href="http://docs.amazonwebservices.com/AmazonS3/latest/dev/UsingIAMPolicies.html">Using IAM Policies</a>
