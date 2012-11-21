@@ -96,5 +96,8 @@ disqus_show_comment_count: false
 # Google Analytics
 google_analytics_tracking_id: UA-526921-4
 
+# Mixpanel
+mixpanel_token: dae48d5fca92d9fef72981d9120a8201
+
 # Facebook Like
 facebook_like: true
