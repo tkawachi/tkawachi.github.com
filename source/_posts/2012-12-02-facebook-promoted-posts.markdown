@@ -32,7 +32,7 @@ Facebook で投稿したときに右下に表示される「宣伝する」を�
 どうやら通常見られるより2倍以上の露出があったようです。
 
 投稿からの流入だけではありませんが、投稿内に書いた
-[AmbientPlayer](https://itunes.apple.com/app/ambientplayer/id578213987)
+[AmbientPlayer](http://www.veronicasoft.com/AmbientPlayer)
 の紹介動画は72回再生がありました。
 
 {% youtube u0tryNRuYsQ %}
