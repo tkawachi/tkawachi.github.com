@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-02T02:55:06+09:00</updated>
+  <updated>2012-12-02T03:18:09+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -43,7 +43,9 @@
 <p>1日後くらいから上の画像のような結果が表示されます。
 どうやら通常見られるより2倍以上の露出があったようです。</p>
 
-<p>投稿からの流入だけではありませんが、投稿内に書いたAmbientPlayerの紹介動画は72回再生がありました。</p>
+<p>投稿からの流入だけではありませんが、投稿内に書いた
+<a href="http://www.veronicasoft.com/AmbientPlayer">AmbientPlayer</a>
+の紹介動画は72回再生がありました。</p>
 
 <div class="embed-video-container"><iframe src="http://www.youtube.com/embed/u0tryNRuYsQ "></iframe></div>
 
