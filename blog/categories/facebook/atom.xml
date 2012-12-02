@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Facebook | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/blog/categories/facebook/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-02T10:24:30+09:00</updated>
+  <updated>2012-12-02T10:44:29+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -30,6 +30,8 @@ Facebook の <a href="https://developers.facebook.com/docs/reference/plugins/rec
 で <code>source/_layouts/post.html</code> を書き換えます。</p>
 
 <p>Blog の like 数が少なすぎるのでしょう。まだおすすめがちゃんと出ないようですが、 like 数が増えると出るようになるのでしょうか。</p>
+
+<p><a href="http://sessan.hatenablog.com/entry/2012/09/27/172013">sessanの日記 - はてなブログにFacebookのRecommendations Barを設置する</a> を参考にしました。</p>
 ]]></content>
   </entry>
   
