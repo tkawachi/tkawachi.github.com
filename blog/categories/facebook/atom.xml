@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Facebook | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/blog/categories/facebook/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-02T10:45:53+09:00</updated>
+  <updated>2012-12-02T10:47:13+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -33,6 +33,53 @@ Github pages だと何を変更したかも github で見られるのが嬉し�
 <p>Blog の like 数が少なすぎるのでしょう。まだおすすめがちゃんと出ないようですが、 like 数が増えると出るようになるのでしょうか。</p>
 
 <p><a href="http://sessan.hatenablog.com/entry/2012/09/27/172013">sessanの日記 - はてなブログにFacebookのRecommendations Barを設置する</a> を参考にしました。</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Facebook promoted posts]]></title>
+    <link href="http://tkawachi.github.com/blog/2012/12/02/facebook-promoted-posts/"/>
+    <updated>2012-12-02T01:54:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2012/12/02/facebook-promoted-posts</id>
+    <content type="html"><![CDATA[<p>Facebook で投稿したときに右下に表示される「宣伝する」を試してみました。
+大学時代の仲間内で作ったアプリをリリースしたのでそのお知らせということで。</p>
+
+<p>「宣伝する」ボタンを押すとこんな画面が表示されます。</p>
+
+<p><img src="/images/20121202/payment1.png" alt="支払画面1" /></p>
+
+<p>674円とのことです。
+うーん。高いのか安いのか？
+よくわかりませんが、何事も経験なので勉強代だと思ってクレジットカードを入力します。</p>
+
+<p><img src="/images/20121202/payment2.png" alt="支払画面2" /></p>
+
+<p>どうやら 81 Facebookポイント を 674円で購入し、それを使って「大切な投稿を宣伝」を購入したようです。
+1 Facebook ポイントは 8.32 円ですか。
+キリが悪いように感じますが、為替相場を考えると 10 Facebook ポイントが $1 なのでしょう。</p>
+
+<p>購入後しばらくは何も変化が感じられません。
+結果が見えるようになるまで1日近くかかります。</p>
+
+<p><img src="/images/20121202/result.png" alt="結果表示" /></p>
+
+<p>1日後くらいから上の画像のような結果が表示されます。
+どうやら通常見られるより2倍以上の露出があったようです。</p>
+
+<p>投稿からの流入だけではありませんが、投稿内に書いた
+<a href="http://www.veronicasoft.com/AmbientPlayer">AmbientPlayer</a>
+の紹介動画は72回再生がありました。</p>
+
+<p><div class="embed-video-container"><iframe src="http://www.youtube.com/embed/u0tryNRuYsQ "></iframe></div></p>
+
+<p><a href="https://www.facebook.com/help/promote">Facebook のヘルプ</a>
+によれば、そもそも自分の投稿の読者のみにしか表示されないことが書いてあります。
+私のフレンド数がおおよそ180ですので、最大露出がこの程度なのでしょう。
+今回の宣伝がフレンドの全域に行き渡ったと仮定すれば、普段の投稿の露出はこの半分程度になっていると言えます。</p>
+
+<p>雑感ですが、「宣伝する」はあくまで露出を高めるだけで、それを見た人に何かしら訴えるのは投稿内容ですから、どれくらいアクションを起こしてもらえるかは投稿の内容が肝になりそうです。
+が、大きな反響を呼ぶ投稿であれば「宣伝する」しなくても、ライクを集めタイムラインへの露出は増えるように思います。
+もちろん露出を増幅する効果はあるでしょうが、効果は微妙かなという感じを私は受けました。</p>
 ]]></content>
   </entry>
   
