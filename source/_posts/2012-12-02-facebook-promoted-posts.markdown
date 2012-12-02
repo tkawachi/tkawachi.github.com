@@ -3,7 +3,7 @@ layout: post
 title: "Facebook promoted posts"
 date: 2012-12-02 01:54
 comments: true
-categories: 
+categories: Facebook
 ---
 
 Facebook で投稿したときに右下に表示される「宣伝する」を試してみました。
