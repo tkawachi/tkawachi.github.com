@@ -5,11 +5,14 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Ruby - tkawachi Blog</title>
+  <title>Octopress に Facebook recommendations bar を設置 - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Category: Ruby">
+  <meta name="description" content="この blog は
+Octopress を使って github pages で書いています。 Facebook recommendations bar を追加してみました。
+Facebook の Recommendations Bar
+のページから blog 用の Facebook &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +21,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.comblog/categories/ruby/">
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/12/02/facebook-recommendations-bar-for-octopress/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -73,36 +76,106 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Ruby</h1>
+    
+      <h1 class="entry-title">Octopress に Facebook Recommendations Bar を設置</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-02T10:18:00+09:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>この blog は
+<a href="http://octopress.org/">Octopress</a> を使って github pages で書いています。</p>
 
-  
-  <h2>2011</h2>
+<p>Facebook recommendations bar を追加してみました。
+Facebook の <a href="https://developers.facebook.com/docs/reference/plugins/recommendationsbar/">Recommendations Bar</a>
+のページから blog 用の Facebook application をひとつ作って、code snippet を吐き出します。</p>
 
-<article>
-  
-<h1><a href="/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/">Compile ruby 1.9.3 on Mac OS X Lion using RVM</a></h1>
-<time datetime="2011-12-27T23:52:00+09:00" pubdate><span class='month'>Dec</span> <span class='day'>27</span> <span class='year'>2011</span></time>
+<p>あとは
+<a href="https://github.com/tkawachi/tkawachi.github.com/commit/0f98e6e1e6511223897a177c414c75115aff78b6">このように</a>
+で <code>source/_layouts/post.html</code> を書き換えます。</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/lion/'>Lion</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a></span>
-</footer>
-
-
-</article>
-
+<p>Blog の like 数が少なすぎるのでしょう。まだおすすめがちゃんと出ないようですが、 like 数が増えると出るようになるのでしょうか。</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-02T10:18:00+09:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/facebook/'>Facebook</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/12/02/facebook-recommendations-bar-for-octopress/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/12/02/facebook-recommendations-bar-for-octopress/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/12/02/facebook-promoted-posts/" title="Previous Post: Facebook promoted posts">&laquo; Facebook promoted posts</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -144,6 +217,16 @@
 </aside>
 
 
+<div class="fb-recommendations-bar" data-href="https://developers.facebook.com/docs/reference/plugins/recommendationsbar/"></div>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=445203802205922";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -158,7 +241,10 @@
       var disqus_shortname = 'tkawachiblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/12/02/facebook-recommendations-bar-for-octopress/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2012/12/02/facebook-recommendations-bar-for-octopress/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

@@ -59,11 +59,17 @@
         <lastmod>2012-12-02T10:14:23+09:00</lastmod>
     </url>
     <url>
+        <loc>
+            http://tkawachi.github.com/blog/2012/12/02/facebook-recommendations-bar-for-octopress/
+        </loc>
+        <lastmod>2012-12-02T10:24:22+09:00</lastmod>
+    </url>
+    <url>
         <loc>http://tkawachi.github.com/blog/archives/</loc>
-        <lastmod>2012-12-02T03:18:00+09:00</lastmod>
+        <lastmod>2012-12-02T10:24:22+09:00</lastmod>
     </url>
     <url>
         <loc>http://tkawachi.github.com/</loc>
-        <lastmod>2012-12-02T03:18:00+09:00</lastmod>
+        <lastmod>2012-12-02T10:24:22+09:00</lastmod>
     </url>
 </urlset>
