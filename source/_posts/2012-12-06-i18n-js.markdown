@@ -1,0 +1,52 @@
+---
+layout: post
+title: "i18n-js"
+date: 2012-12-06 23:37
+comments: true
+categories: Rails I18N JavaScript
+---
+
+Rails 3.2 のプロジェクトで作業していて JavaScript (CoffeeScript) でのローカライゼーションをしたくなりました。
+調べてみたところ [i18n-js](https://github.com/fnando/i18n-js) が簡単につかえてよさそうな感じです。
+
+まずは Gemfile に追加して `bundle install` 。
+
+``` ruby Gemfile
+gem "i18n-js"
+```
+
+続いて application.js に以下の行を追加。
+
+``` javascript app/assets/javascripts/application.js
+//= require i18n
+//= require i18n/translations
+```
+
+app/views/layouts/application.html.erb に以下の行を追加。
+指定した言語で訳が存在しない時にデフォルト言語の訳を参照したいので `I18n.fallbacks = true;` を指定しています。
+
+``` erb app/views/layouts/application.html.erb
+<script type="text/javascript">
+    I18n.defaultLocale = "<%= I18n.default_locale %>";
+    I18n.locale = "<%= I18n.locale %>";
+    I18n.fallbacks = true;
+</script>
+```
+
+最後に `rake i18n:js:setup` を実行すると `config/i18n-js.yml` が生成されます。
+
+これで `config/locales/*.yml` に書いてある Rails (Ruby) 側で利用できる情報と同じものが利用できるようになります。
+
+ローカライゼーションは `I18n.t()` 関数で実行します。
+
+``` javascript
+I18n.t("hello");
+```
+
+デフォルト値を指定したい場合はこんな感じ。
+
+``` javascript
+I18n.t("hello", {defaultValue: "こんちは"});
+```
+
+便利に使わせていただきます。
