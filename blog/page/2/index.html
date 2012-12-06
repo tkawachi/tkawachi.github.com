@@ -9,10 +9,23 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="underscore.js の挙動を試そうと node をインタラクティブに起動して以下のように試したところ _ が配列で置き換えられてしまう。 $ node
-&gt; var _ = require('underscore');
-&gt; _([1,2,3,2,1]).uniq();
-[ 1, &hellip;">
+  <meta name="description" content="仕事で Ruby を使うことになったので、家の Lion ちゃんにも ruby インストール
+しとこうと思ったらエラーになる。
+rvm の version は 1.10.0。 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+$ rvm install 1.9.3
+Installing &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +90,99 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/">Compile Ruby 1.9.3 on Mac OS X Lion Using RVM</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-27T23:52:00+09:00" pubdate data-updated="true">Dec 27<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>仕事で Ruby を使うことになったので、家の Lion ちゃんにも ruby インストール
+しとこうと思ったらエラーになる。
+rvm の version は 1.10.0。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm install 1.9.3
+</span><span class='line'>Installing Ruby from source to: /Users/kawachi/.rvm/rubies/ruby-1.9.3-p0, this may take a while depending on your cpu(s)...
+</span><span class='line'>
+</span><span class='line'>ruby-1.9.3-p0 - #fetching
+</span><span class='line'>ruby-1.9.3-p0 - #extracted to /Users/kawachi/.rvm/src/ruby-1.9.3-p0 (already extracted)
+</span><span class='line'>Fetching yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/archives
+</span><span class='line'>Extracting yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/src
+</span><span class='line'>Configuring yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
+</span><span class='line'>Compiling yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
+</span><span class='line'>Installing yaml to /Users/kawachi/.rvm/usr
+</span><span class='line'>ruby-1.9.3-p0 - #configuring
+</span><span class='line'>ERROR: Error running ' ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr ', please read /Users/kawachi/.rvm/log/ruby-1.9.3-p0/configure.log
+</span><span class='line'>ERROR: There has been an error while running configure. Halting the installation.</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>~/.rvm/log/ruby-1.9.3-p0/configure.log</code> はこんな感じ。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[2011-12-27 23:50:52]  ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr 
+</span><span class='line'>configure: WARNING: unrecognized options: --with-libyaml-dir
+</span><span class='line'>checking build system type... x86_64-apple-darwin11.2.0
+</span><span class='line'>checking host system type... x86_64-apple-darwin11.2.0
+</span><span class='line'>checking target system type... x86_64-apple-darwin11.2.0
+</span><span class='line'>checking whether the C compiler works... no
+</span><span class='line'>configure: error: in `/Users/kawachi/.rvm/src/ruby-1.9.3-p0':
+</span><span class='line'>configure: error: C compiler cannot create executablesSee `config.log' for more details</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>CC=gcc</code> を指定すると少し変わる。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -237,6 +343,10 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/06/i18n-js/">i18n-js</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/02/facebook-recommendations-bar-for-octopress/">Octopress に Facebook recommendations bar を設置</a>
       </li>
     
@@ -250,10 +360,6 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
     
       <li class="post">
         <a href="/blog/2012/11/18/how-to-restrict-s3-for-folder-access/">IAMユーザのS3アクセスをフォルダレベルで制限する</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/">Sending git revision to Exceptional.io</a>
       </li>
     
   </ul>

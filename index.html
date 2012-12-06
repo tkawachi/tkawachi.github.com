@@ -9,10 +9,8 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="この blog は
-Octopress を使って github pages で書いています。 Facebook recommendations bar を追加してみました。
-Facebook の Recommendations Bar
-のページから blog 用の Facebook &hellip;">
+  <meta name="description" content="Rails 3.2 のプロジェクトで作業していて JavaScript (CoffeeScript) でのローカライゼーションをしたくなりました。
+調べてみたところ i18n-js が簡単につかえてよさそうな感じです。 まずは Gemfile に追加して bundle install 。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +75,95 @@ Facebook の Recommendations Bar
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/12/06/i18n-js/">I18n-js</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-06T23:37:00+09:00" pubdate data-updated="true">Dec 6<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Rails 3.2 のプロジェクトで作業していて JavaScript (CoffeeScript) でのローカライゼーションをしたくなりました。
+調べてみたところ <a href="https://github.com/fnando/i18n-js">i18n-js</a> が簡単につかえてよさそうな感じです。</p>
+
+<p>まずは Gemfile に追加して <code>bundle install</code> 。</p>
+
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;i18n-js&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>続いて application.js に以下の行を追加。</p>
+
+<figure class='code'><figcaption><span>app/assets/javascripts/application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//= require i18n</span>
+</span><span class='line'><span class="c1">//= require i18n/translations</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>app/views/layouts/application.html.erb に以下の行を追加。
+指定した言語で訳が存在しない時にデフォルト言語の訳を参照したいので <code>I18n.fallbacks = true;</code> を指定しています。</p>
+
+<figure class='code'><figcaption><span>app/views/layouts/application.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&lt;script type=&quot;text/javascript&quot;&gt;</span>
+</span><span class='line'><span class="x">    I18n.defaultLocale = &quot;</span><span class="cp">&lt;%=</span> <span class="no">I18n</span><span class="o">.</span><span class="n">default_locale</span> <span class="cp">%&gt;</span><span class="x">&quot;;</span>
+</span><span class='line'><span class="x">    I18n.locale = &quot;</span><span class="cp">&lt;%=</span> <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="cp">%&gt;</span><span class="x">&quot;;</span>
+</span><span class='line'><span class="x">    I18n.fallbacks = true;</span>
+</span><span class='line'><span class="x">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最後に <code>rake i18n:js:setup</code> を実行すると <code>config/i18n-js.yml</code> が生成されます。</p>
+
+<p>これで <code>config/locales/*.yml</code> に書いてある Rails (Ruby) 側で利用できる情報と同じものが利用できるようになります。</p>
+
+<p>ローカライゼーションは <code>I18n.t()</code> 関数で実行します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">I18n</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>デフォルト値を指定したい場合はこんな感じ。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">I18n</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">defaultValue</span><span class="o">:</span> <span class="s2">&quot;こんちは&quot;</span><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>便利に使わせていただきます。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -659,99 +746,6 @@ Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめた�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/">Compile Ruby 1.9.3 on Mac OS X Lion Using RVM</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-27T23:52:00+09:00" pubdate data-updated="true">Dec 27<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>仕事で Ruby を使うことになったので、家の Lion ちゃんにも ruby インストール
-しとこうと思ったらエラーになる。
-rvm の version は 1.10.0。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm install 1.9.3
-</span><span class='line'>Installing Ruby from source to: /Users/kawachi/.rvm/rubies/ruby-1.9.3-p0, this may take a while depending on your cpu(s)...
-</span><span class='line'>
-</span><span class='line'>ruby-1.9.3-p0 - #fetching
-</span><span class='line'>ruby-1.9.3-p0 - #extracted to /Users/kawachi/.rvm/src/ruby-1.9.3-p0 (already extracted)
-</span><span class='line'>Fetching yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/archives
-</span><span class='line'>Extracting yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/src
-</span><span class='line'>Configuring yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
-</span><span class='line'>Compiling yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
-</span><span class='line'>Installing yaml to /Users/kawachi/.rvm/usr
-</span><span class='line'>ruby-1.9.3-p0 - #configuring
-</span><span class='line'>ERROR: Error running ' ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr ', please read /Users/kawachi/.rvm/log/ruby-1.9.3-p0/configure.log
-</span><span class='line'>ERROR: There has been an error while running configure. Halting the installation.</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>~/.rvm/log/ruby-1.9.3-p0/configure.log</code> はこんな感じ。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[2011-12-27 23:50:52]  ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr 
-</span><span class='line'>configure: WARNING: unrecognized options: --with-libyaml-dir
-</span><span class='line'>checking build system type... x86_64-apple-darwin11.2.0
-</span><span class='line'>checking host system type... x86_64-apple-darwin11.2.0
-</span><span class='line'>checking target system type... x86_64-apple-darwin11.2.0
-</span><span class='line'>checking whether the C compiler works... no
-</span><span class='line'>configure: error: in `/Users/kawachi/.rvm/src/ruby-1.9.3-p0':
-</span><span class='line'>configure: error: C compiler cannot create executablesSee `config.log' for more details</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>CC=gcc</code> を指定すると少し変わる。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -767,6 +761,10 @@ rvm の version は 1.10.0。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/06/i18n-js/">i18n-js</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/02/facebook-recommendations-bar-for-octopress/">Octopress に Facebook recommendations bar を設置</a>
       </li>
     
@@ -780,10 +778,6 @@ rvm の version は 1.10.0。</p>
     
       <li class="post">
         <a href="/blog/2012/11/18/how-to-restrict-s3-for-folder-access/">IAMユーザのS3アクセスをフォルダレベルで制限する</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/">Sending git revision to Exceptional.io</a>
       </li>
     
   </ul>

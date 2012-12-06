@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Sending git revision to Exceptional.io - tkawachi Blog</title>
+  <title>i18n-js - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Exceptional.io は Ruby アプリケーションで起きた例外を集約して管理するサービスだ。 例外が起きた時に困るのが、それってどのバージョンで起きたバグ？ってことがわからないこと。
-日付が記録されているので調べればわからなくはないけど、面倒だよね。 Exceptional.io &hellip;">
+  <meta name="description" content="Rails 3.2 のプロジェクトで作業していて JavaScript (CoffeeScript) でのローカライゼーションをしたくなりました。
+調べてみたところ i18n-js が簡単につかえてよさそうな感じです。 まずは Gemfile に追加して bundle install 。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/">
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/12/06/i18n-js/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -78,7 +78,7 @@
   
   <header>
     
-      <h1 class="entry-title">Sending Git Revision to Exceptional.io</h1>
+      <h1 class="entry-title">I18n-js</h1>
     
     
       <p class="meta">
@@ -94,60 +94,67 @@
   
 
 
-<time datetime="2012-09-13T20:44:00+09:00" pubdate data-updated="true">Sep 13<span>th</span>, 2012</time>
+<time datetime="2012-12-06T23:37:00+09:00" pubdate data-updated="true">Dec 6<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><a href="https://www.exceptional.io">Exceptional.io</a> は Ruby アプリケーションで起きた例外を集約して管理するサービスだ。</p>
+<div class="entry-content"><p>Rails 3.2 のプロジェクトで作業していて JavaScript (CoffeeScript) でのローカライゼーションをしたくなりました。
+調べてみたところ <a href="https://github.com/fnando/i18n-js">i18n-js</a> が簡単につかえてよさそうな感じです。</p>
 
-<p>例外が起きた時に困るのが、それってどのバージョンで起きたバグ？ってことがわからないこと。
-日付が記録されているので調べればわからなくはないけど、面倒だよね。</p>
+<p>まずは Gemfile に追加して <code>bundle install</code> 。</p>
 
-<p>Exceptional.io では付加情報を付け加えて送ることができるので、以下の utility class をつかって git の revision 情報を取得し、それを送るようにしてみた。</p>
-
-<div><script src='https://gist.github.com/3713816.js?file='></script>
-<noscript><pre><code># coding: UTF-8
-class GitUtil
-  class &lt;&lt; self
-    # Current source code revision
-    def revision
-      rev = capistrano_revision
-      rev = command_revision unless rev
-      rev.try(:chomp)
-    end
-
-    private
-    def capistrano_revision
-      begin
-        revision_file = &quot;#{Rails.root}/REVISION&quot;
-        return File.read(revision_file) if File.exists? revision_file
-      rescue IOError =&gt; e
-        Rails.logger.info(e)
-      end
-      nil
-    end
-
-    def command_revision
-      rev = `cd '#{Rails.root}' &amp;&amp; git rev-list --max-count=1 HEAD`
-      $? == 0 ? rev : nil
-    end
-  end
-end</code></pre></noscript></div>
-
-
-<p>あとは</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Exceptional</span><span class="o">.</span><span class="n">context</span><span class="p">({</span><span class="n">git_revision</span><span class="p">:</span> <span class="no">GitUtil</span><span class="o">.</span><span class="n">revision</span><span class="p">})</span>
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;i18n-js&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>こんな感じのコードを例外送出前に呼んでおくと、付加情報と共に送られていく。</p>
+<p>続いて application.js に以下の行を追加。</p>
 
-<p>これでどのコミットからどのコミットまで例外が起きてたかわかるようになった。便利便利。</p>
+<figure class='code'><figcaption><span>app/assets/javascripts/application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//= require i18n</span>
+</span><span class='line'><span class="c1">//= require i18n/translations</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>app/views/layouts/application.html.erb に以下の行を追加。
+指定した言語で訳が存在しない時にデフォルト言語の訳を参照したいので <code>I18n.fallbacks = true;</code> を指定しています。</p>
+
+<figure class='code'><figcaption><span>app/views/layouts/application.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='erb'><span class='line'><span class="x">&lt;script type=&quot;text/javascript&quot;&gt;</span>
+</span><span class='line'><span class="x">    I18n.defaultLocale = &quot;</span><span class="cp">&lt;%=</span> <span class="no">I18n</span><span class="o">.</span><span class="n">default_locale</span> <span class="cp">%&gt;</span><span class="x">&quot;;</span>
+</span><span class='line'><span class="x">    I18n.locale = &quot;</span><span class="cp">&lt;%=</span> <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="cp">%&gt;</span><span class="x">&quot;;</span>
+</span><span class='line'><span class="x">    I18n.fallbacks = true;</span>
+</span><span class='line'><span class="x">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最後に <code>rake i18n:js:setup</code> を実行すると <code>config/i18n-js.yml</code> が生成されます。</p>
+
+<p>これで <code>config/locales/*.yml</code> に書いてある Rails (Ruby) 側で利用できる情報と同じものが利用できるようになります。</p>
+
+<p>ローカライゼーションは <code>I18n.t()</code> 関数で実行します。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">I18n</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>デフォルト値を指定したい場合はこんな感じ。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">I18n</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">defaultValue</span><span class="o">:</span> <span class="s2">&quot;こんちは&quot;</span><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>便利に使わせていただきます。</p>
 </div>
 
 
@@ -170,15 +177,21 @@ end</code></pre></noscript></div>
   
 
 
-<time datetime="2012-09-13T20:44:00+09:00" pubdate data-updated="true">Sep 13<span>th</span>, 2012</time>
+<time datetime="2012-12-06T23:37:00+09:00" pubdate data-updated="true">Dec 6<span>th</span>, 2012</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/i18n/'>I18N</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>
+  
+</span>
 
 
     </p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/12/06/i18n-js/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/12/06/i18n-js/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -191,10 +204,8 @@ end</code></pre></noscript></div>
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/06/25/open-sources-used-by-spotify/" title="Previous Post: Open sources used by spotify">&laquo; Open sources used by spotify</a>
+        <a class="basic-alignment left" href="/blog/2012/12/02/facebook-recommendations-bar-for-octopress/" title="Previous Post: Octopress に Facebook recommendations bar を設置">&laquo; Octopress に Facebook recommendations bar を設置</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/11/18/how-to-restrict-s3-for-folder-access/" title="Next Post: IAMユーザのS3アクセスをフォルダレベルで制限する">IAMユーザのS3アクセスをフォルダレベルで制限する &raquo;</a>
       
     </p>
   </footer>
@@ -271,8 +282,8 @@ end</code></pre></noscript></div>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/';
-        var disqus_url = 'http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/';
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/12/06/i18n-js/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2012/12/06/i18n-js/';
         var disqus_script = 'embed.js';
       
     (function () {
