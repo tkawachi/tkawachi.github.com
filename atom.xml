@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-06T23:54:01+09:00</updated>
+  <updated>2012-12-06T23:57:31+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[i18n-js]]></title>
+    <title type="html"><![CDATA[Rails の JavaScript (CoffeeScript) でローカライゼーションを簡単に]]></title>
     <link href="http://tkawachi.github.com/blog/2012/12/06/i18n-js/"/>
     <updated>2012-12-06T23:37:00+09:00</updated>
     <id>http://tkawachi.github.com/blog/2012/12/06/i18n-js</id>
