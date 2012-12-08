@@ -27,7 +27,7 @@ a = b + c だったら普通 a - b = c だろうと思うのですが、最後�
 
 <!-- more -->
 
-`t1` は 2012年1月1日ですから、`t3 = t1 + 1.month` によって `t3` には１か月後の 2012年1月2日が入ります。
+`t1` は 2012年1月1日ですから、`t3 = t1 + 1.month` によって `t3` には１か月後の 2012年2月1日が入ります。
 具体的には
 [Date#advance](https://github.com/rails/rails/blob/3-2-stable/activesupport/lib/active_support/core_ext/date/calculations.rb#L108-L116)
 の中で `Date#>>` を使って１か月後の日付が計算されています。
