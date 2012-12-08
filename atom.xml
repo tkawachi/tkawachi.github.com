@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-06T23:57:31+09:00</updated>
+  <updated>2012-12-08T11:55:19+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,59 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ActiveSupport 日時計算の罠]]></title>
+    <link href="http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time/"/>
+    <updated>2012-12-08T11:03:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time</id>
+    <content type="html"><![CDATA[<p>ActiveSupport の日時計算はとても便利です。直感的な記法でスラスラ書けちゃいます。
+でもハマるポイントもありますので注意してください。
+というか昨日僕がやらかしたことの告白です。</p>
+
+<p>下のコードを見てください。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">t1</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">t2</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span>
+</span><span class='line'><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span> <span class="o">==</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span> <span class="c1"># =&gt; true</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">t3</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="n">month</span>
+</span><span class='line'><span class="n">t3</span> <span class="o">-</span> <span class="n">t1</span> <span class="o">==</span> <span class="mi">1</span><span class="o">.</span><span class="n">month</span> <span class="c1"># =&gt; false</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>a = b + c だったら普通 b - a = c だろうと思うのですが、最後の式は false を返します。
+なぜだかわかりますか？</p>
+
+<!-- more -->
+
+
+<p><code>t1</code> は 2012年1月1日で <code>t3 = t1 + 1.month</code> によって <code>t3</code> には 2012年1月2日が入ります。
+具体的には
+<a href="https://github.com/rails/rails/blob/3-2-stable/activesupport/lib/active_support/core_ext/date/calculations.rb#L108-L116">Date#advance</a>
+の中で <code>Date#&gt;&gt;</code> を使って計算されています。</p>
+
+<p><code>Time</code> インスタント間の引き算はふたつの時刻間の秒数を返します。
+<code>t3 - t1</code> は 2012年1月1日から2012年2月1日までの秒数である <code>2678400.0</code> を返します。
+これと <code>1.month</code> を比較するのですが、<code>1.month</code> は <code>30.days</code> つまり <code>2592000</code> 秒となります。</p>
+
+<p>足す時は1ヶ月(2012年1月1日に足す場合は31日間)なのに、比較時は30日間と比較していたために等式が成り立たないということでした。
+たしかに時刻差だけを与えられた場合、それが何ヶ月分かはわからないですよね。</p>
+
+<p>month 以外の <code>Duration</code> である days, minutes, seconds では単位時間が常に同じであるため、このような症状はおきません。
+year に関してはうるう年の時に同じ症状が発生します。</p>
+
+<p>わかってしまえばなんともないが、知らないとハマりやすいポイントでした。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rails の JavaScript (CoffeeScript) でローカライゼーションを簡単に]]></title>

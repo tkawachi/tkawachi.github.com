@@ -5,13 +5,20 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Trying Micro Cloud Foundry 1.1.0 - tkawachi Blog</title>
+  <title>ActiveSupport 日時計算の罠 - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="前々から気になっていた Micro Cloud Foundry を試してみます。
-Cloud Foundry は VMware 社が開発している open source の PaaS です。
-Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめたものです &hellip;">
+  <meta name="description" content="ActiveSupport の日時計算はとても便利です。直感的な記法でスラスラ書けちゃいます。
+でもハマるポイントもありますので注意してください。
+というか昨日僕がやらかしたことの告白です。 下のコードを見てください。 1
+2
+3
+4
+5
+6
+7
+t1 = Time.new(2012, 12, 1 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +27,7 @@ Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめた�
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/">
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -79,7 +86,7 @@ Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめた�
   
   <header>
     
-      <h1 class="entry-title">Trying Micro Cloud Foundry 1.1.0</h1>
+      <h1 class="entry-title">ActiveSupport 日時計算の罠</h1>
     
     
       <p class="meta">
@@ -95,61 +102,58 @@ Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめた�
   
 
 
-<time datetime="2012-01-03T14:19:00+09:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2012</time>
+<time datetime="2012-12-08T11:03:00+09:00" pubdate data-updated="true">Dec 8<span>th</span>, 2012</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>前々から気になっていた Micro Cloud Foundry を試してみます。
-Cloud Foundry は VMware 社が開発している open source の PaaS です。
-Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめたものです。</p>
+<div class="entry-content"><p>ActiveSupport の日時計算はとても便利です。直感的な記法でスラスラ書けちゃいます。
+でもハマるポイントもありますので注意してください。
+というか昨日僕がやらかしたことの告白です。</p>
 
-<p>参考にしたのは <a href="http://support.cloudfoundry.com/entries/20316811-micro-cloud-foundry-installation-setup">Micro Cloud Foundry Installation &amp; Setup</a>。</p>
+<p>下のコードを見てください。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">t1</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">t2</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span>
+</span><span class='line'><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span> <span class="o">==</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span> <span class="c1"># =&gt; true</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">t3</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="n">month</span>
+</span><span class='line'><span class="n">t3</span> <span class="o">-</span> <span class="n">t1</span> <span class="o">==</span> <span class="mi">1</span><span class="o">.</span><span class="n">month</span> <span class="c1"># =&gt; false</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>a = b + c だったら普通 b - a = c だろうと思うのですが、最後の式は false を返します。
+なぜだかわかりますか？</p>
 
 <!-- more -->
 
 
-<p>まず仮想マシンを <a href="http://www.cloudfoundry.com/">Clound Foundry のページ</a>
-からダウンロードします。
-1GBあるので結構時間がかかります。
-BitTorrent で配布してくれとリクエストをだしておきました。</p>
+<p><code>t1</code> は 2012年1月1日で <code>t3 = t1 + 1.month</code> によって <code>t3</code> には 2012年1月2日が入ります。
+具体的には
+<a href="https://github.com/rails/rails/blob/3-2-stable/activesupport/lib/active_support/core_ext/date/calculations.rb#L108-L116">Date#advance</a>
+の中で <code>Date#&gt;&gt;</code> を使って計算されています。</p>
 
-<p>ダウンロード後、展開して <code>micro.vmx</code> を  VMware Fusion 4.1.1 で開こうとするとエラーになる。
-どうやら <code>.vmx</code> が Steinberg VST Mixer Settings に関連付けられていることが問題のようだ。
-以前 Cubase というアプリをインストールしたが、それが干渉している模様。
-<a href="http://communities.vmware.com/thread/239695">VMware のコミュニティページ</a>
-を参考にして <code>micro/</code> ディレクトリを <code>micro.vmwarevm/</code> に改名して
-ダブルクリックすることで起動できた。</p>
+<p><code>Time</code> インスタント間の引き算はふたつの時刻間の秒数を返します。
+<code>t3 - t1</code> は 2012年1月1日から2012年2月1日までの秒数である <code>2678400.0</code> を返します。
+これと <code>1.month</code> を比較するのですが、<code>1.month</code> は <code>30.days</code> つまり <code>2592000</code> 秒となります。</p>
 
-<p>あとは
-<a href="http://support.cloudfoundry.com/entries/20316811-micro-cloud-foundry-installation-setup">参考ページ</a>
-通り、、と行きたいところですが問題発生。</p>
+<p>足す時は1ヶ月(2012年1月1日に足す場合は31日間)なのに、比較時は30日間と比較していたために等式が成り立たないということでした。
+たしかに時刻差だけを与えられた場合、それが何ヶ月分かはわからないですよね。</p>
 
-<p><code>Enter Micro Cloud Foundry configuration token:</code> と聞かれたところで
-自分の token を入力しても
-<code>Unable to contact cloudfoundry.com to redeem configuration token</code>
-というエラーが表示される。
-ネットワークの設定がうまくいっていないのか、はたまた <code>cloudfoundry.com</code> が
-ダウンしているのか。
-<code>Configure vcap.me instead?</code> と聞かれたのでとりあえず y した。</p>
+<p>month 以外の <code>Duration</code> である days, minutes, seconds では単位時間が常に同じであるため、このような症状はおきません。
+year に関してはうるう年の時に同じ症状が発生します。</p>
 
-<pre><code>Micro Cloud Foundry is now bound to localhost (127.0.0.1)
-You must use ssh tunneling to access it
-Press return to continue 
-</code></pre>
-
-<p>と表示された。return を押して続き。</p>
-
-<p>下の画面のとおり「5分かかるよ」と言われた。</p>
-
-<p><img src="https://lh3.googleusercontent.com/-ScF3kpSyiJ0/TwKwn8CpQiI/AAAAAAAAGSM/n1Lcx5EFHw0/s800/Screen%252520Shot%2525202012-01-03%252520at%25252016.30.13.png"></p>
-
-<p>がしかし、待っても待っても返ってこない。1時間以上は待ったが。
-どうしたことだろう？</p>
-
-<p>とりあえず今回はここまで。次回はなんとか動かしたい。</p>
+<p>わかってしまえばなんともないが、知らないとハマりやすいポイントでした。</p>
 </div>
 
 
@@ -172,12 +176,12 @@ Press return to continue
   
 
 
-<time datetime="2012-01-03T14:19:00+09:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2012</time>
+<time datetime="2012-12-08T11:03:00+09:00" pubdate data-updated="true">Dec 8<span>th</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/cloudfoundry/'>CloudFoundry</a>
+    <a class='category' href='/blog/categories/activesupport/'>ActiveSupport</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
   
 </span>
 
@@ -186,7 +190,7 @@ Press return to continue
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -199,10 +203,8 @@ Press return to continue
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/" title="Previous Post: Compile ruby 1.9.3 on Mac OS X Lion using RVM">&laquo; Compile ruby 1.9.3 on Mac OS X Lion using RVM</a>
+        <a class="basic-alignment left" href="/blog/2012/12/06/i18n-js/" title="Previous Post: Rails の JavaScript (CoffeeScript) でローカライゼーションを簡単に">&laquo; Rails の JavaScript (CoffeeScript) でローカライゼーションを簡単に</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/" title="Next Post: Trying Micro Cloud Foundry 1.1.0 その2">Trying Micro Cloud Foundry 1.1.0 その2 &raquo;</a>
       
     </p>
   </footer>
@@ -279,8 +281,8 @@ Press return to continue
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/';
-        var disqus_url = 'http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/';
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time/';
         var disqus_script = 'embed.js';
       
     (function () {
