@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Facebook | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/blog/categories/facebook/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-08T18:22:56+09:00</updated>
+  <updated>2012-12-08T18:29:15+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -26,7 +26,7 @@ Facebook の <a href="https://developers.facebook.com/docs/reference/plugins/rec
 のページから blog 用の Facebook application をひとつ作って、code snippet を吐き出します。</p>
 
 <p>あとは
-<a href="https://github.com/tkawachi/tkawachi.github.com/commit/0f98e6e1e6511223897a177c414c75115aff78b6">このように</a>
+<a href="https://github.com/tkawachi/tkawachi.github.com/blob/source/source/_layouts/post.html#L45-L53">このように</a>
 <code>source/_layouts/post.html</code> を書き換えます。
 Github pages だと何を変更したかも github で見られるのが嬉しいですね。</p>
 
