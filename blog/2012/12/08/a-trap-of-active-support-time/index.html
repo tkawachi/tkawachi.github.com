@@ -138,7 +138,7 @@ t1 = Time.new(2012, 12, 1 &hellip;">
 <!-- more -->
 
 
-<p><code>t1</code> は 2012年1月1日ですから、<code>t3 = t1 + 1.month</code> によって <code>t3</code> には１か月後の 2012年1月2日が入ります。
+<p><code>t1</code> は 2012年1月1日ですから、<code>t3 = t1 + 1.month</code> によって <code>t3</code> には１か月後の 2012年2月1日が入ります。
 具体的には
 <a href="https://github.com/rails/rails/blob/3-2-stable/activesupport/lib/active_support/core_ext/date/calculations.rb#L108-L116">Date#advance</a>
 の中で <code>Date#&gt;&gt;</code> を使って１か月後の日付が計算されています。</p>
