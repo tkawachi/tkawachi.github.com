@@ -27,10 +27,10 @@ a = b + c だったら普通 a - b = c だろうと思うのですが、最後�
 
 <!-- more -->
 
-`t1` は 2012年1月1日で `t3 = t1 + 1.month` によって `t3` には 2012年1月2日が入ります。
+`t1` は 2012年1月1日ですから、`t3 = t1 + 1.month` によって `t3` には１か月後の 2012年1月2日が入ります。
 具体的には
 [Date#advance](https://github.com/rails/rails/blob/3-2-stable/activesupport/lib/active_support/core_ext/date/calculations.rb#L108-L116)
-の中で `Date#>>` を使って計算されています。
+の中で `Date#>>` を使って１か月後の日付が計算されています。
 
 `Time` インスタント間の引き算はふたつの時刻間の秒数を返します。
 `t3 - t1` は 2012年1月1日から2012年2月1日までの秒数である `2678400.0` を返します。
