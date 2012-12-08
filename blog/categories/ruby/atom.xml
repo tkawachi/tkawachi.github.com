@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-08T18:47:41+09:00</updated>
+  <updated>2012-12-08T18:50:55+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -40,10 +40,10 @@ t3 - t1 == 1.month # => false
 <!-- more -->
 
 
-<p><code>t1</code> は 2012年1月1日で <code>t3 = t1 + 1.month</code> によって <code>t3</code> には 2012年1月2日が入ります。
+<p><code>t1</code> は 2012年1月1日ですから、<code>t3 = t1 + 1.month</code> によって <code>t3</code> には１か月後の 2012年1月2日が入ります。
 具体的には
 <a href="https://github.com/rails/rails/blob/3-2-stable/activesupport/lib/active_support/core_ext/date/calculations.rb#L108-L116">Date#advance</a>
-の中で <code>Date#&gt;&gt;</code> を使って計算されています。</p>
+の中で <code>Date#&gt;&gt;</code> を使って１か月後の日付が計算されています。</p>
 
 <p><code>Time</code> インスタント間の引き算はふたつの時刻間の秒数を返します。
 <code>t3 - t1</code> は 2012年1月1日から2012年2月1日までの秒数である <code>2678400.0</code> を返します。
