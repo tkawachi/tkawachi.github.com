@@ -14,7 +14,7 @@ Facebook の [Recommendations Bar](https://developers.facebook.com/docs/referenc
 のページから blog 用の Facebook application をひとつ作って、code snippet を吐き出します。
 
 あとは
-[このように](https://github.com/tkawachi/tkawachi.github.com/blob/source/source/_layouts/post.html#L45-L53)
+[このように](https://github.com/tkawachi/tkawachi.github.com/blob/31482db539e901af1f7f5af28d071e4a4a0c01e0/source/_layouts/post.html#L45-L53)
 `source/_layouts/post.html` を書き換えます。
 Github pages だと何を変更したかも github で見られるのが嬉しいですね。
 
