@@ -1,0 +1,421 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Rails で TypeScript を動かそうとして失敗した記録 - tkawachi Blog</title>
+  <meta name="author" content="KAWACHI Takashi">
+
+  
+  <meta name="description" content="Microsoft 発の型付き JavaScript こと TypeScript が人気ですね。
+typescript-rails という gem があったので、動くのか試してみました。 結論から言っておくと、他のスクリプトやライブラリを参照する TypeScript &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">tkawachi Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tkawachi.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Rails で TypeScript を動かそうとして失敗した記録</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-09T11:27:00+09:00" pubdate data-updated="true">Dec 9<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Microsoft 発の型付き JavaScript こと TypeScript が人気ですね。
+<a href="https://github.com/klaustopher/typescript-rails">typescript-rails</a> という gem があったので、動くのか試してみました。</p>
+
+<p>結論から言っておくと、他のスクリプトやライブラリを参照する TypeScript をコンパイルすることが今回はできませんでした。</p>
+
+<!-- more -->
+
+
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rails new typescript-rails-test -T
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;gem &quot;typescript-rails&quot;&#39;</span> &gt;&gt; Gemfile
+</span><span class='line'><span class="nv">$ </span>bundle
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails g controller <span class="nb">test </span>index
+</span><span class='line'>      create  app/controllers/test_controller.rb
+</span><span class='line'>       route  get <span class="s2">&quot;test/index&quot;</span>
+</span><span class='line'>      invoke  erb
+</span><span class='line'>      create    app/views/test
+</span><span class='line'>      create    app/views/test/index.html.erb
+</span><span class='line'>      invoke  helper
+</span><span class='line'>      create    app/helpers/test_helper.rb
+</span><span class='line'>      invoke  assets
+</span><span class='line'>      invoke    coffee
+</span><span class='line'>      create      app/assets/javascripts/test.js.coffee
+</span><span class='line'>      invoke    scss
+</span><span class='line'>      create      app/assets/stylesheets/test.css.scss
+</span><span class='line'><span class="nv">$ </span>rm app/assets/javascripts/test.js.coffee
+</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;alert(&quot;Hello TypeScript&quot;)&#39;</span> &gt; app/assets/javascripts/test.js.ts
+</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails s
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これで http://localhost:3000/test/index にアクセスすると、正しく alert が表示される。
+いいぞ。</p>
+
+<p>次に JQuery が使ってみたい。</p>
+
+<figure class='code'><figcaption><span>app/assets/javascripts/test.js.ts</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;document ready&quot;</span><span class="p">)</span>
+</span><span class='line'><span class="p">})</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>うーむ。エラーがおきた。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>SyntaxError: (4,1): The name &#39;$&#39; does not exist in the current scope
+</span><span class='line'>  (in /Users/kawachi/gitworks/typescript-rails-test/app/assets/javascripts/test.js.ts)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="https://github.com/klaustopher/typescript-rails/issues/5">Issue #5</a>
+に報告されている問題と同一。
+<code>/// &lt;reference path="jquery.d.ts" /&gt;</code> という行をいれて <code>$</code> の存在を TypeScript compiler に知らしめねばならないらしいが、これが今のところできないようだ。</p>
+
+<p><a href="https://github.com/TimothyKlim/typescript-ruby/issues/1">https://github.com/TimothyKlim/typescript-ruby/issues/1</a>
+によれば、compiler 内の IO class が利用している CommonJS の機能を ExecJS が隠してしまっているのが原因とのこと。
+ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
+
+<p>これが ExecJS から node を叩くときにソースコードをラッピングするものだが、
+よく見ると module, exports, require, console が undefined にされていることがわかる。(<code>result = program();</code> のところで引数に何も渡されていない)
+隠されている CommonJS の機能とはきっとこのことを言っているのだろう。</p>
+
+<figure class='code'><figcaption><span>execjs/support/node_runner.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">program</span><span class="p">,</span> <span class="nx">execJS</span><span class="p">)</span> <span class="p">{</span> <span class="nx">execJS</span><span class="p">(</span><span class="nx">program</span><span class="p">)</span> <span class="p">})(</span><span class="kd">function</span><span class="p">(</span><span class="nx">module</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">require</span><span class="p">,</span> <span class="nx">console</span><span class="p">)</span> <span class="p">{</span> <span class="err">#</span><span class="p">{</span><span class="nx">source</span><span class="p">}</span>
+</span><span class='line'><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">program</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">output</span><span class="p">,</span> <span class="nx">print</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">process</span><span class="p">.</span><span class="nx">stdout</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">string</span><span class="p">);</span>
+</span><span class='line'>  <span class="p">};</span>
+</span><span class='line'>  <span class="k">try</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">result</span> <span class="o">=</span> <span class="nx">program</span><span class="p">();</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">result</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">result</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="nx">print</span><span class="p">(</span><span class="s1">&#39;[&quot;ok&quot;]&#39;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">try</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">print</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">([</span><span class="s1">&#39;ok&#39;</span><span class="p">,</span> <span class="nx">result</span><span class="p">]));</span>
+</span><span class='line'>      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">print</span><span class="p">(</span><span class="s1">&#39;[&quot;err&quot;]&#39;</span><span class="p">);</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">print</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">([</span><span class="s1">&#39;err&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">]));</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><a href="https://github.com/sstephenson/execjs/issues/91">このへん</a>
+をみると ExecJS の作者は、副作用を与えるこれらの機能を ExecJS に取り込むつもりは毛頭ないようだ。</p>
+
+<p>手元で上のコードを少し書き換えて module, exports, require を書き潰さないようにしてみたが、やはり同じエラーが出た。
+ということは、これらの関数が undefined になっていることが直接の理由ではないということか。</p>
+
+<p><a href="http://vividcode.hatenablog.com/entry/ts/run-on-rhino">JavaScript 処理系 Rhino で TypeScript コンパイラのビルドを試してみた</a>
+によると TypeScript がサポートしているのは Node.js と JScript だけなので、Node.js の存在を前提として TypeScript compiler を動かすモジュール作ったほうが早そうな感じ。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-09T11:27:00+09:00" pubdate data-updated="true">Dec 9<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/typescript/'>TypeScript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <div>
+    <div class="fb-like" data-send="false" data-width="450" data-show-faces="true"></div>
+  </div>
+  
+
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/12/08/a-trap-of-active-support-time/" title="Previous Post: ActiveSupport 日時計算の罠">&laquo; ActiveSupport 日時計算の罠</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/08/a-trap-of-active-support-time/">ActiveSupport 日時計算の罠</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/06/i18n-js/">Rails の JavaScript (CoffeeScript) でローカライゼーションを簡単に</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/02/facebook-recommendations-bar-for-octopress/">Octopress に Facebook recommendations bar を設置</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/02/facebook-promoted-posts/">Facebook promoted posts</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+<div class="fb-activity" data-site="http://tkawachi.github.com/" data-app-id="445203802205922" data-width="260" data-height="300" data-header="true" data-linktarget="_top" data-recommendations="false"></div>
+
+  
+</aside>
+
+
+<div class="fb-recommendations-bar"></div>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=445203802205922";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - KAWACHI Takashi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tkawachiblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

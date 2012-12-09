@@ -9,9 +9,9 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="前々から気になっていた Micro Cloud Foundry を試してみます。
-Cloud Foundry は VMware 社が開発している open source の PaaS です。
-Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめたものです &hellip;">
+  <meta name="description" content="前回
+は残念ながらインストールの途中で止まってしまいましたが、解決方法がわかりました。 デフォルトで Bridge network になっているのですが、私の環境
+(VMware 4.1.1, Mac OS X Lion, WiFi)では VM で network が利用不可のようです。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +76,59 @@ Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめた�
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/">Trying Micro Cloud Foundry 1.1.0 その2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-03T19:31:00+09:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/">前回</a>
+は残念ながらインストールの途中で止まってしまいましたが、解決方法がわかりました。</p>
+
+<p>デフォルトで Bridge network になっているのですが、私の環境
+(VMware 4.1.1, Mac OS X Lion, WiFi)では VM で network が利用不可のようです。
+昔から無線で Bridge networking はハマることが多いです。
+以下の手順で回避できました。
+(
+<a href="http://support.cloudfoundry.com/entries/20382148-unable-to-cloudfoundry-com">ここ</a>
+や
+<a href="http://support.cloudfoundry.com/entries/20387172-unable-to-contact-cloudfoundry-com-to-redeem-configuration-token">ここ</a>
+を参考にしました。
+)</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -374,6 +427,10 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/12/08/a-trap-of-active-support-time/">ActiveSupport 日時計算の罠</a>
       </li>
     
@@ -387,10 +444,6 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
     
       <li class="post">
         <a href="/blog/2012/12/02/facebook-promoted-posts/">Facebook promoted posts</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/11/19/generating-html-from-docbook/">Generating HTML from DocBook</a>
       </li>
     
   </ul>

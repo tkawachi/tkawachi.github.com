@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Rails | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-09T00:17:07+09:00</updated>
+  <updated>2012-12-09T11:29:16+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,116 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Rails で TypeScript を動かそうとして失敗した記録]]></title>
+    <link href="http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out/"/>
+    <updated>2012-12-09T11:27:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out</id>
+    <content type="html"><![CDATA[<p>Microsoft 発の型付き JavaScript こと TypeScript が人気ですね。
+<a href="https://github.com/klaustopher/typescript-rails">typescript-rails</a> という gem があったので、動くのか試してみました。</p>
+
+<p>結論から言っておくと、他のスクリプトやライブラリを参照する TypeScript をコンパイルすることが今回はできませんでした。</p>
+
+<!-- more -->
+
+
+<p>``` sh
+$ rails new typescript-rails-test -T
+$ echo 'gem "typescript-rails"' >> Gemfile
+$ bundle
+$ bundle exec rails g controller test index</p>
+
+<pre><code>  create  app/controllers/test_controller.rb
+   route  get "test/index"
+  invoke  erb
+  create    app/views/test
+  create    app/views/test/index.html.erb
+  invoke  helper
+  create    app/helpers/test_helper.rb
+  invoke  assets
+  invoke    coffee
+  create      app/assets/javascripts/test.js.coffee
+  invoke    scss
+  create      app/assets/stylesheets/test.css.scss
+</code></pre>
+
+<p>$ rm app/assets/javascripts/test.js.coffee
+$ echo 'alert("Hello TypeScript")' > app/assets/javascripts/test.js.ts
+$ bundle exec rails s
+```</p>
+
+<p>これで http://localhost:3000/test/index にアクセスすると、正しく alert が表示される。
+いいぞ。</p>
+
+<p>次に JQuery が使ってみたい。
+<code>javascript app/assets/javascripts/test.js.ts
+$(function() {
+  alert("document ready")
+})
+</code></p>
+
+<p>うーむ。エラーがおきた。</p>
+
+<p><code>text
+SyntaxError: (4,1): The name '$' does not exist in the current scope
+  (in /Users/kawachi/gitworks/typescript-rails-test/app/assets/javascripts/test.js.ts)
+</code></p>
+
+<p><a href="https://github.com/klaustopher/typescript-rails/issues/5">Issue #5</a>
+に報告されている問題と同一。
+<code>/// &lt;reference path="jquery.d.ts" /&gt;</code> という行をいれて <code>$</code> の存在を TypeScript compiler に知らしめねばならないらしいが、これが今のところできないようだ。</p>
+
+<p><a href="https://github.com/TimothyKlim/typescript-ruby/issues/1">https://github.com/TimothyKlim/typescript-ruby/issues/1</a>
+によれば、compiler 内の IO class が利用している CommonJS の機能を ExecJS が隠してしまっているのが原因とのこと。
+ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
+
+<p>これが ExecJS から node を叩くときにソースコードをラッピングするものだが、
+よく見ると module, exports, require, console が undefined にされていることがわかる。(<code>result = program();</code> のところで引数に何も渡されていない)
+隠されている CommonJS の機能とはきっとこのことを言っているのだろう。</p>
+
+<p>``` javascript execjs/support/node_runner.js
+(function(program, execJS) { execJS(program) })(function(module, exports, require, console) { #{source}
+}, function(program) {
+  var output, print = function(string) {</p>
+
+<pre><code>process.stdout.write('' + string);
+</code></pre>
+
+<p>  };
+  try {</p>
+
+<pre><code>result = program();
+if (typeof result == 'undefined' &amp;&amp; result !== null) {
+  print('["ok"]');
+} else {
+  try {
+    print(JSON.stringify(['ok', result]));
+  } catch (err) {
+    print('["err"]');
+  }
+}
+</code></pre>
+
+<p>  } catch (err) {</p>
+
+<pre><code>print(JSON.stringify(['err', '' + err]));
+</code></pre>
+
+<p>  }
+});
+```</p>
+
+<p><a href="https://github.com/sstephenson/execjs/issues/91">このへん</a>
+をみると ExecJS の作者は、副作用を与えるこれらの機能を ExecJS に取り込むつもりは毛頭ないようだ。</p>
+
+<p>手元で上のコードを少し書き換えて module, exports, require を書き潰さないようにしてみたが、やはり同じエラーが出た。
+ということは、これらの関数が undefined になっていることが直接の理由ではないということか。</p>
+
+<p><a href="http://vividcode.hatenablog.com/entry/ts/run-on-rhino">JavaScript 処理系 Rhino で TypeScript コンパイラのビルドを試してみた</a>
+によると TypeScript がサポートしているのは Node.js と JScript だけなので、Node.js の存在を前提として TypeScript compiler を動かすモジュール作ったほうが早そうな感じ。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ActiveSupport 日時計算の罠]]></title>
