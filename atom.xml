@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-09T11:30:31+09:00</updated>
+  <updated>2012-12-09T11:33:07+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -155,6 +155,8 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
 
 <p><a href="http://vividcode.hatenablog.com/entry/ts/run-on-rhino">JavaScript 処理系 Rhino で TypeScript コンパイラのビルドを試してみた</a>
 によると TypeScript がサポートしているのは Node.js と JScript だけなので、Node.js の存在を前提として TypeScript compiler を動かすモジュール作ったほうが早そうな感じ。</p>
+
+<p>時間が取れたら作りたいな。</p>
 ]]></content>
   </entry>
   
