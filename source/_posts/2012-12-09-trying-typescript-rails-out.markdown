@@ -91,8 +91,10 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。
 [このへん](https://github.com/sstephenson/execjs/issues/91)
 をみると ExecJS の作者は、副作用を与えるこれらの機能を ExecJS に取り込むつもりは毛頭ないようだ。
 
-手元で上のコードを少し書き換えて module, exports, require を書き潰さないようにしてみたが、やはり同じエラーが出た。
+上のコードを手元で少し書き換えて module, exports, require を書き潰さないようにしてみたが、やはり同じエラーが出た。
 ということは、これらの関数が undefined になっていることが直接の理由ではないということか。
 
 [JavaScript 処理系 Rhino で TypeScript コンパイラのビルドを試してみた](http://vividcode.hatenablog.com/entry/ts/run-on-rhino)
 によると TypeScript がサポートしているのは Node.js と JScript だけなので、Node.js の存在を前提として TypeScript compiler を動かすモジュール作ったほうが早そうな感じ。
+
+時間が取れたら作りたいな。
