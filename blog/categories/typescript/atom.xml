@@ -4,7 +4,7 @@
   <title><![CDATA[Category: TypeScript | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/blog/categories/typescript/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-09T11:29:16+09:00</updated>
+  <updated>2012-12-09T11:30:31+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -115,7 +115,7 @@ if (typeof result == 'undefined' &amp;&amp; result !== null) {
 <p><a href="https://github.com/sstephenson/execjs/issues/91">このへん</a>
 をみると ExecJS の作者は、副作用を与えるこれらの機能を ExecJS に取り込むつもりは毛頭ないようだ。</p>
 
-<p>手元で上のコードを少し書き換えて module, exports, require を書き潰さないようにしてみたが、やはり同じエラーが出た。
+<p>上のコードを手元で少し書き換えて module, exports, require を書き潰さないようにしてみたが、やはり同じエラーが出た。
 ということは、これらの関数が undefined になっていることが直接の理由ではないということか。</p>
 
 <p><a href="http://vividcode.hatenablog.com/entry/ts/run-on-rhino">JavaScript 処理系 Rhino で TypeScript コンパイラのビルドを試してみた</a>
