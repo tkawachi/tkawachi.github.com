@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-09T11:33:07+09:00</updated>
+  <updated>2012-12-31T23:47:35+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Emacs Lisp Package Archive]]></title>
+    <link href="http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/"/>
+    <updated>2012-12-31T23:16:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive</id>
+    <content type="html"><![CDATA[<p>Macでの日本語の文書を読み書きするテキストエディタを探していた。
+Facebookでつぶやいていたらいろいろおすすめをいただいたのだが、これだ！！というものがなかった。
+それで Emacs に戻ろうと思った。</p>
+
+<p>ほぼ三年弱ぶりくらいに Emacs に戻ってきたのだが
+<a href="http://emacswiki.org/emacs/ELPA">ELPA</a>
+というパッケージマネージャがデフォルトで付いてきていて、ものすごく導入障壁が下がっていたのでメモしておく。</p>
+
+<!-- more -->
+
+
+<p>Mac OS X なので Emacs 自体は
+<a href="http://emacsformacosx.com/">Emacs For Mac OS X</a>
+からダウンロードした。
+他のアプリと同じようにインストールできる。簡単。</p>
+
+<p>おもむろに <code>M-x list-packages</code> とこんな画面が出てくる。</p>
+
+<p><img src="http://tkawachi.github.com/images/20121231/list-packages.png" alt="M-x list-packages" /></p>
+
+<p>青い下線があるところに移動して return を押すとこんなかんじでパッケージの説明が出てくる。</p>
+
+<p><img src="http://tkawachi.github.com/images/20121231/show.png" alt="M-x list-packages" /></p>
+
+<p>あとは <code>Install</code> と書かれているところに移動して return を押せばインストールが完了する。
+簡単！</p>
+
+<p>いくつか公開レポジトリがあるらしく以下のように設定しておけば複数のレポジトリからパッケージがインストールできる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+</span><span class='line'>                           ("marmalade" . "http://marmalade-repo.org/packages/")
+</span><span class='line'>                           ("melpa" . "http://melpa.milkbox.net/packages/")))</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上の３つを入れた状態で <code>list-packages</code> すると現時点で 1000 程度のパッケージがリストされます。
+これからもっと増えていくでしょう。</p>
+
+<p>perl でいうところの CPAN が Emacs にできたということですね。素晴らしいです。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Rails で TypeScript を動かそうとして失敗した記録]]></title>

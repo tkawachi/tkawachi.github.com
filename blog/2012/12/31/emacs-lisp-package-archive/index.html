@@ -5,11 +5,14 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Rspec - tkawachi Blog</title>
+  <title>Emacs Lisp Package Archive - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Category: Rspec">
+  <meta name="description" content="Macでの日本語の文書を読み書きするテキストエディタを探していた。
+Facebookでつぶやいていたらいろいろおすすめをいただいたのだが、これだ！！というものがなかった。
+それで Emacs に戻ろうと思った。 ほぼ三年弱ぶりくらいに Emacs に戻ってきたのだが
+ELPA &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +21,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.comblog/categories/rspec/">
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -73,36 +76,138 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Rspec</h1>
+    
+      <h1 class="entry-title">Emacs Lisp Package Archive</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-31T23:16:00+09:00" pubdate data-updated="true">Dec 31<span>st</span>, 2012</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>Macでの日本語の文書を読み書きするテキストエディタを探していた。
+Facebookでつぶやいていたらいろいろおすすめをいただいたのだが、これだ！！というものがなかった。
+それで Emacs に戻ろうと思った。</p>
 
-  
-  <h2>2012</h2>
+<p>ほぼ三年弱ぶりくらいに Emacs に戻ってきたのだが
+<a href="http://emacswiki.org/emacs/ELPA">ELPA</a>
+というパッケージマネージャがデフォルトで付いてきていて、ものすごく導入障壁が下がっていたのでメモしておく。</p>
 
-<article>
-  
-<h1><a href="/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/">Run rspec faster for Rails 3.1</a></h1>
-<time datetime="2012-01-22T21:07:00+09:00" pubdate><span class='month'>Jan</span> <span class='day'>22</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/rspec/'>Rspec</a></span>
-</footer>
+<!-- more -->
 
 
-</article>
+<p>Mac OS X なので Emacs 自体は
+<a href="http://emacsformacosx.com/">Emacs For Mac OS X</a>
+からダウンロードした。
+他のアプリと同じようにインストールできる。簡単。</p>
 
+<p>おもむろに <code>M-x list-packages</code> とこんな画面が出てくる。</p>
+
+<p><img src="/images/20121231/list-packages.png" alt="M-x list-packages" /></p>
+
+<p>青い下線があるところに移動して return を押すとこんなかんじでパッケージの説明が出てくる。</p>
+
+<p><img src="/images/20121231/show.png" alt="M-x list-packages" /></p>
+
+<p>あとは <code>Install</code> と書かれているところに移動して return を押せばインストールが完了する。
+簡単！</p>
+
+<p>いくつか公開レポジトリがあるらしく以下のように設定しておけば複数のレポジトリからパッケージがインストールできる。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+</span><span class='line'>                           ("marmalade" . "http://marmalade-repo.org/packages/")
+</span><span class='line'>                           ("melpa" . "http://melpa.milkbox.net/packages/")))</span></code></pre></td></tr></table></div></figure>
+
+
+<p>上の３つを入れた状態で <code>list-packages</code> すると現時点で 1000 程度のパッケージがリストされます。
+これからもっと増えていくでしょう。</p>
+
+<p>perl でいうところの CPAN が Emacs にできたということですね。素晴らしいです。</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-31T23:16:00+09:00" pubdate data-updated="true">Dec 31<span>st</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/emacs/'>Emacs</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <div>
+    <div class="fb-like" data-send="false" data-width="450" data-show-faces="true"></div>
+  </div>
+  
+
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/12/09/trying-typescript-rails-out/" title="Previous Post: Rails で TypeScript を動かそうとして失敗した記録">&laquo; Rails で TypeScript を動かそうとして失敗した記録</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -145,6 +250,16 @@
 </aside>
 
 
+<div class="fb-recommendations-bar"></div>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=445203802205922";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -159,7 +274,10 @@
       var disqus_shortname = 'tkawachiblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
