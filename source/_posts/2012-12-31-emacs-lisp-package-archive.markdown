@@ -40,7 +40,7 @@ Mac OS X なので Emacs 自体は
                            ("melpa" . "http://melpa.milkbox.net/packages/")))
 ```
 
-上の３つを入れた状態で `list-packages` すると現時点で 1000 程度のパッケージがリストされます。
-これからもっと増えていくでしょう。
+上の３つを入れた状態で `list-packages` すると現時点で 1000 程度のパッケージがリストされる。
+これからもっと増えていくだろう。
 
-perl でいうところの CPAN が Emacs にできたということですね。素晴らしいです。
+perl でいうところの CPAN が Emacs にできたということだ。素晴らしい。
