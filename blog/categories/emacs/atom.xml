@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Emacs | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/blog/categories/emacs/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-31T23:47:35+09:00</updated>
+  <updated>2012-12-31T23:51:56+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -56,10 +56,10 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
 
 <p>```</p>
 
-<p>上の３つを入れた状態で <code>list-packages</code> すると現時点で 1000 程度のパッケージがリストされます。
-これからもっと増えていくでしょう。</p>
+<p>上の３つを入れた状態で <code>list-packages</code> すると現時点で 1000 程度のパッケージがリストされる。
+これからもっと増えていくだろう。</p>
 
-<p>perl でいうところの CPAN が Emacs にできたということですね。素晴らしいです。</p>
+<p>perl でいうところの CPAN が Emacs にできたということだ。素晴らしい。</p>
 ]]></content>
   </entry>
   
