@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2012-12-31T23:51:56+09:00</updated>
+  <updated>2013-01-04T19:27:38+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,50 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Bootswatchのテーマをtwitter-bootstrap-railsで使う]]></title>
+    <link href="http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails/"/>
+    <updated>2013-01-04T18:12:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails</id>
+    <content type="html"><![CDATA[<p>美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
+これ自体は別に悪いことはないと思うのですが、他のサイトと見分けの付かないサイトになってしまうのは良くないですよね。</p>
+
+<p>そこでbootstrap用のテーマを入れよう、となるわけです。
+テーマを入れることで色・フォントなどが変更されるので、bootstrap臭が軽減されます。</p>
+
+<p>bootstrap theme などで検索すると有償・無償を含めテーマを取り扱っているサイトが見つかると思いますが、今回は <a href="http://bootswatch.com/">Bootswatch</a> を twitter-bootstrap-rails と共に使う方法をメモします。
+bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方法があると思います。</p>
+
+<!-- more -->
+
+
+<p>まず <a href="http://bootswatch.com/#gallery">Bootswatch の Gallery</a> から使いたいテーマを選びます。
+<code>vendor/assets/stylesheets/bootswatch/</code> ディレクトリを作り、選んだテーマの Download ボタンから <code>variables.less</code> と <code>bootswatch.less</code> をダウンロードして、このディレクトリに保存します。</p>
+
+<p><code>app/assets/stylesheets/</code> ではなく <code>vendor/assets/stylesheets/</code> 以下に <code>bootswatch</code> ディレクトリを作成して保存します。
+なぜなら <code>app/assets/stylesheets/application.css.scss</code> にはデフォルトで <code>*= require_tree .</code> という行があり、<code>app/assets/stylesheets/</code> 以下にある <code>.less</code> ファイルはすべて require されてしまうからです。
+<code>variables.less</code>, <code>bootswatch.less</code> は <code>@import</code> するものであって、require するとエラーになります。
+それに <code>vendor</code> というのはサードパーティ製のアレヤコレヤを置くところなので、きっとこっちが正解でしょう。</p>
+
+<p>あとは <code>bootstrap_and_overrides.css.less</code> で <code>@import “twitter/bootstrap/responsive”;</code> の行のあとに以下の２行を付け足します。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@import “bootswatch/variables.less”;
+</span><span class='line'>@import “bootswatch/bootswatch.less”;</span></code></pre></td></tr></table></div></figure>
+
+
+<p>これでいける(少なくとも僕は使えてる)と思うんですが、ダメだったら教えて下さい。</p>
+
+<p>参考</p>
+
+<ul>
+<li><a href="http://bobonrails.com/post/29340795516/customizing-twitter-bootstrap-on-rails-3">Customizing Twitter Bootstrap On Rails 3</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Emacs Lisp Package Archive]]></title>

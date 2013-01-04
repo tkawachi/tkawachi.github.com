@@ -5,14 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Emacs Lisp Package Archive - tkawachi Blog</title>
+  <title>Bootswatchのテーマをtwitter-bootstrap-railsで使う - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Macでの日本語の文書を読み書きするテキストエディタを探していた。
-Facebookでつぶやいていたらいろいろおすすめをいただいたのだが、これだ！！というものがなかった。
-それで Emacs に戻ろうと思った。 ほぼ三年弱ぶりくらいに Emacs に戻ってきたのだが
-ELPA &hellip;">
+  <meta name="description" content="美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
+これ自体は別に悪いことはないと思うのですが、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +19,7 @@ ELPA &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/">
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -80,7 +78,7 @@ ELPA &hellip;">
   
   <header>
     
-      <h1 class="entry-title">Emacs Lisp Package Archive</h1>
+      <h1 class="entry-title">Bootswatchのテーマをtwitter-bootstrap-railsで使う</h1>
     
     
       <p class="meta">
@@ -96,54 +94,49 @@ ELPA &hellip;">
   
 
 
-<time datetime="2012-12-31T23:16:00+09:00" pubdate data-updated="true">Dec 31<span>st</span>, 2012</time>
+<time datetime="2013-01-04T18:12:00+09:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Macでの日本語の文書を読み書きするテキストエディタを探していた。
-Facebookでつぶやいていたらいろいろおすすめをいただいたのだが、これだ！！というものがなかった。
-それで Emacs に戻ろうと思った。</p>
+<div class="entry-content"><p>美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
+これ自体は別に悪いことはないと思うのですが、他のサイトと見分けの付かないサイトになってしまうのは良くないですよね。</p>
 
-<p>ほぼ三年弱ぶりくらいに Emacs に戻ってきたのだが
-<a href="http://emacswiki.org/emacs/ELPA">ELPA</a>
-というパッケージマネージャがデフォルトで付いてきていて、ものすごく導入障壁が下がっていたのでメモしておく。</p>
+<p>そこでbootstrap用のテーマを入れよう、となるわけです。
+テーマを入れることで色・フォントなどが変更されるので、bootstrap臭が軽減されます。</p>
+
+<p>bootstrap theme などで検索すると有償・無償を含めテーマを取り扱っているサイトが見つかると思いますが、今回は <a href="http://bootswatch.com/">Bootswatch</a> を twitter-bootstrap-rails と共に使う方法をメモします。
+bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方法があると思います。</p>
 
 <!-- more -->
 
 
-<p>Mac OS X なので Emacs 自体は
-<a href="http://emacsformacosx.com/">Emacs For Mac OS X</a>
-からダウンロードした。
-他のアプリと同じようにインストールできる。簡単。</p>
+<p>まず <a href="http://bootswatch.com/#gallery">Bootswatch の Gallery</a> から使いたいテーマを選びます。
+<code>vendor/assets/stylesheets/bootswatch/</code> ディレクトリを作り、選んだテーマの Download ボタンから <code>variables.less</code> と <code>bootswatch.less</code> をダウンロードして、このディレクトリに保存します。</p>
 
-<p>おもむろに <code>M-x list-packages</code> とこんな画面が出てくる。</p>
+<p><code>app/assets/stylesheets/</code> ではなく <code>vendor/assets/stylesheets/</code> 以下に <code>bootswatch</code> ディレクトリを作成して保存します。
+なぜなら <code>app/assets/stylesheets/application.css.scss</code> にはデフォルトで <code>*= require_tree .</code> という行があり、<code>app/assets/stylesheets/</code> 以下にある <code>.less</code> ファイルはすべて require されてしまうからです。
+<code>variables.less</code>, <code>bootswatch.less</code> は <code>@import</code> するものであって、require するとエラーになります。
+それに <code>vendor</code> というのはサードパーティ製のアレヤコレヤを置くところなので、きっとこっちが正解でしょう。</p>
 
-<p><img src="/images/20121231/list-packages.png" alt="M-x list-packages" /></p>
-
-<p>青い下線があるところに移動して return を押すとこんなかんじでパッケージの説明が出てくる。</p>
-
-<p><img src="/images/20121231/show.png" alt="M-x list-packages" /></p>
-
-<p>あとは <code>Install</code> と書かれているところに移動して return を押せばインストールが完了する。
-簡単！</p>
-
-<p>いくつか公開レポジトリがあるらしく以下のように設定しておけば複数のレポジトリからパッケージがインストールできる。</p>
+<p>あとは <code>bootstrap_and_overrides.css.less</code> で <code>@import “twitter/bootstrap/responsive”;</code> の行のあとに以下の２行を付け足します。</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-</span><span class='line'>                           ("marmalade" . "http://marmalade-repo.org/packages/")
-</span><span class='line'>                           ("melpa" . "http://melpa.milkbox.net/packages/")))</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@import “bootswatch/variables.less”;
+</span><span class='line'>@import “bootswatch/bootswatch.less”;</span></code></pre></td></tr></table></div></figure>
 
 
-<p>上の３つを入れた状態で <code>list-packages</code> すると現時点で 1000 程度のパッケージがリストされる。
-これからもっと増えていくだろう。</p>
+<p>これでいける(少なくとも僕は使えてる)と思うんですが、ダメだったら教えて下さい。</p>
 
-<p>perl でいうところの CPAN が Emacs にできたということだ。素晴らしい。</p>
+<p>参考</p>
+
+<ul>
+<li><a href="http://bobonrails.com/post/29340795516/customizing-twitter-bootstrap-on-rails-3">Customizing Twitter Bootstrap On Rails 3</a></li>
+</ul>
+
 </div>
 
 
@@ -166,12 +159,12 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
   
 
 
-<time datetime="2012-12-31T23:16:00+09:00" pubdate data-updated="true">Dec 31<span>st</span>, 2012</time>
+<time datetime="2013-01-04T18:12:00+09:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/emacs/'>Emacs</a>
+    <a class='category' href='/blog/categories/bootstrap/'>Bootstrap</a>, <a class='category' href='/blog/categories/less/'>LESS</a>
   
 </span>
 
@@ -186,7 +179,7 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
   
 
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails/" data-via="" data-counturl="http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -196,10 +189,8 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/12/09/trying-typescript-rails-out/" title="Previous Post: Rails で TypeScript を動かそうとして失敗した記録">&laquo; Rails で TypeScript を動かそうとして失敗した記録</a>
+        <a class="basic-alignment left" href="/blog/2012/12/31/emacs-lisp-package-archive/" title="Previous Post: Emacs Lisp Package Archive">&laquo; Emacs Lisp Package Archive</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/01/04/use-bootswatch-with-rails/" title="Next Post: Bootswatchのテーマをtwitter-bootstrap-railsで使う">Bootswatchのテーマをtwitter-bootstrap-railsで使う &raquo;</a>
       
     </p>
   </footer>
@@ -277,8 +268,8 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/';
-        var disqus_url = 'http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/';
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails/';
         var disqus_script = 'embed.js';
       
     (function () {
