@@ -9,8 +9,7 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
-これ自体は別に悪いことはないと思うのですが、 &hellip;">
+  <meta name="description" content="Homebrew で ImageMagick をインストールして RVM 環境の ruby に rmagick gem を入れようとしたら意外に苦労したのでメモ。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -75,6 +74,47 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/01/05/homebrew-rmagick/">Homebrew RMagick</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-05T14:38:00+09:00" pubdate data-updated="true">Jan 5<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Homebrew で ImageMagick をインストールして RVM 環境の ruby に rmagick gem を入れようとしたら意外に苦労したのでメモ。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/01/05/homebrew-rmagick/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -642,88 +682,6 @@ s3:ListBucket, s3:GetBucketLocation を許可するには、以下の様な stat
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/">Sending Git Revision to Exceptional.io</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-09-13T20:44:00+09:00" pubdate data-updated="true">Sep 13<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="https://www.exceptional.io">Exceptional.io</a> は Ruby アプリケーションで起きた例外を集約して管理するサービスだ。</p>
-
-<p>例外が起きた時に困るのが、それってどのバージョンで起きたバグ？ってことがわからないこと。
-日付が記録されているので調べればわからなくはないけど、面倒だよね。</p>
-
-<p>Exceptional.io では付加情報を付け加えて送ることができるので、以下の utility class をつかって git の revision 情報を取得し、それを送るようにしてみた。</p>
-
-<div><script src='https://gist.github.com/3713816.js?file='></script>
-<noscript><pre><code># coding: UTF-8
-class GitUtil
-  class &lt;&lt; self
-    # Current source code revision
-    def revision
-      rev = capistrano_revision
-      rev = command_revision unless rev
-      rev.try(:chomp)
-    end
-
-    private
-    def capistrano_revision
-      begin
-        revision_file = &quot;#{Rails.root}/REVISION&quot;
-        return File.read(revision_file) if File.exists? revision_file
-      rescue IOError =&gt; e
-        Rails.logger.info(e)
-      end
-      nil
-    end
-
-    def command_revision
-      rev = `cd '#{Rails.root}' &amp;&amp; git rev-list --max-count=1 HEAD`
-      $? == 0 ? rev : nil
-    end
-  end
-end</code></pre></noscript></div>
-
-
-<p>あとは</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Exceptional</span><span class="o">.</span><span class="n">context</span><span class="p">({</span><span class="n">git_revision</span><span class="p">:</span> <span class="no">GitUtil</span><span class="o">.</span><span class="n">revision</span><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>こんな感じのコードを例外送出前に呼んでおくと、付加情報と共に送られていく。</p>
-
-<p>これでどのコミットからどのコミットまで例外が起きてたかわかるようになった。便利便利。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -739,6 +697,10 @@ end</code></pre></noscript></div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/05/homebrew-rmagick/">Homebrew RMagick</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/04/use-bootswatch-with-rails/">Bootswatchのテーマをtwitter-bootstrap-railsで使う</a>
       </li>
     
@@ -752,10 +714,6 @@ end</code></pre></noscript></div>
     
       <li class="post">
         <a href="/blog/2012/12/08/a-trap-of-active-support-time/">ActiveSupport 日時計算の罠</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/06/i18n-js/">Rails の JavaScript (CoffeeScript) でローカライゼーションを簡単に</a>
       </li>
     
   </ul>

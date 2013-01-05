@@ -5,12 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Open sources used by spotify - tkawachi Blog</title>
+  <title>Homebrew RMagick - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="US などの iTunes store からダウンロードできる Spotify の iOS アプリの出来がとても良い。
-アプリ内に用意されている Lisence のページを見ていたら、利用している open source ソフトウェアの一覧が並んでいたので、 &hellip;">
+  <meta name="description" content="Homebrew で ImageMagick をインストールして RVM 環境の ruby に rmagick gem を入れようとしたら意外に苦労したのでメモ。 最終的な手順 brew update
+brew install ghostscript imagemagick
+ln -s /usr/ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.com/blog/2012/06/25/open-sources-used-by-spotify/">
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -78,7 +79,7 @@
   
   <header>
     
-      <h1 class="entry-title">Open Sources Used by Spotify</h1>
+      <h1 class="entry-title">Homebrew RMagick</h1>
     
     
       <p class="meta">
@@ -94,52 +95,52 @@
   
 
 
-<time datetime="2012-06-25T00:49:00+09:00" pubdate data-updated="true">Jun 25<span>th</span>, 2012</time>
+<time datetime="2013-01-05T14:38:00+09:00" pubdate data-updated="true">Jan 5<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>US などの iTunes store からダウンロードできる <a href="http://www.spotify.com/">Spotify</a> の iOS アプリの出来がとても良い。
-アプリ内に用意されている Lisence のページを見ていたら、利用している open source ソフトウェアの一覧が並んでいたので、ちゃんと出来てるアプリに使われているものはきっとちゃんとしているだろうということでメモしておく。</p>
+<div class="entry-content"><p>Homebrew で ImageMagick をインストールして RVM 環境の ruby に rmagick gem を入れようとしたら意外に苦労したのでメモ。</p>
+
+<!-- more -->
+
+
+<p>最終的な手順</p>
+
+<ol>
+<li><code>brew update</code></li>
+<li><code>brew install ghostscript imagemagick</code></li>
+<li><code>ln -s /usr/local/lib/libMagickCore-Q16.dylib /usr/local/lib/libMagickCore.dylib</code></li>
+<li><code>gem install rmagick</code></li>
+<li><code>rm /usr/local/lib/libMagickCore.dylib</code></li>
+</ol>
+
+
+<p>ハマりポイント</p>
 
 <ul>
-<li><a href="http://www.boost.org/">Boost</a></li>
-<li><a href="http://expat.sourceforge.net/">Expat</a></li>
-<li><a href="http://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible">FastDelegate</a> C++ の member function pointer に代わる何か？</li>
-<li><a href="http://sourceforge.net/projects/giflib/">giflib</a> GIF</li>
-<li><a href="http://libjpeg.sourceforge.net/">libjpeg</a> JPEG</li>
-<li><a href="http://www.libpng.org/pub/png/libpng.html">libpng</a> PNG</li>
-<li><a href="http://xiph.org/ogg/">libogg</a> Ogg</li>
-<li><a href="http://xiph.org/vorbis/">libvorbis</a> Vorbis</li>
-<li><a href="http://wss.co.uk/pinknoise/tremolo/">Tremolo</a> Tremolo is an ARM optimised version of the Tremor lib from xiph.org. For those that don&#8217;t know, the Tremor lib is an integer only library for doing Ogg Vorbis decompression.</li>
-<li><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html">Mersenne Twister</a> Mersenne Twister(以下MT)は、松本眞 ・西村拓士（アルファベット順）により1996年から1997年に渡って 開発された疑似乱数生成アルゴリズムです。</li>
-<li><a href="https://ccrma.stanford.edu/software/snd/">Snd</a> Snd is a sound editor. Spotify では resampling にコードを流量。</li>
-<li><a href="http://zlib.net/">zlib</a></li>
-<li><a href="http://nsis.sourceforge.net/Main_Page">NSIS</a> Windows のインストーラ作成システム。</li>
-<li><a href="http://sourceforge.net/projects/wtl/">Windows Template Library</a> Windows Template Library (WTL) is a C++ library for developing Windows applications and UI components. It extends ATL (Active Template Library) and provides a set of classes for controls, dialogs, frame windows, GDI objects, and more.</li>
-<li><a href="http://growl.info/">Growl</a></li>
-<li><a href="http://www.lua.org/">Lua</a></li>
-<li><a href="http://programming.nu/index">Nu</a> Nu is an interpreted object-oriented language. Its syntax comes from Lisp, but Nu is semantically closer to Ruby than Lisp. Nu is implemented in Objective-C and is designed to take full advantange of the Objective-C runtime and the many mature class libraries written in Objective-C.</li>
-<li><a href="http://stig.github.com/json-framework/">SBJSON</a></li>
-<li><a href="http://allseeing-i.com/ASIHTTPRequest/">ASIHTTPRequest</a></li>
-<li><a href="https://github.com/mikeash/MAObjCRuntime">MAObjCRuntime</a> MAObjCRuntime is an ObjC wrapper around the Objective-C runtime APIs. If that&#8217;s confusing, it provides a nice object-oriented interface around (some of) the C functions in /usr/include/objc.</li>
-<li><a href="http://code.google.com/p/google-breakpad/">Google Breakpad</a> An open-source multi-platform crash reporting system</li>
-<li><a href="http://zendold.lojcomm.com.br/icarousel/">iCarousel</a> iCarousel is an open source (free) javascript tool for creating carousel like widgets.</li>
-<li><a href="https://github.com/jdg/MBProgressHUD">MBProgressHUD</a> MBProgressHUD is an iOS drop-in class that displays a translucent HUD with an indicator and/or labels while work is being done in a background thread</li>
-<li><a href="https://github.com/kolinkrewinkel/KKGridView">KKGridView</a> High-performance iOS grid view (MIT license). iOS6 では iOS SDK に類似の view controller を入れたので不要に。</li>
-<li><a href="https://github.com/robbiehanson/KissXML">KissXML</a> KissXML provides a drop-in replacement for Apple&#8217;s NSXML class culster in environments without NSXML (e.g. iOS).</li>
-<li><a href="https://github.com/booyah/protobuf-objc">ProtobufObjc</a></li>
-<li><a href="https://github.com/facebook/facebook-ios-sdk">Facebook</a></li>
-<li><a href="http://www.chromium.org/">Chronium</a></li>
-<li><a href="http://code.google.com/p/chromiumembedded/">CEF</a> The Chromium Embedded Framework (CEF) is an open source project founded by Marshall Greenblatt in 2008 to develop a Web browser control based on the Google Chromium project. CEF currently supports a range of programming languages and operating systems and can be easily integrated into both new and existing applications.</li>
+<li>brew では <code>MagickCore-Q16</code> という名前でライブラリがインストールされる。
+RMagick の <a href="https://github.com/rmagick/rmagick/blob/master/ext/RMagick/extconf.rb#L207">extconf.rb</a> では <code>MagickCore</code>, <code>Magick</code>, <code>Magick++</code> という
+名前でライブラリの存在を確認しているため、ここで落ちる。
+<code>-Q16</code> ってなんじゃ！
+
+<ul>
+<li>→ <code>/usr/local/lib/libMagickCore.dylib</code> に symlink しちゃう。
+<code>MagickCore</code>, <code>Magick</code>, <code>Magick++</code> のうち一つだけあればチェックは通るので
+<code>libMagickCore.dylib</code> だけで OK。
+また gem のインストールが終わったら不要なので symlink 消しとく。</li>
+</ul>
+</li>
+<li>rmagick gem のインストールが途中で止まる。ghostscript 入ってないと途中で止まるっぽい。。
+
+<ul>
+<li>→ brew で ghostscript も入れる。</li>
+</ul>
+</li>
 </ul>
 
-
-<p>Mac 版 Spotify のブラウザっぽいものは CEF なのかな。</p>
-
-<p>Google Breakpad, Nu, MAObjCRuntime, KKGridView あたりはすぐ使うかも。要調査。</p>
 </div>
 
 
@@ -162,8 +163,14 @@
   
 
 
-<time datetime="2012-06-25T00:49:00+09:00" pubdate data-updated="true">Jun 25<span>th</span>, 2012</time>
+<time datetime="2013-01-05T14:38:00+09:00" pubdate data-updated="true">Jan 5<span>th</span>, 2013</time>
       
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/homebrew/'>Homebrew</a>, <a class='category' href='/blog/categories/rmagick/'>RMagick</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
 
 
     </p>
@@ -176,7 +183,7 @@
   
 
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2012/06/25/open-sources-used-by-spotify/" data-via="" data-counturl="http://tkawachi.github.com/blog/2012/06/25/open-sources-used-by-spotify/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick/" data-via="" data-counturl="http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -186,10 +193,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/" title="Previous Post: Run rspec faster for Rails 3.1">&laquo; Run rspec faster for Rails 3.1</a>
+        <a class="basic-alignment left" href="/blog/2013/01/04/use-bootswatch-with-rails/" title="Previous Post: Bootswatchのテーマをtwitter-bootstrap-railsで使う">&laquo; Bootswatchのテーマをtwitter-bootstrap-railsで使う</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/" title="Next Post: Sending git revision to Exceptional.io">Sending git revision to Exceptional.io &raquo;</a>
       
     </p>
   </footer>
@@ -267,8 +272,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://tkawachi.github.com/blog/2012/06/25/open-sources-used-by-spotify/';
-        var disqus_url = 'http://tkawachi.github.com/blog/2012/06/25/open-sources-used-by-spotify/';
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick/';
         var disqus_script = 'embed.js';
       
     (function () {

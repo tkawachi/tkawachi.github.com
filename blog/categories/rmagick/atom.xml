@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: RMagick | tkawachi Blog]]></title>
+  <link href="http://tkawachi.github.com/blog/categories/rmagick/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.com/"/>
+  <updated>2013-01-05T14:52:37+09:00</updated>
+  <id>http://tkawachi.github.com/</id>
+  <author>
+    <name><![CDATA[KAWACHI Takashi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Homebrew RMagick]]></title>
+    <link href="http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick/"/>
+    <updated>2013-01-05T14:38:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick</id>
+    <content type="html"><![CDATA[<p>Homebrew で ImageMagick をインストールして RVM 環境の ruby に rmagick gem を入れようとしたら意外に苦労したのでメモ。</p>
+
+<!-- more -->
+
+
+<p>最終的な手順</p>
+
+<ol>
+<li><code>brew update</code></li>
+<li><code>brew install ghostscript imagemagick</code></li>
+<li><code>ln -s /usr/local/lib/libMagickCore-Q16.dylib /usr/local/lib/libMagickCore.dylib</code></li>
+<li><code>gem install rmagick</code></li>
+<li><code>rm /usr/local/lib/libMagickCore.dylib</code></li>
+</ol>
+
+
+<p>ハマりポイント</p>
+
+<ul>
+<li>brew では <code>MagickCore-Q16</code> という名前でライブラリがインストールされる。
+RMagick の <a href="https://github.com/rmagick/rmagick/blob/master/ext/RMagick/extconf.rb#L207">extconf.rb</a> では <code>MagickCore</code>, <code>Magick</code>, <code>Magick++</code> という
+名前でライブラリの存在を確認しているため、ここで落ちる。
+<code>-Q16</code> ってなんじゃ！
+
+<ul>
+<li>→ <code>/usr/local/lib/libMagickCore.dylib</code> に symlink しちゃう。
+<code>MagickCore</code>, <code>Magick</code>, <code>Magick++</code> のうち一つだけあればチェックは通るので
+<code>libMagickCore.dylib</code> だけで OK。
+また gem のインストールが終わったら不要なので symlink 消しとく。</li>
+</ul>
+</li>
+<li>rmagick gem のインストールが途中で止まる。ghostscript 入ってないと途中で止まるっぽい。。
+
+<ul>
+<li>→ brew で ghostscript も入れる。</li>
+</ul>
+</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>
