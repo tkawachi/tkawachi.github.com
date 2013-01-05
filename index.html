@@ -9,7 +9,8 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Homebrew で ImageMagick をインストールして RVM 環境の ruby に rmagick gem を入れようとしたら意外に苦労したのでメモ。 ">
+  <meta name="description" content="JavaScript(というか CoffeeScript)って90年代にブラウザ上で使われていた頃のイメージが拭えず、どうも気持ち悪くて逃げて回ってたんですが、事情があって最近は渋々書いてます。
+JavaScriperの皆様にとっては何を今更だとは思いますが jQuery. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,6 +75,48 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/01/06/jquery-deferred/">jQueryのDeferredとPromise</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-06T00:44:00+09:00" pubdate data-updated="true">Jan 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>JavaScript(というか CoffeeScript)って90年代にブラウザ上で使われていた頃のイメージが拭えず、どうも気持ち悪くて逃げて回ってたんですが、事情があって最近は渋々書いてます。
+JavaScriperの皆様にとっては何を今更だとは思いますが <a href="http://qiita.com/items/3d1cf51d7ae91305eaaa">jQuery.Deferredを使って楽しい非同期生活を送る方法</a> を読んで Deferred 便利だな、と思ったので理解したところをメモしておきます。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/01/06/jquery-deferred/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -588,100 +631,6 @@ DocBook って難しくて怖いイメージがあったんですが意外に簡
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/11/18/how-to-restrict-s3-for-folder-access/">IAMユーザのS3アクセスをフォルダレベルで制限する</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-11-18T19:29:00+09:00" pubdate data-updated="true">Nov 18<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>AWS の IAM でユーザを作り、S3 bucket の特定の path 以下にのみアクセスを与えるということを設定したかったのですが、情報を見つけられず時間をつかってしまったので共有しておきます。
-(参考: <a href="https://forums.aws.amazon.com/message.jspa?messageID=245525">Giving a user permission to acceess just a folder within a bucket</a>)</p>
-
-<p>現状 AWS では bucket 数上限が 100, IAM ユーザ数制限が 5000 になっています。
-利用者1人に 1 IAM ユーザを発行すると 5000 人で使えるわけですが、
-bucket 毎に共有設定を行った場合は 100 共有までです。
-同一 bucket 内で path を切り替えて共有した場合は bucket 数上限は関係なくなるので嬉しい、というわけです。</p>
-
-<p>まず最初に S3 の IAM policy に関するAWS の公式ドキュメントは
-<a href="http://docs.amazonwebservices.com/AmazonS3/latest/dev/UsingIAMPolicies.html">Using IAM Policies</a>
-です。
-Bucket レベルの指定は arn:aws:s3:::bucket_name に対して行い、 object レベルの指定は arn:aws:s3:::bucket_name/key_name に対して行います。</p>
-
-<p>同ページ内の Example 5: Allow a partner to drop files into a specific portion of the corporate bucket がやりたいこととほぼ同じ設定になります。</p>
-
-<p>Object レベルの指定で path 以下にアクセスを制限したいときは * が使えます。
-my_bucket bucket の shared/ 以下に s3:PutObject を許可するには、以下のような statement を追加します。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  "Effect":"Allow",
-</span><span class='line'>  "Action":"s3:PutObject",
-</span><span class='line'>  "Resource":"arn:aws:s3:::my_bucket/shared/*"
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上記は object レベルでの指定になります。
-S3を利用するアプリケーションによっては object レベルの API だけではなく bucket レベルでの API も使うものがあります。</p>
-
-<p>Bucket レベルの指定で path 以下にアクセスを制限したいときは Condition, StringLike を使います。
-s3:ListBucket, s3:GetBucketLocation を許可するには、以下の様な statement を追加します。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  "Effect": "Allow",
-</span><span class='line'>  "Action": ["s3:ListBucket", "s3:GetBucketLocation"],
-</span><span class='line'>  "Resource": "arn:aws:s3:::my_bucket",
-</span><span class='line'>  "Condition": {
-</span><span class='line'>    "StringLike": {
-</span><span class='line'>    "s3:prefix": "shared/*"
-</span><span class='line'>  }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上記の方法でアプリケーションが利用する API に応じて object レベル, bucket レベルの action を許可すれば、今回の目的が達成できます。</p>
-
-<p>なお、S3 すべての action についてこれらの指定で動作することを検証したわけではないので、必要に応じてみなさまご確認ください。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -697,6 +646,10 @@ s3:ListBucket, s3:GetBucketLocation を許可するには、以下の様な stat
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/01/06/jquery-deferred/">jQueryのDeferredとPromise</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/01/05/homebrew-rmagick/">Homebrew RMagick</a>
       </li>
     
@@ -710,10 +663,6 @@ s3:ListBucket, s3:GetBucketLocation を許可するには、以下の様な stat
     
       <li class="post">
         <a href="/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/12/08/a-trap-of-active-support-time/">ActiveSupport 日時計算の罠</a>
       </li>
     
   </ul>

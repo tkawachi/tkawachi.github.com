@@ -1,0 +1,418 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>jQueryのDeferredとPromise - tkawachi Blog</title>
+  <meta name="author" content="KAWACHI Takashi">
+
+  
+  <meta name="description" content="JavaScript(というか CoffeeScript)って90年代にブラウザ上で使われていた頃のイメージが拭えず、どうも気持ち悪くて逃げて回ってたんですが、事情があって最近は渋々書いてます。
+JavaScriperの皆様にとっては何を今更だとは思いますが jQuery. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tkawachi.github.com/blog/2013/01/06/jquery-deferred/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-4']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">tkawachi Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tkawachi.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">jQueryのDeferredとPromise</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-06T00:44:00+09:00" pubdate data-updated="true">Jan 6<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>JavaScript(というか CoffeeScript)って90年代にブラウザ上で使われていた頃のイメージが拭えず、どうも気持ち悪くて逃げて回ってたんですが、事情があって最近は渋々書いてます。
+JavaScriperの皆様にとっては何を今更だとは思いますが <a href="http://qiita.com/items/3d1cf51d7ae91305eaaa">jQuery.Deferredを使って楽しい非同期生活を送る方法</a> を読んで Deferred 便利だな、と思ったので理解したところをメモしておきます。</p>
+
+<!-- more -->
+
+
+<h2>利用シーン</h2>
+
+<ul>
+<li><code>$.get()</code> ってエラーハンドリングできないのか。使えないなー。と思ったとき</li>
+<li>複数の AJAX リクエスト(などの非同期処理)を同時に開始して、全部終わったら何かしたいとき。</li>
+</ul>
+
+
+<h2>Deferred object</h2>
+
+<p>キーになるのは
+<a href="http://api.jquery.com/category/deferred-object/">Deferred object</a>
+です。</p>
+
+<h3>状態</h3>
+
+<p>Deferred object は状態を持ちます。状態は３つのうちいずれか。</p>
+
+<ol>
+<li>未解決(unresolved)</li>
+<li>解決済み(resolved)</li>
+<li>拒否済み(rejected)</li>
+</ol>
+
+
+<p>実装によってはいろいろ呼び名があるみたいですが、jQuery では上のように呼ばれています。
+jQuery以外の、例えば CommonJS の
+<a href="http://wiki.commonjs.org/wiki/Promises/A">Promises/A</a>
+では unfulfilled, fulfilled, failed がそれぞれの状態に対応します。</p>
+
+<p>状態の遷移は「未解決→解決済み」「未解決→拒否済み」の二種類だけです。
+一度、解決済みや拒否済みになったら未解決に戻ったりしませんし、解決済みから拒否済みへ遷移したりもしません。</p>
+
+<h2>利用者</h2>
+
+<p>このオブジェクトの利用者は</p>
+
+<ul>
+<li>a: 非同期処理をする人</li>
+<li>b: 非同期処理の結果を受ける人</li>
+</ul>
+
+
+<p>の２人です。
+aさんが状態遷移を担当し、bさんがそれに応じて処理を行う役割です。</p>
+
+<p>Deferred object はaさんからbさんへ提供されますが、大抵の場合は Deferred の機能制限版である
+<a href="http://api.jquery.com/Types/#Promise">Promise object</a>
+が bさんに渡されます。
+状態遷移を起こすのはaさん担当で、bさんがそれをしてはまずいので、Promiseでは状態遷移関連のメソッドが取り除かれています。
+Promise は Deferred の <code>.promise()</code> メソッドで得られます。</p>
+
+<p>非同期処理の関数コール時の戻り値として a から b に Promise object が渡されます。
+処理が終わったら結果を渡すから約束手形(Promise)をもっておいてくれ、というわけですね。</p>
+
+<h2>解決または拒否へ</h2>
+
+<p>aさんは非同期処理が終わったら約束通り結果を渡します。
+引数に処理結果を渡して<code>.resolve()</code> メソッドを呼び出すことで、解決済み状態へ遷移します。</p>
+
+<p>処理が失敗に終わった場合には <code>.reject()</code> を呼びます。</p>
+
+<h2>約束手形(Promise)の使い方</h2>
+
+<p>書いてて思ったのですが、約束手形は一定の期日に支払いをする約束であるのに対して、Promise はいつ処理が完了するかわからないので少し違いました。
+どちらかというとカイジの
+<a href="http://fukumoto.lsx3.net/?%CC%DB%BC%A8%CF%BF%2F%CD%F8%BA%AC%C0%EE%B9%AC%CD%BA#b1869786">その気になれば10年後20年後ということも可能だろう</a>
+という大金の引換券に似ています。</p>
+
+<p>ともあれ、Promise はその時点では結果が出ていないので、すぐに結果を利用することができません。
+代わりに callback を登録しておくことができます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">// 解決済みになったら呼ばれる callback を登録</span>
+</span><span class='line'><span class="nx">promise</span><span class="p">.</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span> <span class="nx">data</span><span class="err">は処理結果</span> <span class="p">});</span>
+</span><span class='line'><span class="c1">// 拒否済みになったら呼ばれる callback を登録</span>
+</span><span class='line'><span class="nx">promise</span><span class="p">.</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="err">エラー処理</span> <span class="p">});</span>
+</span><span class='line'><span class="c1">// 解決済みもしくは拒否済みになったら呼ばれる callback を登録</span>
+</span><span class='line'><span class="nx">promise</span><span class="p">.</span><span class="nx">always</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="err">処理</span> <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>callback 複数登録する事ができ、登録した順に呼ばれます。例えば <code>done()</code> を複数回呼び出して解決済みになったときの callback を複数個登録することができます。</p>
+
+<p><code>done()</code>, <code>fail()</code>, <code>always()</code> は Deferred の場合は Deferred, Promise の場合は Promise を返すので、method chain でつなげることができます。</p>
+
+<h2>約束の組み合せ</h2>
+
+<p>受け取った Promise/Deferred は <code>$.when()</code> で組み合わせることができます。
+組み合わせると、渡したものすべてが解決済みになったときに解決済みになる Promise が返されます。
+組み合せにより、複数の非同期処理がすべて完了したら何かを実行することができます。</p>
+
+<p>組み合わせた場合、 callback の引数に渡される結果も増えます。
+以下のコードで d1, d2 にはそれぞれ promise1, promise2 の結果が渡されます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">promise1</span><span class="p">,</span> <span class="nx">promise2</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d1</span><span class="p">,</span> <span class="nx">d2</span><span class="p">)</span> <span class="p">{</span> <span class="err">…</span> <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>$.when()</code> に Defered でも Promise でもない値を渡した場合、解決済みの値として扱われます。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nx">promise</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d1</span><span class="p">,</span> <span class="nx">d2</span><span class="p">)</span> <span class="p">{</span> <span class="err">…</span> <span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>などとした場合、10は解決済みと見なされ、<code>promise</code>が解決済みになり次第、<code>d1</code> に 10 が渡されて callback が実行されます。</p>
+
+<h2>$.ajax の戻り値は Deferred</h2>
+
+<p><code>$.ajax</code>, <code>$.get</code>, <code>$.post</code> など AJAX 関数群の戻り値 jqXHR は Deferred と同じインタフェースを備えています。
+すなわち <code>$.when</code> を使って、複数の AJAX 通信がすべて完了したら次に…をするといったコードが簡潔に書けます。</p>
+
+<p>また <code>$.get</code> などはエラーコールバックを引数に取れませんが、戻り値は Deferred ですので、これに <code>.fail()</code> を呼び出すことでエラーコールバックを登録することができます。
+今まで使えない子だと思っていたのですが、僕が知らないだけでずっと前に使える子になってたんですね。</p>
+
+<h2>まとめ</h2>
+
+<p>なんだか長くなってしまった。まとめ。</p>
+
+<ul>
+<li>Deferred は３状態をもつ</li>
+<li>解決済み、拒否済みになった時に実行するコールバックを登録できる</li>
+<li>Promise は Deferred の機能制限版 (結果をもらう人向け)</li>
+<li><code>$.when</code> で Deferred/Promise を組み合せられる</li>
+<li><code>$.ajax</code>, <code>$.get</code>, etc. の戻り値は Deferred</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-06T00:44:00+09:00" pubdate data-updated="true">Jan 6<span>th</span>, 2013</time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <div>
+    <div class="fb-like" data-send="false" data-width="450" data-show-faces="true"></div>
+  </div>
+  
+
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.com/blog/2013/01/06/jquery-deferred/" data-via="" data-counturl="http://tkawachi.github.com/blog/2013/01/06/jquery-deferred/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/01/05/homebrew-rmagick/" title="Previous Post: Homebrew RMagick">&laquo; Homebrew RMagick</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/01/06/jquery-deferred/">jQueryのDeferredとPromise</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/05/homebrew-rmagick/">Homebrew RMagick</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/01/04/use-bootswatch-with-rails/">Bootswatchのテーマをtwitter-bootstrap-railsで使う</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/31/emacs-lisp-package-archive/">Emacs Lisp Package Archive</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+<div class="fb-activity" data-site="http://tkawachi.github.com/" data-app-id="445203802205922" data-width="260" data-height="300" data-header="true" data-linktarget="_top" data-recommendations="false"></div>
+
+  
+</aside>
+
+
+<div class="fb-recommendations-bar"></div>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1&appId=445203802205922";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - KAWACHI Takashi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tkawachiblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.com/blog/2013/01/06/jquery-deferred/';
+        var disqus_url = 'http://tkawachi.github.com/blog/2013/01/06/jquery-deferred/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
