@@ -3,7 +3,7 @@ layout: post
 title: jQueryのDeferredとPromise
 date: 2013-01-06 00:44
 comments: true
-categories: 
+categories: jQuery
 ---
 
 JavaScript(というか CoffeeScript)って90年代にブラウザ上で使われていた頃のイメージが拭えず、どうも気持ち悪くて逃げて回ってたんですが、事情があって最近は渋々書いてます。
