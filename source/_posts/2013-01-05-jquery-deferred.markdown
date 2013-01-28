@@ -108,9 +108,9 @@ $.when(10, promise).done(function(d1, d2) { … });
 
 などとした場合、10は解決済みと見なされ、`promise`が解決済みになり次第、`d1` に 10 が渡されて callback が実行されます。
 
-## $.ajax の戻り値は Deferred
+## $.ajax の戻り値は Promise
 
-`$.ajax`, `$.get`, `$.post` など AJAX 関数群の戻り値 jqXHR は Deferred と同じインタフェースを備えています。
+`$.ajax`, `$.get`, `$.post` など AJAX 関数群の戻り値 jqXHR は Promise と同じインタフェースを備えています。
 すなわち `$.when` を使って、複数の AJAX 通信がすべて完了したら次に…をするといったコードが簡潔に書けます。
 
 また `$.get` などはエラーコールバックを引数に取れませんが、戻り値は Deferred ですので、これに `.fail()` を呼び出すことでエラーコールバックを登録することができます。
@@ -124,4 +124,4 @@ $.when(10, promise).done(function(d1, d2) { … });
 * 解決済み、拒否済みになった時に実行するコールバックを登録できる
 * Promise は Deferred の機能制限版 (結果をもらう人向け)
 * `$.when` で Deferred/Promise を組み合せられる
-* `$.ajax`, `$.get`, etc. の戻り値は Deferred
+* `$.ajax`, `$.get`, etc. の戻り値は Promise
