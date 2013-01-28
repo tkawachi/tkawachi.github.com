@@ -4,7 +4,7 @@
   <title><![CDATA[Category: jQuery | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/blog/categories/jquery/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2013-01-06T00:45:22+09:00</updated>
+  <updated>2013-01-29T02:26:14+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -130,9 +130,9 @@ $.when(10, promise).done(function(d1, d2) { … });
 
 <p>などとした場合、10は解決済みと見なされ、<code>promise</code>が解決済みになり次第、<code>d1</code> に 10 が渡されて callback が実行されます。</p>
 
-<h2>$.ajax の戻り値は Deferred</h2>
+<h2>$.ajax の戻り値は Promise</h2>
 
-<p><code>$.ajax</code>, <code>$.get</code>, <code>$.post</code> など AJAX 関数群の戻り値 jqXHR は Deferred と同じインタフェースを備えています。
+<p><code>$.ajax</code>, <code>$.get</code>, <code>$.post</code> など AJAX 関数群の戻り値 jqXHR は Promise と同じインタフェースを備えています。
 すなわち <code>$.when</code> を使って、複数の AJAX 通信がすべて完了したら次に…をするといったコードが簡潔に書けます。</p>
 
 <p>また <code>$.get</code> などはエラーコールバックを引数に取れませんが、戻り値は Deferred ですので、これに <code>.fail()</code> を呼び出すことでエラーコールバックを登録することができます。
@@ -147,7 +147,7 @@ $.when(10, promise).done(function(d1, d2) { … });
 <li>解決済み、拒否済みになった時に実行するコールバックを登録できる</li>
 <li>Promise は Deferred の機能制限版 (結果をもらう人向け)</li>
 <li><code>$.when</code> で Deferred/Promise を組み合せられる</li>
-<li><code>$.ajax</code>, <code>$.get</code>, etc. の戻り値は Deferred</li>
+<li><code>$.ajax</code>, <code>$.get</code>, etc. の戻り値は Promise</li>
 </ul>
 
 ]]></content>

@@ -221,9 +221,9 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
 
 <p>などとした場合、10は解決済みと見なされ、<code>promise</code>が解決済みになり次第、<code>d1</code> に 10 が渡されて callback が実行されます。</p>
 
-<h2>$.ajax の戻り値は Deferred</h2>
+<h2>$.ajax の戻り値は Promise</h2>
 
-<p><code>$.ajax</code>, <code>$.get</code>, <code>$.post</code> など AJAX 関数群の戻り値 jqXHR は Deferred と同じインタフェースを備えています。
+<p><code>$.ajax</code>, <code>$.get</code>, <code>$.post</code> など AJAX 関数群の戻り値 jqXHR は Promise と同じインタフェースを備えています。
 すなわち <code>$.when</code> を使って、複数の AJAX 通信がすべて完了したら次に…をするといったコードが簡潔に書けます。</p>
 
 <p>また <code>$.get</code> などはエラーコールバックを引数に取れませんが、戻り値は Deferred ですので、これに <code>.fail()</code> を呼び出すことでエラーコールバックを登録することができます。
@@ -238,7 +238,7 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
 <li>解決済み、拒否済みになった時に実行するコールバックを登録できる</li>
 <li>Promise は Deferred の機能制限版 (結果をもらう人向け)</li>
 <li><code>$.when</code> で Deferred/Promise を組み合せられる</li>
-<li><code>$.ajax</code>, <code>$.get</code>, etc. の戻り値は Deferred</li>
+<li><code>$.ajax</code>, <code>$.get</code>, etc. の戻り値は Promise</li>
 </ul>
 
 </div>
