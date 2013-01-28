@@ -226,7 +226,7 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
 <p><code>$.ajax</code>, <code>$.get</code>, <code>$.post</code> など AJAX 関数群の戻り値 jqXHR は Promise と同じインタフェースを備えています。
 すなわち <code>$.when</code> を使って、複数の AJAX 通信がすべて完了したら次に…をするといったコードが簡潔に書けます。</p>
 
-<p>また <code>$.get</code> などはエラーコールバックを引数に取れませんが、戻り値は Deferred ですので、これに <code>.fail()</code> を呼び出すことでエラーコールバックを登録することができます。
+<p>また <code>$.get</code> などはエラーコールバックを引数に取れませんが、戻り値は Promise ですので、これに <code>.fail()</code> を呼び出すことでエラーコールバックを登録することができます。
 今まで使えない子だと思っていたのですが、僕が知らないだけでずっと前に使える子になってたんですね。</p>
 
 <h2>まとめ</h2>

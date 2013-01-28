@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2013-01-29T02:26:14+09:00</updated>
+  <updated>2013-01-29T02:37:41+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -143,7 +143,7 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
 <p><code>$.ajax</code>, <code>$.get</code>, <code>$.post</code> など AJAX 関数群の戻り値 jqXHR は Promise と同じインタフェースを備えています。
 すなわち <code>$.when</code> を使って、複数の AJAX 通信がすべて完了したら次に…をするといったコードが簡潔に書けます。</p>
 
-<p>また <code>$.get</code> などはエラーコールバックを引数に取れませんが、戻り値は Deferred ですので、これに <code>.fail()</code> を呼び出すことでエラーコールバックを登録することができます。
+<p>また <code>$.get</code> などはエラーコールバックを引数に取れませんが、戻り値は Promise ですので、これに <code>.fail()</code> を呼び出すことでエラーコールバックを登録することができます。
 今まで使えない子だと思っていたのですが、僕が知らないだけでずっと前に使える子になってたんですね。</p>
 
 <h2>まとめ</h2>
