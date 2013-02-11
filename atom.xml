@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2013-02-11T17:44:23+09:00</updated>
+  <updated>2013-02-11T22:40:51+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,44 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[情熱の持ち方・燃やし方？]]></title>
+    <link href="http://tkawachi.github.com/blog/2013/02/11/passion-study/"/>
+    <updated>2013-02-11T22:28:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2013/02/11/passion-study</id>
+    <content type="html"><![CDATA[<p>情熱が燃えていない。
+結婚して子どもができ幸せであるが、今ひとつのめり込めるものがない。
+好きなものはある。プログラミングが好きだ。
+しかし覚えたての学生時代ほど燃えてはいない。
+その他に趣味といえる趣味はない。</p>
+
+<!-- more -->
+
+
+<p>大学では様々なことを教えてくれる。
+しかし情熱の持ち方、情熱の燃やし方については教えてもらわなかった。
+情熱の持ち方、燃やし方について教えてくれる人や場があってもいいんじゃないか？
+いや、きっと自分が知らないだけで、あるに違いない。</p>
+
+<p>世の中に同じような人は多いのではないだろうか？
+情熱を燃やせば人生もっと楽しくなる人が、日本中にいるのではなかろうか。</p>
+
+<p>現時点で解決したい事項を書いておく。</p>
+
+<ul>
+<li>情熱をもつにあたり必要な内部条件・外部条件はなにか？</li>
+<li>体系的な情熱の燃やし方はあるか？</li>
+<li>情熱が燃えている時と燃えていない時の判断することはできるか？</li>
+</ul>
+
+
+<p>まずは書籍を当たろうと Amazon で検索したところ、
+<a href="http://www.amazon.co.jp/gp/product/4479793577/">情熱のスイッチ</a>
+の内容が近そうである。とりあえずポチった。
+なにかヒントが得られるだろうか。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[jQueryのDeferredとPromise]]></title>
@@ -1295,222 +1333,6 @@ Node v0.4.7 で確認しました。最新版でどうなっているかは知�
 「HTML5で作る「シンプルメモ帳」」全8回を全て見たが30分もかかっていない。</p>
 
 <p>今は内容が少ないがこれから充実していくことを期待しています。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Inside Play! continuation -- JavaFlow]]></title>
-    <link href="http://tkawachi.github.com/blog/2011/12/22/inside-play-continuation-javaflow/"/>
-    <updated>2011-12-22T21:47:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2011/12/22/inside-play-continuation-javaflow</id>
-    <content type="html"><![CDATA[<p>Play! 1.x 系 では version 1.2 から continuation (継続)が導入されました。
-これを使ってController処理を一時中断、終わったら再開して応答を返す、なんてことをしているみたいです。
-これによって、HTTP処理スレッドは他のリクエストの処理にかかることができ、不要な待ち時間を少なくすることができるようです。
-興味深いですね。</p>
-
-<p>Continuation の実装として <a href="http://commons.apache.org/sandbox/javaflow/">JavaFlow</a> が使われています。
-JavaFlow の日本語記事はほとんど見当たらない様子ですので、 Play! の continuation 理解を深めるためにも、JavaFlow を触ってみたいと思います。</p>
-
-<!-- more -->
-
-
-<h2>JavaFlow の入手</h2>
-
-<p><a href="http://commons.apache.org/sandbox/javaflow/downloads.html">Downloadページ</a>
-を見てみると、現時点でリリース版は無いことがわかります。(なんと！)
-「初版もリリースされていないライブラリを使っていたのか」と思う気持ちを押さえて <code>svn co</code> しましょう。</p>
-
-<pre><code>$ svn co http://svn.apache.org/repos/asf/commons/sandbox/javaflow/trunk/ javaflow
-</code></pre>
-
-<p><code>pom.xml</code> が含まれているので Maven project ですね。依存関係を全て含んだ .jar を作りたかったので
-<a href="http://stackoverflow.com/questions/574594/how-can-i-create-an-executable-jar-with-dependencies-using-maven">ここ</a>
-を参考にして pom.xml を書き換えて <code>mvn</code> を実行しました。</p>
-
-<pre><code>$ svn diff pom.xmlIndex: pom.xml
-===================================================================
---- pom.xml     (revision 1221696)
-+++ pom.xml     (working copy)
-@@ -128,6 +128,14 @@
-
-   &lt;build&gt;
-     &lt;plugins&gt;
-+      &lt;plugin&gt;
-+        &lt;artifactId&gt;maven-assembly-plugin&lt;/artifactId&gt;
-+        &lt;configuration&gt;
-+          &lt;descriptorRefs&gt;
-+                &lt;descriptorRef&gt;jar-with-dependencies&lt;/descriptorRef&gt;
-+          &lt;/descriptorRefs&gt;
-+        &lt;/configuration&gt;
-+      &lt;/plugin&gt;
-       &lt;plugin&gt;     
-         &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
-         &lt;configuration&gt;
-
-$ mvn package assembly:single
-</code></pre>
-
-<p><code>target/commons-javaflow-1.0-SNAPSHOT-jar-with-dependencies.jar</code> が生成されました。</p>
-
-<h2>JavaFlow を使う2つの方法</h2>
-
-<p>JavaFlow を使って continuation を実行するには bytecode を enhance する必要があります。これは推測ですが、Call stack を保存・復元する必要があり、Java に用意されている言語機能ではそれが実現不能だからではないでしょうか。</p>
-
-<p>JavaFlow のドキュメントによると、2つの方法で bytecode を enhance できるようです。</p>
-
-<ul>
-<li><a href="http://commons.apache.org/sandbox/javaflow/antTask.html">JavaFlow の ant task</a> を使ってコンパイル時に enhance する</li>
-<li><code>org.apache.commons.javaflow.ContinuationClassLoader</code> を使って class を load する。</li>
-</ul>
-
-
-<p>Play! では後者に近い方法を利用しています。
-<a href="https://github.com/playframework/play/blob/master/framework/src/play/classloading/enhancers/ContinuationEnhancer.java"><code>play.classloading.enhancers.ContinuationEnhancer</code></a> が JavaFlow  の <code>ContinuationClassLoader</code> と同じようなことをしています。
-(Play! には JavaFlow 及び依存ライブラリの .jar が含まれているのですが、ant task も ContinuationClassLoader も何故か .jar 中に存在しなかったため、ソースからコンパイルしたのでした。)</p>
-
-<p>今回は ant task を使ってみようと思います。</p>
-
-<h2>Sample continuation</h2>
-
-<p>ここから <a href="http://commons.apache.org/sandbox/javaflow/tutorial.html">JavaFlow の tutorial</a> 相当のコードを動かしてみます。
-compile できるようになるまで案外苦労しました。</p>
-
-<p><code>build.xml</code> はこんな感じ。</p>
-
-<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;project name="JavaFlowTest" default="run"&gt;
-
-  &lt;!-- javaflow の jar file の位置に応じて変更してください --&gt;
-  &lt;property name="javaflow-jar" value="lib/commons-javaflow-1.0-SNAPSHOT-jar-with-dependencies.jar" /&gt;
-
-  &lt;taskdef name="javaflow"
-    classname="org.apache.commons.javaflow.ant.AntRewriteTask"&gt;
-    &lt;classpath&gt;
-      &lt;path location="${javaflow-jar}" /&gt;
-    &lt;/classpath&gt;
-  &lt;/taskdef&gt;
-
-  &lt;target name="compile" depends="clean"&gt;
-    &lt;!--
-    複数回 javaflow task で bytecode 変換しようとするとエラーになるようなので
-    depends="clean" しておく。
-    --&gt;
-    &lt;mkdir dir="build/classes"/&gt;
-    &lt;javac srcdir="src" destdir="build/classes" classpath="${javaflow-jar}"
-      includeantruntime="false" /&gt;
-    &lt;javaflow srcdir="build/classes" destdir="build/classes"&gt;
-      &lt;include name="cont/**/*.class" /&gt;
-    &lt;/javaflow&gt;
-  &lt;/target&gt;
-
-  &lt;target name="run" depends="compile"&gt;
-    &lt;java fork="true" classname="Main"&gt;
-      &lt;classpath&gt;
-        &lt;path location="${javaflow-jar}" /&gt;
-        &lt;path location="build/classes" /&gt;
-      &lt;/classpath&gt;
-    &lt;/java&gt;
-  &lt;/target&gt;
-
-  &lt;target name="clean"&gt;
-    &lt;delete dir="build" /&gt;
-  &lt;/target&gt;
-
-&lt;/project&gt;
-</code></pre>
-
-<p><a href="http://commons.apache.org/sandbox/javaflow/antTask.html">JavaFlow のドキュメント</a>
-には <code>&lt;javaflow /&gt;</code> task の attribute は srcdir および dstdir と書いてあるが、そのまま実行するとエラーとなった。dstdir は destdir が正しいようです。後ほどバグレポートしておこう。</p>
-
-<p><code>src/cont/MyRunnable.java</code> は 0 から 9 までを印字します。ただし1回ループを回るごとに <code>Continuation.suspend()</code> します。</p>
-
-<pre><code>package cont;
-import org.apache.commons.javaflow.Continuation;
-
-public class MyRunnable implements Runnable {
-  public void run() {
-    System.out.println("started!");
-    for( int i=0; i&lt;10; i++ )
-      echo(i);
-  }
-  private void echo(int x) {
-    System.out.println(x);
-    Continuation.suspend();
-  }
-}
-</code></pre>
-
-<p><code>src/Main.java</code> は <code>cont.MyRunnable</code> を <code>Continuation</code> として実行する。ただし5回実行した後の状態を取っておき、最後にもう一度実行しています。</p>
-
-<pre><code>import org.apache.commons.javaflow.Continuation;
-import cont.MyRunnable;
-
-public class Main {
-  public static void main(String[] args) {
-    Continuation beginContinuation = Continuation.startSuspendedWith(new MyRunnable());
-    Continuation c = beginContinuation;
-    System.out.println("Loop 5 times");
-    for (int i = 0; i &lt; 5; i++) {
-      c = Continuation.continueWith(c);
-    }
-    Continuation fifthContinuation = c;
-    System.out.println("Run the rest");
-    while (c != null) {
-      c = Continuation.continueWith(c);
-    }
-    System.out.println("Run from fifthContinuation again!");
-    c = fifthContinuation;
-    while (c != null) {
-      c = Continuation.continueWith(c);
-    }
-  }
-}
-</code></pre>
-
-<p>実行結果はこうなりました。</p>
-
-<pre><code>$ ant
-…省略…
-run: 
-     [java] Loop 5 times
-     [java] started!
-     [java] 0
-     [java] 1
-     [java] 2
-     [java] 3
-     [java] 4
-     [java] Run the rest
-     [java] 5
-     [java] 6
-     [java] 7
-     [java] 8
-     [java] 9
-     [java] Run from fifthContinuation again!
-     [java] 5
-     [java] 6
-     [java] 7
-     [java] 8
-     [java] 9
-
-BUILD SUCCESSFUL
-Total time: 2 seconds
-</code></pre>
-
-<p>5回回した時点の Continuation オブジェクトをとっておいて後から好きなときに実行出来ることがわかります。</p>
-
-<p>Play! では <code>await()</code> 実行時に <code>Continuation.suspend()</code> を呼び出しています。
-Continuation object を得てから Job などの完了後に再開しているのでしょう。</p>
-
-<h2>java.lang.Error: Internal error が出るんですが…</h2>
-
-<p><code>await()</code> は code coverage module の <a href="http://www.playframework.org/modules/cobertura">cobertura</a> と一緒に使っちゃダメです。
-両者共に bytecode を変更するのですが、秘孔を突くと起動時に妙な例外と共に落ちます(<a href="https://play.lighthouseapp.com/projects/57987/tickets/1189-continuationenhancer-causes-javalangerror-internal-error-with-cobertura">レポート済み</a>)。v1.3 が修正 milestone とされていますがまだバグは健在のようです。</p>
-
-<p>他の bytecode 変換モジュールを使ってエラーが起きた場合にも、<code>ContinuationEnhancer</code> の存在を頭の隅で覚えておくと良いかもしれません。</p>
-
-<h2>明日は</h2>
-
-<p><a href="https://twitter.com/#!/i2key">@i2key</a> さんです。お楽しみに！</p>
 ]]></content>
   </entry>
   
