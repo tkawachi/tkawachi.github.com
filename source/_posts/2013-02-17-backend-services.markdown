@@ -40,7 +40,7 @@ categories:
 * [Tinfoil](https://www.tinfoilsecurity.com/) と [Trustwave](https://www.trustwave.com/)。
   セキュリティをチェックし、脆弱性がある場合に教えてくれるサービス。
 * [KISSmetrics](http://www.kissmetrics.com/)。メトリックスおよびイベントトラッキングサービス。
-* [Customer.io](http://customer.io/) お知らせメール送信サービス。
+* [Customer.io](http://customer.io/) お知らせメール送信サービス。最近きてない人だけに送るなんてことができる。
 
 すでに適正価格でやってくれるサービスがある場合、それを使わないで自分で作るのは馬鹿げています。使えるものは使いましょう。
 
