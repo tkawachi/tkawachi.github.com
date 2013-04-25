@@ -9,9 +9,8 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="slash7 の Thomas Fuchs さんが自分たちのサービス
-Freckle で使っている有償サービス群を紹介している。
-小さいチームでは自分のビジネスのコアに集中し、それ以外の部分に力を分散させるべからずというのはまさにその通り。 紹介されていたサービスは以下のとおり。 &hellip;">
+  <meta name="description" content="Google で typescript rails と検索すると去年12月に書いた「Rails で TypeScript を動かそうとして失敗した記録」というエントリが2番目に出てくる日々が続いている。
+「TypeScriptをRailsで使いたい」と思った人たちは、検索結果を見て、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +75,62 @@ Freckle で使っている有償サービス群を紹介している。
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/04/25/typescript-and-rails-again/">RailsでTypeScript、再び</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-04-25T23:22:00+09:00" pubdate data-updated="true">Apr 25<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Google で typescript rails と検索すると去年12月に書いた「<a href="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a>」というエントリが2番目に出てくる日々が続いている。
+「TypeScriptをRailsで使いたい」と思った人たちは、検索結果を見て、ああ動かないのかと思うのだろう。</p>
+
+<p>あれから状況は少しだけ改善した。
+typescript-rails gem で <code>/// &lt;reference&gt;</code> が一部使えるようになった。
+というか使えるようにする <a href="https://github.com/klaustopher/typescript-rails/pull/6">patch</a> を出した。</p>
+
+<p>この patch により、<code>node</code> コマンドをインストールしてあることが前提になったので注意されたし。</p>
+
+<p>サンプルを作ろうと思い
+<a href="https://github.com/tkawachi/typescript-rails-sample/blob/051838b7/app/assets/javascripts/test.js.ts.erb">test.js.ts.erb</a>
+を書いてみた。
+<code>.js.ts</code> ファイルや <code>.d.ts</code> ファイルを参照できるようになっていることがわかると思う。
+サンプル内でやっているように <code>jquery.d.ts</code> を参照して、 jQuery も使えるようになった。</p>
+
+<p>一方で以下の問題が残っている。
+TypeScript compiler に渡る際に違うディレクトリにコピーされるため、参照先を絶対パスで指定している。そのため <code>.erb</code> suffix を付ける必要がある。
+また参照先の拡張子が <code>.js.ts</code>, <code>.d.ts</code> ならば大丈夫だが <code>.js.ts.erb</code> の場合、compiler が参照してくれない。</p>
+
+<p>これらの問題を解消しないとちょっと本格利用はできないかなあ。
+また時間がとれたらなんとかしたい。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -544,56 +599,6 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/12/02/facebook-recommendations-bar-for-octopress/">Octopress に Facebook Recommendations Bar を設置</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-02T10:18:00+09:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>この blog は
-<a href="http://octopress.org/">Octopress</a> を使って github pages で書いています。</p>
-
-<p>Facebook recommendations bar を追加してみました。
-Facebook の <a href="https://developers.facebook.com/docs/reference/plugins/recommendationsbar/">Recommendations Bar</a>
-のページから blog 用の Facebook application をひとつ作って、code snippet を吐き出します。</p>
-
-<p>あとは
-<a href="https://github.com/tkawachi/tkawachi.github.com/blob/31482db539e901af1f7f5af28d071e4a4a0c01e0/source/_layouts/post.html#L45-L53">このように</a>
-<code>source/_layouts/post.html</code> を書き換えます。
-Github pages だと何を変更したかも github で見られるのが嬉しいですね。</p>
-
-<p>Blog の like 数が少なすぎるのでしょう。まだおすすめがちゃんと出ないようですが、 like 数が増えると出るようになるのでしょうか。</p>
-
-<p><a href="http://sessan.hatenablog.com/entry/2012/09/27/172013">sessanの日記 - はてなブログにFacebookのRecommendations Barを設置する</a> を参考にしました。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -609,6 +614,10 @@ Github pages だと何を変更したかも github で見られるのが嬉し�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/04/25/typescript-and-rails-again/">RailsでTypeScript、再び</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/02/17/backend-services/">使わないと損なバックエンドサービス</a>
       </li>
     
@@ -622,10 +631,6 @@ Github pages だと何を変更したかも github で見られるのが嬉し�
     
       <li class="post">
         <a href="/blog/2013/01/05/homebrew-rmagick/">Homebrew RMagick</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/04/use-bootswatch-with-rails/">Bootswatchのテーマをtwitter-bootstrap-railsで使う</a>
       </li>
     
   </ul>

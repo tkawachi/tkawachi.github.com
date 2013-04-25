@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2013-02-17T22:45:48+09:00</updated>
+  <updated>2013-04-25T23:28:03+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[RailsでTypeScript、再び]]></title>
+    <link href="http://tkawachi.github.com/blog/2013/04/25/typescript-and-rails-again/"/>
+    <updated>2013-04-25T23:22:00+09:00</updated>
+    <id>http://tkawachi.github.com/blog/2013/04/25/typescript-and-rails-again</id>
+    <content type="html"><![CDATA[<p>Google で typescript rails と検索すると去年12月に書いた「<a href="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a>」というエントリが2番目に出てくる日々が続いている。
+「TypeScriptをRailsで使いたい」と思った人たちは、検索結果を見て、ああ動かないのかと思うのだろう。</p>
+
+<p>あれから状況は少しだけ改善した。
+typescript-rails gem で <code>/// &lt;reference&gt;</code> が一部使えるようになった。
+というか使えるようにする <a href="https://github.com/klaustopher/typescript-rails/pull/6">patch</a> を出した。</p>
+
+<p>この patch により、<code>node</code> コマンドをインストールしてあることが前提になったので注意されたし。</p>
+
+<p>サンプルを作ろうと思い
+<a href="https://github.com/tkawachi/typescript-rails-sample/blob/051838b7/app/assets/javascripts/test.js.ts.erb">test.js.ts.erb</a>
+を書いてみた。
+<code>.js.ts</code> ファイルや <code>.d.ts</code> ファイルを参照できるようになっていることがわかると思う。
+サンプル内でやっているように <code>jquery.d.ts</code> を参照して、 jQuery も使えるようになった。</p>
+
+<p>一方で以下の問題が残っている。
+TypeScript compiler に渡る際に違うディレクトリにコピーされるため、参照先を絶対パスで指定している。そのため <code>.erb</code> suffix を付ける必要がある。
+また参照先の拡張子が <code>.js.ts</code>, <code>.d.ts</code> ならば大丈夫だが <code>.js.ts.erb</code> の場合、compiler が参照してくれない。</p>
+
+<p>これらの問題を解消しないとちょっと本格利用はできないかなあ。
+また時間がとれたらなんとかしたい。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[使わないと損なバックエンドサービス]]></title>
@@ -1306,64 +1335,6 @@ RVM で止められてる気がする。。。</p>
 <code>$ CC=gcc rvm install 1.9.3</code> で compile できた。</p>
 
 <p>正しいやり方でないような気はするけど、まいっか。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[underscore.js in node REPL]]></title>
-    <link href="http://tkawachi.github.com/blog/2011/12/25/underscore-dot-js-in-node-repl/"/>
-    <updated>2011-12-25T01:04:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2011/12/25/underscore-dot-js-in-node-repl</id>
-    <content type="html"><![CDATA[<p>underscore.js の挙動を試そうと node をインタラクティブに起動して以下のように試したところ <code>_</code> が配列で置き換えられてしまう。</p>
-
-<pre><code>$ node
-&gt; var _ = require('underscore');
-&gt; _([1,2,3,2,1]).uniq();
-[ 1, 2, 3 ]
-&gt; _
-[ 1, 2, 3 ]
-</code></pre>
-
-<p>なぜ？どうして？
-しばらく悩んじゃいました。</p>
-
-<!-- more -->
-
-
-<p>あれこれやっているうちに、以下のように console.log() で結果をだすと問題ないことがわかった。</p>
-
-<pre><code>$ node
-&gt; var _ = require('underscore');
-&gt; console.log(_([1,2,3,2,1]).uniq());
-[ 1, 2, 3 ]
-&gt; _
-{ [Function]
-  _: [Circular],
-  VERSION: '1.2.3',
-(略)
-</code></pre>
-
-<p>正解は<a href="http://nodejs.org/docs/latest/api/repl.html#rEPL_Features">これ</a>！</p>
-
-<blockquote><p>The special variable _ (underscore) contains the result of the last expression.</p></blockquote>
-
-<p>気づいてしまえばなんてこと無いです。
-node の REPL (Read-Eval-Print-Loop) が最後の式の値を自動的に <code>_</code> に代入するとのこと。</p>
-
-<p>一つ解せないのは expression の評価値が undefined の場合には _ に代入されないこと。
-Node v0.4.7 で確認しました。最新版でどうなっているかは知りません。</p>
-
-<pre><code>$ node
-&gt; 1
-1
-&gt; _
-1
-&gt; undefined
-&gt; _
-1
-</code></pre>
-
-<p>まあこの挙動のおかげで <code>console.log()</code> で <code>_</code> が置き換えられなかったわけですけどね。</p>
 ]]></content>
   </entry>
   
