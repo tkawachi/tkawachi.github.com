@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.com/"/>
-  <updated>2013-04-25T23:28:03+09:00</updated>
+  <updated>2013-04-29T14:53:46+09:00</updated>
   <id>http://tkawachi.github.com/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -856,7 +856,7 @@ s3:ListBucket, s3:GetBucketLocation を許可するには、以下の様な stat
 
 <p>Exceptional.io では付加情報を付け加えて送ることができるので、以下の utility class をつかって git の revision 情報を取得し、それを送るようにしてみた。</p>
 
-<div><script src='https://gist.github.com/3713816.js?file='></script>
+<div><script src='https://gist.github.com/3713816.js'></script>
 <noscript><pre><code># coding: UTF-8
 class GitUtil
   class &lt;&lt; self
