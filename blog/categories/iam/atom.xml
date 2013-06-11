@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: IAM | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/iam/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/iam/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[IAMユーザのS3アクセスをフォルダレベルで制限する]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/11/18/how-to-restrict-s3-for-folder-access/"/>
+    <link href="http://tkawachi.github.io/blog/2012/11/18/how-to-restrict-s3-for-folder-access/"/>
     <updated>2012-11-18T19:29:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/11/18/how-to-restrict-s3-for-folder-access</id>
+    <id>http://tkawachi.github.io/blog/2012/11/18/how-to-restrict-s3-for-folder-access</id>
     <content type="html"><![CDATA[<p>AWS の IAM でユーザを作り、S3 bucket の特定の path 以下にのみアクセスを与えるということを設定したかったのですが、情報を見つけられず時間をつかってしまったので共有しておきます。
 (参考: <a href="https://forums.aws.amazon.com/message.jspa?messageID=245525">Giving a user permission to acceess just a folder within a bucket</a>)</p>
 
@@ -52,10 +52,10 @@ s3:ListBucket, s3:GetBucketLocation を許可するには、以下の様な stat
 
 <p>```
 {
-  "Effect": "Allow",
-  "Action": ["s3:ListBucket", "s3:GetBucketLocation"],
-  "Resource": "arn:aws:s3:::my_bucket",
-  "Condition": {</p>
+  &ldquo;Effect&rdquo;: &ldquo;Allow&rdquo;,
+  &ldquo;Action&rdquo;: [&ldquo;s3:ListBucket&rdquo;, &ldquo;s3:GetBucketLocation&rdquo;],
+  &ldquo;Resource&rdquo;: &ldquo;arn:aws:s3:::my_bucket&rdquo;,
+  &ldquo;Condition&rdquo;: {</p>
 
 <pre><code>"StringLike": {
 "s3:prefix": "shared/*"

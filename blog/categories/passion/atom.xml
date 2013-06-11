@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Passion | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/passion/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/passion/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[情熱の持ち方・燃やし方？]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/02/11/passion-study/"/>
+    <link href="http://tkawachi.github.io/blog/2013/02/11/passion-study/"/>
     <updated>2013-02-11T22:28:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/02/11/passion-study</id>
+    <id>http://tkawachi.github.io/blog/2013/02/11/passion-study</id>
     <content type="html"><![CDATA[<p>情熱が燃えていない。
 結婚して子どもができ幸せであるが、今ひとつのめり込めるものがない。
 好きなものはある。プログラミングが好きだ。

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: LESS | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/less/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/less/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Bootswatchのテーマをtwitter-bootstrap-railsで使う]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails/"/>
+    <link href="http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/"/>
     <updated>2013-01-04T18:12:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails</id>
+    <id>http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails</id>
     <content type="html"><![CDATA[<p>美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
 これ自体は別に悪いことはないと思うのですが、他のサイトと見分けの付かないサイトになってしまうのは良くないですよね。</p>
 

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: jQuery | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/jquery/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/jquery/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[jQueryのDeferredとPromise]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/01/06/jquery-deferred/"/>
+    <link href="http://tkawachi.github.io/blog/2013/01/06/jquery-deferred/"/>
     <updated>2013-01-06T00:44:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/01/06/jquery-deferred</id>
+    <id>http://tkawachi.github.io/blog/2013/01/06/jquery-deferred</id>
     <content type="html"><![CDATA[<p>JavaScript(というか CoffeeScript)って90年代にブラウザ上で使われていた頃のイメージが拭えず、どうも気持ち悪くて逃げて回ってたんですが、事情があって最近は渋々書いてます。
 JavaScripterの皆様にとっては何を今更だとは思いますが <a href="http://qiita.com/items/3d1cf51d7ae91305eaaa">jQuery.Deferredを使って楽しい非同期生活を送る方法</a> を読んで Deferred 便利だな、と思ったので理解したところをメモしておきます。</p>
 

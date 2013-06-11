@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Rspec | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/rspec/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/rspec/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Run rspec faster for Rails 3.1]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/"/>
+    <link href="http://tkawachi.github.io/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/"/>
     <updated>2012-01-22T21:07:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1</id>
+    <id>http://tkawachi.github.io/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1</id>
     <content type="html"><![CDATA[<p>個人プロジェクトで Rails 3.1 のアプリケーションを書いていたのだが、<code>rake spec</code> の
 実行が遅くてイライラしていた。
 1回の実行に 10 秒程度が掛かっていた。
@@ -54,17 +54,17 @@ spork を用いたテストの実行をファイル書き換え時に行うこ�
 
 <p>``` ruby Gemfile
 group :development do
-  gem 'spork'
-  gem 'guard'
-  gem 'rb-fsevent', :require => false
-  gem 'ruby_gntp'
-  gem 'guard-rspec'
-  gem 'guard-spork'
+  gem &lsquo;spork&rsquo;
+  gem &lsquo;guard&rsquo;
+  gem &lsquo;rb-fsevent&rsquo;, :require => false
+  gem &lsquo;ruby_gntp&rsquo;
+  gem &lsquo;guard-rspec&rsquo;
+  gem &lsquo;guard-spork&rsquo;
 end</p>
 
 <p>group :development, :test do
-  gem 'rspec-rails', '~> 2.6'
-  gem 'webrat'
+  gem &lsquo;rspec-rails&rsquo;, &lsquo;~> 2.6&rsquo;
+  gem &lsquo;webrat&rsquo;
 end
 ```</p>
 

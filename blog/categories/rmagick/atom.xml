@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: RMagick | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/rmagick/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/rmagick/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Homebrew RMagick]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick/"/>
+    <link href="http://tkawachi.github.io/blog/2013/01/05/homebrew-rmagick/"/>
     <updated>2013-01-05T14:38:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick</id>
+    <id>http://tkawachi.github.io/blog/2013/01/05/homebrew-rmagick</id>
     <content type="html"><![CDATA[<p>Homebrew で ImageMagick をインストールして RVM 環境の ruby に rmagick gem を入れようとしたら意外に苦労したのでメモ。</p>
 
 <!-- more -->

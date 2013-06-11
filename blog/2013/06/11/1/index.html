@@ -5,12 +5,16 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Bootswatchのテーマをtwitter-bootstrap-railsで使う - tkawachi Blog</title>
+  <title>loan pattern - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
-これ自体は別に悪いことはないと思うのですが、 &hellip;">
+  <meta name="description" content="最近 scala を書いてあることがありまして、
+Java 延長線上として使う分には全く問題ないのだが、
+scala ぽいこととなるとかなり怪しい。
+なので初歩から少しずつ勉強して、その様子を晒しておくことにする。 今日は loan pattern。
+リソース解放を忘れずに行うためのパターン。
+C &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +23,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails">
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/06/11/1">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
@@ -79,7 +83,7 @@
   
   <header>
     
-      <h1 class="entry-title">Bootswatchのテーマをtwitter-bootstrap-railsで使う</h1>
+      <h1 class="entry-title">Loan Pattern</h1>
     
     
       <p class="meta">
@@ -95,47 +99,66 @@
   
 
 
-<time datetime="2013-01-04T18:12:00+09:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
+<time datetime="2013-06-11T22:07:00+09:00" pubdate data-updated="true">Jun 11<span>th</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
-これ自体は別に悪いことはないと思うのですが、他のサイトと見分けの付かないサイトになってしまうのは良くないですよね。</p>
+<div class="entry-content"><p>最近 scala を書いてあることがありまして、
+Java 延長線上として使う分には全く問題ないのだが、
+scala ぽいこととなるとかなり怪しい。
+なので初歩から少しずつ勉強して、その様子を晒しておくことにする。</p>
 
-<p>そこでbootstrap用のテーマを入れよう、となるわけです。
-テーマを入れることで色・フォントなどが変更されるので、bootstrap臭が軽減されます。</p>
+<p>今日は loan pattern。
+リソース解放を忘れずに行うためのパターン。
+C++ では RAII, golang では defer を使う場面で使うやつ。</p>
 
-<p>bootstrap theme などで検索すると有償・無償を含めテーマを取り扱っているサイトが見つかると思いますが、今回は <a href="http://bootswatch.com/">Bootswatch</a> を twitter-bootstrap-rails と共に使う方法をメモします。
-bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方法があると思います。</p>
+<p>以下、基本形。</p>
 
-<!-- more -->
-
-
-<p>まず <a href="http://bootswatch.com/#gallery">Bootswatch の Gallery</a> から使いたいテーマを選びます。
-<code>vendor/assets/stylesheets/bootswatch/</code> ディレクトリを作り、選んだテーマの Download ボタンから <code>variables.less</code> と <code>bootswatch.less</code> をダウンロードして、このディレクトリに保存します。</p>
-
-<p><code>app/assets/stylesheets/</code> ではなく <code>vendor/assets/stylesheets/</code> 以下に <code>bootswatch</code> ディレクトリを作成して保存します。
-なぜなら <code>app/assets/stylesheets/application.css.scss</code> にはデフォルトで <code>*= require_tree .</code> という行があり、<code>app/assets/stylesheets/</code> 以下にある <code>.less</code> ファイルはすべて require されてしまうからです。
-<code>variables.less</code>, <code>bootswatch.less</code> は <code>@import</code> するものであって、require するとエラーになります。
-それに <code>vendor</code> というのはサードパーティ製のアレヤコレヤを置くところなので、きっとこっちが正解でしょう。</p>
-
-<p>あとは <code>bootstrap_and_overrides.css.less</code> で <code>@import “twitter/bootstrap/responsive”;</code> の行のあとに以下の２行を付け足します。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@import “bootswatch/variables.less”;
-</span><span class='line'>@import “bootswatch/bootswatch.less”;</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">def</span> <span class="n">using</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">R</span> <span class="k">&lt;:</span> <span class="o">{</span><span class="kt">def</span> <span class="kt">close</span><span class="o">()}](</span><span class="n">r</span><span class="k">:</span> <span class="kt">R</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">R</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">f</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">r</span><span class="o">.</span><span class="n">close</span><span class="o">()</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// 使いかた</span>
+</span><span class='line'>  <span class="n">using</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileWriter</span><span class="o">(</span><span class="s">&quot;xyz&quot;</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>    <span class="o">(</span><span class="n">f</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="c1">// f に対する操作</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>これでいける(少なくとも僕は使えてる)と思うんですが、ダメだったら教えて下さい。</p>
+<p>ポイント</p>
+
+<ul>
+<li>parameterized type の R には structural type で upper bound を指定する(<code>R &lt;: {def close()}</code>)。
+これにより R には <code>close()</code> メソッドを持つ任意の型を受け付けられる。
+Structural typing は scala で duck typing できる機能。便利。
+R の upper bound に trait や class を指定すると継承関係がある型しか使えないので
+汎用性が下がり残念な気持ちになる。注意。</li>
+</ul>
+
+
+<p>それにしても名前が覚えづらい。</p>
 
 <p>参考</p>
 
 <ul>
-<li><a href="http://bobonrails.com/post/29340795516/customizing-twitter-bootstrap-on-rails-3">Customizing Twitter Bootstrap On Rails 3</a></li>
+<li><a href="http://www.ne.jp/asahi/hishidama/home/tech/scala/sample/using.html">Scala using（ローンパターン）</a></li>
 </ul>
 
 </div>
@@ -160,12 +183,12 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
   
 
 
-<time datetime="2013-01-04T18:12:00+09:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
+<time datetime="2013-06-11T22:07:00+09:00" pubdate data-updated="true">Jun 11<span>th</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/bootstrap/'>Bootstrap</a>, <a class='category' href='/blog/categories/less/'>LESS</a>
+    <a class='category' href='/blog/categories/scala/'>scala</a>
   
 </span>
 
@@ -174,7 +197,7 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/06/11/1/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/06/11/1/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -187,10 +210,8 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/12/31/emacs-lisp-package-archive/" title="Previous Post: Emacs Lisp Package Archive">&laquo; Emacs Lisp Package Archive</a>
+        <a class="basic-alignment left" href="/blog/2013/04/25/typescript-and-rails-again/" title="Previous Post: RailsでTypeScript、再び">&laquo; RailsでTypeScript、再び</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/01/05/homebrew-rmagick/" title="Next Post: Homebrew RMagick">Homebrew RMagick &raquo;</a>
       
     </p>
   </footer>
@@ -267,8 +288,8 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/';
-        var disqus_url = 'http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/';
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/06/11/1/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2013/06/11/1/';
         var disqus_script = 'embed.js';
       
     (function () {

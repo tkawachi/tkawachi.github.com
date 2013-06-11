@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -14,10 +14,73 @@
 
   
   <entry>
+    <title type="html"><![CDATA[loan pattern]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/06/11/1/"/>
+    <updated>2013-06-11T22:07:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/06/11/1</id>
+    <content type="html"><![CDATA[<p>最近 scala を書いてあることがありまして、
+Java 延長線上として使う分には全く問題ないのだが、
+scala ぽいこととなるとかなり怪しい。
+なので初歩から少しずつ勉強して、その様子を晒しておくことにする。</p>
+
+<p>今日は loan pattern。
+リソース解放を忘れずに行うためのパターン。
+C++ では RAII, golang では defer を使う場面で使うやつ。</p>
+
+<p>以下、基本形。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">def</span> <span class="n">using</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">R</span> <span class="k">&lt;:</span> <span class="o">{</span><span class="kt">def</span> <span class="kt">close</span><span class="o">()}](</span><span class="n">r</span><span class="k">:</span> <span class="kt">R</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">R</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">f</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+</span><span class='line'>      <span class="n">r</span><span class="o">.</span><span class="n">close</span><span class="o">()</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="c1">// 使いかた</span>
+</span><span class='line'>  <span class="n">using</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileWriter</span><span class="o">(</span><span class="s">&quot;xyz&quot;</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>    <span class="o">(</span><span class="n">f</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="c1">// f に対する操作</span>
+</span><span class='line'>  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>ポイント</p>
+
+<ul>
+<li>parameterized type の R には structural type で upper bound を指定する(<code>R &lt;: {def close()}</code>)。
+これにより R には <code>close()</code> メソッドを持つ任意の型を受け付けられる。
+Structural typing は scala で duck typing できる機能。便利。
+R の upper bound に trait や class を指定すると継承関係がある型しか使えないので
+汎用性が下がり残念な気持ちになる。注意。</li>
+</ul>
+
+
+<p>それにしても名前が覚えづらい。</p>
+
+<p>参考</p>
+
+<ul>
+<li><a href="http://www.ne.jp/asahi/hishidama/home/tech/scala/sample/using.html">Scala using（ローンパターン）</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[RailsでTypeScript、再び]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/04/25/typescript-and-rails-again/"/>
+    <link href="http://tkawachi.github.io/blog/2013/04/25/typescript-and-rails-again/"/>
     <updated>2013-04-25T23:22:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/04/25/typescript-and-rails-again</id>
+    <id>http://tkawachi.github.io/blog/2013/04/25/typescript-and-rails-again</id>
     <content type="html"><![CDATA[<p>Google で typescript rails と検索すると去年12月に書いた「<a href="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a>」というエントリが2番目に出てくる日々が続いている。
 「TypeScriptをRailsで使いたい」と思った人たちは、検索結果を見て、ああ動かないのかと思うのだろう。</p>
 
@@ -44,9 +107,9 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
   
   <entry>
     <title type="html"><![CDATA[使わないと損なバックエンドサービス]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/02/17/backend-services/"/>
+    <link href="http://tkawachi.github.io/blog/2013/02/17/backend-services/"/>
     <updated>2013-02-17T18:47:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/02/17/backend-services</id>
+    <id>http://tkawachi.github.io/blog/2013/02/17/backend-services</id>
     <content type="html"><![CDATA[<p><a href="http://slash7.com/company/">slash7</a> の Thomas Fuchs さんが自分たちのサービス
 <a href="http://mir.aculo.us/2013/02/16/running-a-saas-here-are-some-services-youll-find-useful/">Freckle で使っている有償サービス群を紹介</a>している。
 小さいチームでは自分のビジネスのコアに集中し、それ以外の部分に力を分散させるべからずというのはまさにその通り。</p>
@@ -93,9 +156,9 @@ pingdom のほうは<a href="http://status.letsfreckle.com/">こういうステ�
   
   <entry>
     <title type="html"><![CDATA[情熱の持ち方・燃やし方？]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/02/11/passion-study/"/>
+    <link href="http://tkawachi.github.io/blog/2013/02/11/passion-study/"/>
     <updated>2013-02-11T22:28:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/02/11/passion-study</id>
+    <id>http://tkawachi.github.io/blog/2013/02/11/passion-study</id>
     <content type="html"><![CDATA[<p>情熱が燃えていない。
 結婚して子どもができ幸せであるが、今ひとつのめり込めるものがない。
 好きなものはある。プログラミングが好きだ。
@@ -131,9 +194,9 @@ pingdom のほうは<a href="http://status.letsfreckle.com/">こういうステ�
   
   <entry>
     <title type="html"><![CDATA[jQueryのDeferredとPromise]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/01/06/jquery-deferred/"/>
+    <link href="http://tkawachi.github.io/blog/2013/01/06/jquery-deferred/"/>
     <updated>2013-01-06T00:44:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/01/06/jquery-deferred</id>
+    <id>http://tkawachi.github.io/blog/2013/01/06/jquery-deferred</id>
     <content type="html"><![CDATA[<p>JavaScript(というか CoffeeScript)って90年代にブラウザ上で使われていた頃のイメージが拭えず、どうも気持ち悪くて逃げて回ってたんですが、事情があって最近は渋々書いてます。
 JavaScripterの皆様にとっては何を今更だとは思いますが <a href="http://qiita.com/items/3d1cf51d7ae91305eaaa">jQuery.Deferredを使って楽しい非同期生活を送る方法</a> を読んで Deferred 便利だな、と思ったので理解したところをメモしておきます。</p>
 
@@ -279,9 +342,9 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
   
   <entry>
     <title type="html"><![CDATA[Homebrew RMagick]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick/"/>
+    <link href="http://tkawachi.github.io/blog/2013/01/05/homebrew-rmagick/"/>
     <updated>2013-01-05T14:38:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick</id>
+    <id>http://tkawachi.github.io/blog/2013/01/05/homebrew-rmagick</id>
     <content type="html"><![CDATA[<p>Homebrew で ImageMagick をインストールして RVM 環境の ruby に rmagick gem を入れようとしたら意外に苦労したのでメモ。</p>
 
 <!-- more -->
@@ -326,9 +389,9 @@ RMagick の <a href="https://github.com/rmagick/rmagick/blob/master/ext/RMagick/
   
   <entry>
     <title type="html"><![CDATA[Bootswatchのテーマをtwitter-bootstrap-railsで使う]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails/"/>
+    <link href="http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/"/>
     <updated>2013-01-04T18:12:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails</id>
+    <id>http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails</id>
     <content type="html"><![CDATA[<p>美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
 これ自体は別に悪いことはないと思うのですが、他のサイトと見分けの付かないサイトになってしまうのは良くないですよね。</p>
 
@@ -370,9 +433,9 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
   
   <entry>
     <title type="html"><![CDATA[Emacs Lisp Package Archive]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/"/>
+    <link href="http://tkawachi.github.io/blog/2012/12/31/emacs-lisp-package-archive/"/>
     <updated>2012-12-31T23:16:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive</id>
+    <id>http://tkawachi.github.io/blog/2012/12/31/emacs-lisp-package-archive</id>
     <content type="html"><![CDATA[<p>Macでの日本語の文書を読み書きするテキストエディタを探していた。
 Facebookでつぶやいていたらいろいろおすすめをいただいたのだが、これだ！！というものがなかった。
 それで Emacs に戻ろうと思った。</p>
@@ -391,11 +454,11 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
 
 <p>おもむろに <code>M-x list-packages</code> とこんな画面が出てくる。</p>
 
-<p><img src="http://tkawachi.github.com/images/20121231/list-packages.png" alt="M-x list-packages" /></p>
+<p><img src="http://tkawachi.github.io/images/20121231/list-packages.png" alt="M-x list-packages" /></p>
 
 <p>青い下線があるところに移動して return を押すとこんなかんじでパッケージの説明が出てくる。</p>
 
-<p><img src="http://tkawachi.github.com/images/20121231/show.png" alt="M-x list-packages" /></p>
+<p><img src="http://tkawachi.github.io/images/20121231/show.png" alt="M-x list-packages" /></p>
 
 <p>あとは <code>Install</code> と書かれているところに移動して return を押せばインストールが完了する。
 簡単！</p>
@@ -419,9 +482,9 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
   
   <entry>
     <title type="html"><![CDATA[Rails で TypeScript を動かそうとして失敗した記録]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out/"/>
+    <link href="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/"/>
     <updated>2012-12-09T11:27:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out</id>
+    <id>http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out</id>
     <content type="html"><![CDATA[<p>Microsoft 発の型付き JavaScript こと TypeScript が人気ですね。
 <a href="https://github.com/klaustopher/typescript-rails">typescript-rails</a> という gem があったので、動くのか試してみました。</p>
 
@@ -473,7 +536,7 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>これで http://localhost:3000/test/index にアクセスすると、正しく alert が表示される。
+<p>これで <a href="http://localhost:3000/test/index">http://localhost:3000/test/index</a> にアクセスすると、正しく alert が表示される。
 いいぞ。</p>
 
 <p>次に JQuery が使ってみたい。</p>
@@ -566,9 +629,9 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
   
   <entry>
     <title type="html"><![CDATA[ActiveSupport 日時計算の罠]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time/"/>
+    <link href="http://tkawachi.github.io/blog/2012/12/08/a-trap-of-active-support-time/"/>
     <updated>2012-12-08T11:03:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time</id>
+    <id>http://tkawachi.github.io/blog/2012/12/08/a-trap-of-active-support-time</id>
     <content type="html"><![CDATA[<p>ActiveSupport の日時計算はとても便利です。直感的な記法でスラスラ書けちゃいます。
 でもハマるポイントもありますので注意してください。
 というか昨日僕がやらかしたことの告白です。</p>
@@ -592,7 +655,7 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>a = b + c だったら普通 a - b = c だろうと思うのですが、最後の式は false を返します。
+<p>a = b + c だったら普通 a &ndash; b = c だろうと思うのですが、最後の式は false を返します。
 なぜだかわかりますか？</p>
 
 <!-- more -->
@@ -619,9 +682,9 @@ year に関してはうるう年の時に同じ症状が発生します。</p>
   
   <entry>
     <title type="html"><![CDATA[Rails の JavaScript (CoffeeScript) でローカライゼーションを簡単に]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/12/06/i18n-js/"/>
+    <link href="http://tkawachi.github.io/blog/2012/12/06/i18n-js/"/>
     <updated>2012-12-06T23:37:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/12/06/i18n-js</id>
+    <id>http://tkawachi.github.io/blog/2012/12/06/i18n-js</id>
     <content type="html"><![CDATA[<p>Rails 3.2 のプロジェクトで作業していて JavaScript (CoffeeScript) でのローカライゼーションをしたくなりました。
 調べてみたところ <a href="https://github.com/fnando/i18n-js">i18n-js</a> が簡単につかえてよさそうな感じです。</p>
 
@@ -681,9 +744,9 @@ year に関してはうるう年の時に同じ症状が発生します。</p>
   
   <entry>
     <title type="html"><![CDATA[Octopress に Facebook recommendations bar を設置]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/12/02/facebook-recommendations-bar-for-octopress/"/>
+    <link href="http://tkawachi.github.io/blog/2012/12/02/facebook-recommendations-bar-for-octopress/"/>
     <updated>2012-12-02T10:18:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/12/02/facebook-recommendations-bar-for-octopress</id>
+    <id>http://tkawachi.github.io/blog/2012/12/02/facebook-recommendations-bar-for-octopress</id>
     <content type="html"><![CDATA[<p>この blog は
 <a href="http://octopress.org/">Octopress</a> を使って github pages で書いています。</p>
 
@@ -698,27 +761,27 @@ Github pages だと何を変更したかも github で見られるのが嬉し�
 
 <p>Blog の like 数が少なすぎるのでしょう。まだおすすめがちゃんと出ないようですが、 like 数が増えると出るようになるのでしょうか。</p>
 
-<p><a href="http://sessan.hatenablog.com/entry/2012/09/27/172013">sessanの日記 - はてなブログにFacebookのRecommendations Barを設置する</a> を参考にしました。</p>
+<p><a href="http://sessan.hatenablog.com/entry/2012/09/27/172013">sessanの日記 &ndash; はてなブログにFacebookのRecommendations Barを設置する</a> を参考にしました。</p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Facebook promoted posts]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/12/02/facebook-promoted-posts/"/>
+    <link href="http://tkawachi.github.io/blog/2012/12/02/facebook-promoted-posts/"/>
     <updated>2012-12-02T01:54:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/12/02/facebook-promoted-posts</id>
+    <id>http://tkawachi.github.io/blog/2012/12/02/facebook-promoted-posts</id>
     <content type="html"><![CDATA[<p>Facebook で投稿したときに右下に表示される「宣伝する」を試してみました。
 大学時代の仲間内で作ったアプリをリリースしたのでそのお知らせということで。</p>
 
 <p>「宣伝する」ボタンを押すとこんな画面が表示されます。</p>
 
-<p><img src="http://tkawachi.github.com/images/20121202/payment1.png" alt="支払画面1" /></p>
+<p><img src="http://tkawachi.github.io/images/20121202/payment1.png" alt="支払画面1" /></p>
 
 <p>674円とのことです。
 うーん。高いのか安いのか？
 よくわかりませんが、何事も経験なので勉強代だと思ってクレジットカードを入力します。</p>
 
-<p><img src="http://tkawachi.github.com/images/20121202/payment2.png" alt="支払画面2" /></p>
+<p><img src="http://tkawachi.github.io/images/20121202/payment2.png" alt="支払画面2" /></p>
 
 <p>どうやら 81 Facebookポイント を 674円で購入し、それを使って「大切な投稿を宣伝」を購入したようです。
 1 Facebook ポイントは 8.32 円ですか。
@@ -727,7 +790,7 @@ Github pages だと何を変更したかも github で見られるのが嬉し�
 <p>購入後しばらくは何も変化が感じられません。
 結果が見えるようになるまで1日近くかかります。</p>
 
-<p><img src="http://tkawachi.github.com/images/20121202/result.png" alt="結果表示" /></p>
+<p><img src="http://tkawachi.github.io/images/20121202/result.png" alt="結果表示" /></p>
 
 <p>1日後くらいから上の画像のような結果が表示されます。
 どうやら通常見られるより2倍以上の露出があったようです。</p>
@@ -752,9 +815,9 @@ Github pages だと何を変更したかも github で見られるのが嬉し�
   
   <entry>
     <title type="html"><![CDATA[Generating HTML from DocBook]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook/"/>
+    <link href="http://tkawachi.github.io/blog/2012/11/19/generating-html-from-docbook/"/>
     <updated>2012-11-19T00:28:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook</id>
+    <id>http://tkawachi.github.io/blog/2012/11/19/generating-html-from-docbook</id>
     <content type="html"><![CDATA[<p>これまで DocBook には縁がなかったのですが、とある DocBook 形式の .xml ファイルを HTML に変換したくなりました。
 DocBook project で用意されている xslt を xlstproc コマンドであててあげれば良いようです。</p>
 
@@ -779,9 +842,9 @@ DocBook って難しくて怖いイメージがあったんですが意外に簡
   
   <entry>
     <title type="html"><![CDATA[IAMユーザのS3アクセスをフォルダレベルで制限する]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/11/18/how-to-restrict-s3-for-folder-access/"/>
+    <link href="http://tkawachi.github.io/blog/2012/11/18/how-to-restrict-s3-for-folder-access/"/>
     <updated>2012-11-18T19:29:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/11/18/how-to-restrict-s3-for-folder-access</id>
+    <id>http://tkawachi.github.io/blog/2012/11/18/how-to-restrict-s3-for-folder-access</id>
     <content type="html"><![CDATA[<p>AWS の IAM でユーザを作り、S3 bucket の特定の path 以下にのみアクセスを与えるということを設定したかったのですが、情報を見つけられず時間をつかってしまったので共有しておきます。
 (参考: <a href="https://forums.aws.amazon.com/message.jspa?messageID=245525">Giving a user permission to acceess just a folder within a bucket</a>)</p>
 
@@ -846,9 +909,9 @@ s3:ListBucket, s3:GetBucketLocation を許可するには、以下の様な stat
   
   <entry>
     <title type="html"><![CDATA[Sending git revision to Exceptional.io]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/"/>
+    <link href="http://tkawachi.github.io/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/"/>
     <updated>2012-09-13T20:44:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io</id>
+    <id>http://tkawachi.github.io/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io</id>
     <content type="html"><![CDATA[<p><a href="https://www.exceptional.io">Exceptional.io</a> は Ruby アプリケーションで起きた例外を集約して管理するサービスだ。</p>
 
 <p>例外が起きた時に困るのが、それってどのバージョンで起きたバグ？ってことがわからないこと。
@@ -901,9 +964,9 @@ end</code></pre></noscript></div>
   
   <entry>
     <title type="html"><![CDATA[Open sources used by spotify]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/06/25/open-sources-used-by-spotify/"/>
+    <link href="http://tkawachi.github.io/blog/2012/06/25/open-sources-used-by-spotify/"/>
     <updated>2012-06-25T00:49:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/06/25/open-sources-used-by-spotify</id>
+    <id>http://tkawachi.github.io/blog/2012/06/25/open-sources-used-by-spotify</id>
     <content type="html"><![CDATA[<p>US などの iTunes store からダウンロードできる <a href="http://www.spotify.com/">Spotify</a> の iOS アプリの出来がとても良い。
 アプリ内に用意されている Lisence のページを見ていたら、利用している open source ソフトウェアの一覧が並んでいたので、ちゃんと出来てるアプリに使われているものはきっとちゃんとしているだろうということでメモしておく。</p>
 
@@ -916,7 +979,7 @@ end</code></pre></noscript></div>
 <li><a href="http://www.libpng.org/pub/png/libpng.html">libpng</a> PNG</li>
 <li><a href="http://xiph.org/ogg/">libogg</a> Ogg</li>
 <li><a href="http://xiph.org/vorbis/">libvorbis</a> Vorbis</li>
-<li><a href="http://wss.co.uk/pinknoise/tremolo/">Tremolo</a> Tremolo is an ARM optimised version of the Tremor lib from xiph.org. For those that don&#8217;t know, the Tremor lib is an integer only library for doing Ogg Vorbis decompression.</li>
+<li><a href="http://wss.co.uk/pinknoise/tremolo/">Tremolo</a> Tremolo is an ARM optimised version of the Tremor lib from xiph.org. For those that don&rsquo;t know, the Tremor lib is an integer only library for doing Ogg Vorbis decompression.</li>
 <li><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html">Mersenne Twister</a> Mersenne Twister(以下MT)は、松本眞 ・西村拓士（アルファベット順）により1996年から1997年に渡って 開発された疑似乱数生成アルゴリズムです。</li>
 <li><a href="https://ccrma.stanford.edu/software/snd/">Snd</a> Snd is a sound editor. Spotify では resampling にコードを流量。</li>
 <li><a href="http://zlib.net/">zlib</a></li>
@@ -927,12 +990,12 @@ end</code></pre></noscript></div>
 <li><a href="http://programming.nu/index">Nu</a> Nu is an interpreted object-oriented language. Its syntax comes from Lisp, but Nu is semantically closer to Ruby than Lisp. Nu is implemented in Objective-C and is designed to take full advantange of the Objective-C runtime and the many mature class libraries written in Objective-C.</li>
 <li><a href="http://stig.github.com/json-framework/">SBJSON</a></li>
 <li><a href="http://allseeing-i.com/ASIHTTPRequest/">ASIHTTPRequest</a></li>
-<li><a href="https://github.com/mikeash/MAObjCRuntime">MAObjCRuntime</a> MAObjCRuntime is an ObjC wrapper around the Objective-C runtime APIs. If that&#8217;s confusing, it provides a nice object-oriented interface around (some of) the C functions in /usr/include/objc.</li>
+<li><a href="https://github.com/mikeash/MAObjCRuntime">MAObjCRuntime</a> MAObjCRuntime is an ObjC wrapper around the Objective-C runtime APIs. If that&rsquo;s confusing, it provides a nice object-oriented interface around (some of) the C functions in /usr/include/objc.</li>
 <li><a href="http://code.google.com/p/google-breakpad/">Google Breakpad</a> An open-source multi-platform crash reporting system</li>
 <li><a href="http://zendold.lojcomm.com.br/icarousel/">iCarousel</a> iCarousel is an open source (free) javascript tool for creating carousel like widgets.</li>
 <li><a href="https://github.com/jdg/MBProgressHUD">MBProgressHUD</a> MBProgressHUD is an iOS drop-in class that displays a translucent HUD with an indicator and/or labels while work is being done in a background thread</li>
 <li><a href="https://github.com/kolinkrewinkel/KKGridView">KKGridView</a> High-performance iOS grid view (MIT license). iOS6 では iOS SDK に類似の view controller を入れたので不要に。</li>
-<li><a href="https://github.com/robbiehanson/KissXML">KissXML</a> KissXML provides a drop-in replacement for Apple&#8217;s NSXML class culster in environments without NSXML (e.g. iOS).</li>
+<li><a href="https://github.com/robbiehanson/KissXML">KissXML</a> KissXML provides a drop-in replacement for Apple&rsquo;s NSXML class culster in environments without NSXML (e.g. iOS).</li>
 <li><a href="https://github.com/booyah/protobuf-objc">ProtobufObjc</a></li>
 <li><a href="https://github.com/facebook/facebook-ios-sdk">Facebook</a></li>
 <li><a href="http://www.chromium.org/">Chronium</a></li>
@@ -948,9 +1011,9 @@ end</code></pre></noscript></div>
   
   <entry>
     <title type="html"><![CDATA[Run rspec faster for Rails 3.1]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/"/>
+    <link href="http://tkawachi.github.io/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/"/>
     <updated>2012-01-22T21:07:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1</id>
+    <id>http://tkawachi.github.io/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1</id>
     <content type="html"><![CDATA[<p>個人プロジェクトで Rails 3.1 のアプリケーションを書いていたのだが、<code>rake spec</code> の
 実行が遅くてイライラしていた。
 1回の実行に 10 秒程度が掛かっていた。
@@ -1062,9 +1125,9 @@ spork を用いたテストの実行をファイル書き換え時に行うこ�
   
   <entry>
     <title type="html"><![CDATA[Trying Micro Cloud Foundry 1.1.0 その2]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/"/>
+    <link href="http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/"/>
     <updated>2012-01-03T19:31:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2</id>
+    <id>http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2</id>
     <content type="html"><![CDATA[<p><a href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/">前回</a>
 は残念ながらインストールの途中で止まってしまいましたが、解決方法がわかりました。</p>
 
@@ -1124,9 +1187,9 @@ spork を用いたテストの実行をファイル書き換え時に行うこ�
   
   <entry>
     <title type="html"><![CDATA[Trying Micro Cloud Foundry 1.1.0]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/"/>
+    <link href="http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/"/>
     <updated>2012-01-03T14:19:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0</id>
+    <id>http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0</id>
     <content type="html"><![CDATA[<p>前々から気になっていた Micro Cloud Foundry を試してみます。
 Cloud Foundry は VMware 社が開発している open source の PaaS です。
 Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめたものです。</p>
@@ -1175,166 +1238,6 @@ Press return to continue
 どうしたことだろう？</p>
 
 <p>とりあえず今回はここまで。次回はなんとか動かしたい。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Compile ruby 1.9.3 on Mac OS X Lion using RVM]]></title>
-    <link href="http://tkawachi.github.com/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/"/>
-    <updated>2011-12-27T23:52:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion</id>
-    <content type="html"><![CDATA[<p>仕事で Ruby を使うことになったので、家の Lion ちゃんにも ruby インストール
-しとこうと思ったらエラーになる。
-rvm の version は 1.10.0。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ rvm install 1.9.3
-</span><span class='line'>Installing Ruby from source to: /Users/kawachi/.rvm/rubies/ruby-1.9.3-p0, this may take a while depending on your cpu(s)...
-</span><span class='line'>
-</span><span class='line'>ruby-1.9.3-p0 - #fetching
-</span><span class='line'>ruby-1.9.3-p0 - #extracted to /Users/kawachi/.rvm/src/ruby-1.9.3-p0 (already extracted)
-</span><span class='line'>Fetching yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/archives
-</span><span class='line'>Extracting yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/src
-</span><span class='line'>Configuring yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
-</span><span class='line'>Compiling yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
-</span><span class='line'>Installing yaml to /Users/kawachi/.rvm/usr
-</span><span class='line'>ruby-1.9.3-p0 - #configuring
-</span><span class='line'>ERROR: Error running ' ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr ', please read /Users/kawachi/.rvm/log/ruby-1.9.3-p0/configure.log
-</span><span class='line'>ERROR: There has been an error while running configure. Halting the installation.</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>~/.rvm/log/ruby-1.9.3-p0/configure.log</code> はこんな感じ。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[2011-12-27 23:50:52]  ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr 
-</span><span class='line'>configure: WARNING: unrecognized options: --with-libyaml-dir
-</span><span class='line'>checking build system type... x86_64-apple-darwin11.2.0
-</span><span class='line'>checking host system type... x86_64-apple-darwin11.2.0
-</span><span class='line'>checking target system type... x86_64-apple-darwin11.2.0
-</span><span class='line'>checking whether the C compiler works... no
-</span><span class='line'>configure: error: in `/Users/kawachi/.rvm/src/ruby-1.9.3-p0':
-</span><span class='line'>configure: error: C compiler cannot create executablesSee `config.log' for more details</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>CC=gcc</code> を指定すると少し変わる。</p>
-
-<!-- more -->
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ CC=gcc rvm install 1.9.3
-</span><span class='line'>ERROR: The provided CC(gcc) is LLVM based, it is not yet fully supported by ruby and gems, please read `rvm requirements`.</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>rvm requirements</code> を読むといろいろ書いてある。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>  Notes for Darwin ( Mac OS X )
-</span><span class='line'>    For Snow Leopard: Xcode Version 3.2.1 (1613) or later, such as 3.2.6 or Xcode 4.1.
-</span><span class='line'>    [ Please note that Xcode 3.x will *not* work on OS X Lion. The 'cross-over' is Xcode 4.1. ]
-</span><span class='line'>
-</span><span class='line'>    You should download the Xcode tools from developer.apple.com, since the Snow Leopard dvd install contained bugs.
-</span><span class='line'>    You can find Xcode 4.1 for OS X Lion at:
-</span><span class='line'>    https://developer.apple.com/downloads/download.action?path=Developer_Tools/xcode_4.1_for_lion/xcode_4.1_for_lion.dmg
-</span><span class='line'>
-</span><span class='line'>    ** Lion Users: Xcode Version 4.2.x for OS X Lion works only for ruby 1.9.3-p0 (or higher).
-</span><span class='line'>                   It currently fails to build several other rubies and gems, as well as several Homebrew and
-</span><span class='line'>                   Macports packages. Xcode Version 4.1 (4B110) works.
-</span><span class='line'>    ** NOTE: Currently, Node.js is having issues building with osx-gcc-installer. This is _not_ an RVM issue. This is
-</span><span class='line'>       because Node.js depends on the Carbon headers. ox-gcc-installer does not install these to the system.
-</span><span class='line'>       This issue only affects users using osx-gcc-installer, and not Xcode. The only fix is to install Xcode over osx-gcc-installer.
-</span><span class='line'>
-</span><span class='line'>    For MacRuby: Install LLVM first.
-</span><span class='line'>    For JRuby:  Install the JDK. See http://developer.apple.com/java/download/  # Current Java version 1.6.0_26
-</span><span class='line'>    For IronRuby: Install Mono &gt;= 2.6
-</span><span class='line'>      For Ruby 1.9.3: Install libksba # If using Homebrew, 'brew install libksba'</span></code></pre></td></tr></table></div></figure>
-
-
-<p>なんかいろいろ書いてある。
-自分の環境 (Lion, Xcode 4.2.1) に関連しそうなのは、</p>
-
-<ul>
-<li>Lion で Xcode 4.1 だとうまくいく</li>
-<li>Lion の Xcode 4.2 でコンパイルできるのは ruby 1.9.3-p0 とそれ以降</li>
-<li>Ruby 1.9.3 をインストールする前に libksba をインストールせよ</li>
-</ul>
-
-
-<p>たしかに Xcode 4.2 なので LLVM しかないけど、
-ruby 1.9.3-p0 はコンパイルできるんじゃないの？
-RVM で止められてる気がする。。。</p>
-
-<p><code>~/.rvm/scripts/functions/build</code> を参照すると、
-<code>CC</code> 環境変数が存在するときは <code>--version</code> 付きで実行して LLVM だったら <code>exit 1</code> してる。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>--- .rvm/scripts/functions/build.orig   2011-12-28 00:29:10.000000000 +0900
-</span><span class='line'>+++ .rvm/scripts/functions/build        2011-12-28 00:29:32.000000000 +0900
-</span><span class='line'>@@ -29,7 +29,7 @@
-</span><span class='line'>       else
-</span><span class='line'>         rvm_error "The autodetected CC(${CC:-}) is LLVM based, it is not yet fully supported by ruby and gems, please read \`rvm requirements\`, and set CC=/path/to/gcc ."
-</span><span class='line'>       fi
-</span><span class='line'>-      exit 1
-</span><span class='line'>+      #exit 1
-</span><span class='line'>     fi
-</span><span class='line'> 
-</span><span class='line'>   fi</span></code></pre></td></tr></table></div></figure>
-
-
-<p>とりあえず上記のとおりコメントアウトしてみたら
-<code>$ CC=gcc rvm install 1.9.3</code> で compile できた。</p>
-
-<p>正しいやり方でないような気はするけど、まいっか。</p>
 ]]></content>
   </entry>
   

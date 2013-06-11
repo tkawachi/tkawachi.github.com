@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: CloudFoundry | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/cloudfoundry/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/cloudfoundry/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Trying Micro Cloud Foundry 1.1.0 その2]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/"/>
+    <link href="http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/"/>
     <updated>2012-01-03T19:31:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2</id>
+    <id>http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2</id>
     <content type="html"><![CDATA[<p><a href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/">前回</a>
 は残念ながらインストールの途中で止まってしまいましたが、解決方法がわかりました。</p>
 
@@ -58,11 +58,11 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ vmc target http://api.kawachi.cloudfoundry.me
-</span><span class='line'>Successfully targeted to [http://api.kawachi.cloudfoundry.me]&lt;/p>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ vmc target &lt;a href="http://api.kawachi.cloudfoundry.me">http://api.kawachi.cloudfoundry.me&lt;/a>
+</span><span class='line'>Successfully targeted to [&lt;a href="http://api.kawachi.cloudfoundry.me">http://api.kawachi.cloudfoundry.me&lt;/a>]&lt;/p>
 </span><span class='line'>
 </span><span class='line'>&lt;p>$ vmc register
-</span><span class='line'>Email: hoho@fufu.com
+</span><span class='line'>Email: &lt;a href="&#x6d;&#97;&#x69;&#108;&#x74;&#111;&#58;&#x68;&#111;&#x68;&#x6f;&#x40;&#x66;&#117;&#102;&#x75;&#x2e;&#99;&#x6f;&#x6d;">&#104;&#x6f;&#104;&#111;&#x40;&#102;&#117;&#x66;&#x75;&#46;&#x63;&#111;&#109;&lt;/a>
 </span><span class='line'>Password: &lt;strong>&lt;strong>&lt;strong>
 </span><span class='line'>Verify Password: &lt;/strong>&lt;/strong>&lt;/strong>
 </span><span class='line'>Creating New User: OK</span></code></pre></td></tr></table></div></figure></notextile></div></p>
@@ -76,9 +76,9 @@
   
   <entry>
     <title type="html"><![CDATA[Trying Micro Cloud Foundry 1.1.0]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/"/>
+    <link href="http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/"/>
     <updated>2012-01-03T14:19:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0</id>
+    <id>http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0</id>
     <content type="html"><![CDATA[<p>前々から気になっていた Micro Cloud Foundry を試してみます。
 Cloud Foundry は VMware 社が開発している open source の PaaS です。
 Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめたものです。</p>
@@ -121,7 +121,7 @@ Press return to continue
 
 <p>下の画面のとおり「5分かかるよ」と言われた。</p>
 
-<p><img src="https://lh3.googleusercontent.com/-ScF3kpSyiJ0/TwKwn8CpQiI/AAAAAAAAGSM/n1Lcx5EFHw0/s800/Screen%252520Shot%2525202012-01-03%252520at%25252016.30.13.png"></p>
+<p><img class="<a" src="href="https://lh3.googleusercontent.com/-ScF3kpSyiJ0/TwKwn8CpQiI/AAAAAAAAGSM/n1Lcx5EFHw0/s800/Screen%252520Shot%2525202012-01-03%252520at%25252016.30.13.png">https://lh3.googleusercontent.com/-ScF3kpSyiJ0/TwKwn8CpQiI/AAAAAAAAGSM/n1Lcx5EFHw0/s800/Screen%252520Shot%2525202012-01-03%252520at%25252016.30.13.png</a>"></p>
 
 <p>がしかし、待っても待っても返ってこない。1時間以上は待ったが。
 どうしたことだろう？</p>

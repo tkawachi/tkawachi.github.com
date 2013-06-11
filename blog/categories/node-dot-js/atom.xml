@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Node.js | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/node-dot-js/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/node-dot-js/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[underscore.js in node REPL]]></title>
-    <link href="http://tkawachi.github.com/blog/2011/12/25/underscore-dot-js-in-node-repl/"/>
+    <link href="http://tkawachi.github.io/blog/2011/12/25/underscore-dot-js-in-node-repl/"/>
     <updated>2011-12-25T01:04:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2011/12/25/underscore-dot-js-in-node-repl</id>
+    <id>http://tkawachi.github.io/blog/2011/12/25/underscore-dot-js-in-node-repl</id>
     <content type="html"><![CDATA[<p>underscore.js の挙動を試そうと node をインタラクティブに起動して以下のように試したところ <code>_</code> が配列で置き換えられてしまう。</p>
 
 <pre><code>$ node

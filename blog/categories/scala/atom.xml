@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: scala | tkawachi Blog]]></title>
+  <link href="http://tkawachi.github.io/blog/categories/scala/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
+  <author>
+    <name><![CDATA[KAWACHI Takashi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[loan pattern]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/06/11/1/"/>
+    <updated>2013-06-11T22:07:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/06/11/1</id>
+    <content type="html"><![CDATA[<p>最近 scala を書いてあることがありまして、
+Java 延長線上として使う分には全く問題ないのだが、
+scala ぽいこととなるとかなり怪しい。
+なので初歩から少しずつ勉強して、その様子を晒しておくことにする。</p>
+
+<p>今日は loan pattern。
+リソース解放を忘れずに行うためのパターン。
+C++ では RAII, golang では defer を使う場面で使うやつ。</p>
+
+<p>以下、基本形。</p>
+
+<p>``` scala
+  def using<a href="r:%20R">A, R &lt;: {def close()}</a>(f: R => A): A =</p>
+
+<pre><code>try {
+  f(r)
+} finally {
+  r.close()
+}
+</code></pre>
+
+<p>  // 使いかた
+  using(new FileWriter(&ldquo;xyz&rdquo;)) {</p>
+
+<pre><code>(f) =&gt; // f に対する操作
+</code></pre>
+
+<p>  }
+```</p>
+
+<p>ポイント</p>
+
+<ul>
+<li>parameterized type の R には structural type で upper bound を指定する(<code>R &lt;: {def close()}</code>)。
+これにより R には <code>close()</code> メソッドを持つ任意の型を受け付けられる。
+Structural typing は scala で duck typing できる機能。便利。
+R の upper bound に trait や class を指定すると継承関係がある型しか使えないので
+汎用性が下がり残念な気持ちになる。注意。</li>
+</ul>
+
+
+<p>それにしても名前が覚えづらい。</p>
+
+<p>参考</p>
+
+<ul>
+<li><a href="http://www.ne.jp/asahi/hishidama/home/tech/scala/sample/using.html">Scala using（ローンパターン）</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

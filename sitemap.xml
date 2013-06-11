@@ -1,119 +1,119 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
-        <loc>http://tkawachi.github.com/blog/2011/12/22/inside-play-continuation-javaflow/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2011/12/22/inside-play-continuation-javaflow/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2011/12/24/dotinstall/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2011/12/24/dotinstall/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2011/12/25/underscore-dot-js-in-node-repl/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://tkawachi.github.com/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/
-        </loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2011/12/25/underscore-dot-js-in-node-repl/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/
+            http://tkawachi.github.io/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/
         </loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/
+            http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/
         </loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2012/06/25/open-sources-used-by-spotify/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2012/06/25/open-sources-used-by-spotify/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tkawachi.github.com/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/
+            http://tkawachi.github.io/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/
         </loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://tkawachi.github.io/blog/2012/11/18/how-to-restrict-s3-for-folder-access/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://tkawachi.github.io/blog/2012/11/19/generating-html-from-docbook/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
+    </url>
+    <url>
+        <loc>http://tkawachi.github.io/blog/2012/12/02/facebook-promoted-posts/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
         <loc>
-            http://tkawachi.github.com/blog/2012/11/18/how-to-restrict-s3-for-folder-access/
+            http://tkawachi.github.io/blog/2012/12/02/facebook-recommendations-bar-for-octopress/
         </loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2012/12/06/i18n-js/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2012/12/02/facebook-promoted-posts/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2012/12/08/a-trap-of-active-support-time/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>
-            http://tkawachi.github.com/blog/2012/12/02/facebook-recommendations-bar-for-octopress/
-        </loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2012/12/06/i18n-js/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2012/12/31/emacs-lisp-package-archive/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2013/01/05/homebrew-rmagick/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2012/12/31/emacs-lisp-package-archive/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2013/01/06/jquery-deferred/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2013/01/04/use-bootswatch-with-rails/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2013/02/11/passion-study/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2013/01/05/homebrew-rmagick/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2013/02/17/backend-services/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2013/01/06/jquery-deferred/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2013/04/25/typescript-and-rails-again/</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2013/02/11/passion-study/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/2013/06/11/1/</loc>
+        <lastmod>2013-06-11T22:46:58+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2013/02/17/backend-services/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/blog/archives/</loc>
+        <lastmod>2013-06-11T22:46:58+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/2013/04/25/typescript-and-rails-again/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/</loc>
+        <lastmod>2013-06-11T22:46:58+09:00</lastmod>
     </url>
     <url>
-        <loc>http://tkawachi.github.com/blog/archives/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.com/</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.com/robots.txt</loc>
-        <lastmod>2013-04-29T14:53:27+09:00</lastmod>
+        <loc>http://tkawachi.github.io/robots.txt</loc>
+        <lastmod>2013-06-11T22:04:38+09:00</lastmod>
     </url>
 </urlset>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: TypeScript | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/typescript/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/typescript/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[RailsでTypeScript、再び]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/04/25/typescript-and-rails-again/"/>
+    <link href="http://tkawachi.github.io/blog/2013/04/25/typescript-and-rails-again/"/>
     <updated>2013-04-25T23:22:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/04/25/typescript-and-rails-again</id>
+    <id>http://tkawachi.github.io/blog/2013/04/25/typescript-and-rails-again</id>
     <content type="html"><![CDATA[<p>Google で typescript rails と検索すると去年12月に書いた「<a href="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a>」というエントリが2番目に出てくる日々が続いている。
 「TypeScriptをRailsで使いたい」と思った人たちは、検索結果を見て、ああ動かないのかと思うのだろう。</p>
 
@@ -44,9 +44,9 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
   
   <entry>
     <title type="html"><![CDATA[Rails で TypeScript を動かそうとして失敗した記録]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out/"/>
+    <link href="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/"/>
     <updated>2012-12-09T11:27:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out</id>
+    <id>http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out</id>
     <content type="html"><![CDATA[<p>Microsoft 発の型付き JavaScript こと TypeScript が人気ですね。
 <a href="https://github.com/klaustopher/typescript-rails">typescript-rails</a> という gem があったので、動くのか試してみました。</p>
 
@@ -57,7 +57,7 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
 
 <p>``` sh
 $ rails new typescript-rails-test -T
-$ echo 'gem "typescript-rails"' >> Gemfile
+$ echo &lsquo;gem &ldquo;typescript-rails&rdquo;&rsquo; >> Gemfile
 $ bundle
 $ bundle exec rails g controller test index</p>
 
@@ -76,11 +76,11 @@ $ bundle exec rails g controller test index</p>
 </code></pre>
 
 <p>$ rm app/assets/javascripts/test.js.coffee
-$ echo 'alert("Hello TypeScript")' > app/assets/javascripts/test.js.ts
+$ echo &lsquo;alert(&ldquo;Hello TypeScript&rdquo;)&rsquo; > app/assets/javascripts/test.js.ts
 $ bundle exec rails s
 ```</p>
 
-<p>これで http://localhost:3000/test/index にアクセスすると、正しく alert が表示される。
+<p>これで <a href="http://localhost:3000/test/index">http://localhost:3000/test/index</a> にアクセスすると、正しく alert が表示される。
 いいぞ。</p>
 
 <p>次に JQuery が使ってみたい。

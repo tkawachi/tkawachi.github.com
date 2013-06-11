@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: ActiveSupport | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/activesupport/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/activesupport/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[ActiveSupport 日時計算の罠]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time/"/>
+    <link href="http://tkawachi.github.io/blog/2012/12/08/a-trap-of-active-support-time/"/>
     <updated>2012-12-08T11:03:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time</id>
+    <id>http://tkawachi.github.io/blog/2012/12/08/a-trap-of-active-support-time</id>
     <content type="html"><![CDATA[<p>ActiveSupport の日時計算はとても便利です。直感的な記法でスラスラ書けちゃいます。
 でもハマるポイントもありますので注意してください。
 というか昨日僕がやらかしたことの告白です。</p>
@@ -28,13 +28,13 @@
 t1 = Time.new(2012, 12, 1)</p>
 
 <p>t2 = t1 + 1.day
-t2 - t1 == 1.day # => true</p>
+t2 &ndash; t1 == 1.day # => true</p>
 
 <p>t3 = t1 + 1.month
-t3 - t1 == 1.month # => false
+t3 &ndash; t1 == 1.month # => false
 ```</p>
 
-<p>a = b + c だったら普通 a - b = c だろうと思うのですが、最後の式は false を返します。
+<p>a = b + c だったら普通 a &ndash; b = c だろうと思うのですが、最後の式は false を返します。
 なぜだかわかりますか？</p>
 
 <!-- more -->

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Lion | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/lion/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/lion/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,26 +15,26 @@
   
   <entry>
     <title type="html"><![CDATA[Compile ruby 1.9.3 on Mac OS X Lion using RVM]]></title>
-    <link href="http://tkawachi.github.com/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/"/>
+    <link href="http://tkawachi.github.io/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/"/>
     <updated>2011-12-27T23:52:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion</id>
+    <id>http://tkawachi.github.io/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion</id>
     <content type="html"><![CDATA[<p>仕事で Ruby を使うことになったので、家の Lion ちゃんにも ruby インストール
 しとこうと思ったらエラーになる。
 rvm の version は 1.10.0。</p>
 
 <p>```
 $ rvm install 1.9.3
-Installing Ruby from source to: /Users/kawachi/.rvm/rubies/ruby-1.9.3-p0, this may take a while depending on your cpu(s)...</p>
+Installing Ruby from source to: /Users/kawachi/.rvm/rubies/ruby-1.9.3-p0, this may take a while depending on your cpu(s)&hellip;</p>
 
-<p>ruby-1.9.3-p0 - #fetching
-ruby-1.9.3-p0 - #extracted to /Users/kawachi/.rvm/src/ruby-1.9.3-p0 (already extracted)
+<p>ruby-1.9.3-p0 &ndash; #fetching
+ruby-1.9.3-p0 &ndash; #extracted to /Users/kawachi/.rvm/src/ruby-1.9.3-p0 (already extracted)
 Fetching yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/archives
 Extracting yaml-0.1.4.tar.gz to /Users/kawachi/.rvm/src
 Configuring yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
 Compiling yaml in /Users/kawachi/.rvm/src/yaml-0.1.4.
 Installing yaml to /Users/kawachi/.rvm/usr
-ruby-1.9.3-p0 - #configuring
-ERROR: Error running ' ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr ', please read /Users/kawachi/.rvm/log/ruby-1.9.3-p0/configure.log
+ruby-1.9.3-p0 &ndash; #configuring
+ERROR: Error running &lsquo; ./configure &mdash;prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 &mdash;enable-shared &mdash;disable-install-doc &mdash;with-libyaml-dir=/Users/kawachi/.rvm/usr &rsquo;, please read /Users/kawachi/.rvm/log/ruby-1.9.3-p0/configure.log
 ERROR: There has been an error while running configure. Halting the installation.
 ```</p>
 
@@ -106,7 +106,7 @@ RVM で止められてる気がする。。。</p>
 <code>CC</code> 環境変数が存在するときは <code>--version</code> 付きで実行して LLVM だったら <code>exit 1</code> してる。</p>
 
 <p>```
---- .rvm/scripts/functions/build.orig   2011-12-28 00:29:10.000000000 +0900
+&mdash;&ndash; .rvm/scripts/functions/build.orig   2011-12-28 00:29:10.000000000 +0900
 +++ .rvm/scripts/functions/build        2011-12-28 00:29:32.000000000 +0900
 @@ -29,7 +29,7 @@</p>
 

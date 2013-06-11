@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://tkawachi.github.com/sitemap.xml 
+Sitemap: http://tkawachi.github.io/sitemap.xml 

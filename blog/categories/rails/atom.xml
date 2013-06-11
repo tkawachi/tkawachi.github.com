@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Rails | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/rails/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/rails/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[RailsでTypeScript、再び]]></title>
-    <link href="http://tkawachi.github.com/blog/2013/04/25/typescript-and-rails-again/"/>
+    <link href="http://tkawachi.github.io/blog/2013/04/25/typescript-and-rails-again/"/>
     <updated>2013-04-25T23:22:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2013/04/25/typescript-and-rails-again</id>
+    <id>http://tkawachi.github.io/blog/2013/04/25/typescript-and-rails-again</id>
     <content type="html"><![CDATA[<p>Google で typescript rails と検索すると去年12月に書いた「<a href="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a>」というエントリが2番目に出てくる日々が続いている。
 「TypeScriptをRailsで使いたい」と思った人たちは、検索結果を見て、ああ動かないのかと思うのだろう。</p>
 
@@ -44,9 +44,9 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
   
   <entry>
     <title type="html"><![CDATA[Rails で TypeScript を動かそうとして失敗した記録]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out/"/>
+    <link href="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/"/>
     <updated>2012-12-09T11:27:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/12/09/trying-typescript-rails-out</id>
+    <id>http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out</id>
     <content type="html"><![CDATA[<p>Microsoft 発の型付き JavaScript こと TypeScript が人気ですね。
 <a href="https://github.com/klaustopher/typescript-rails">typescript-rails</a> という gem があったので、動くのか試してみました。</p>
 
@@ -57,7 +57,7 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
 
 <p>``` sh
 $ rails new typescript-rails-test -T
-$ echo 'gem "typescript-rails"' >> Gemfile
+$ echo &lsquo;gem &ldquo;typescript-rails&rdquo;&rsquo; >> Gemfile
 $ bundle
 $ bundle exec rails g controller test index</p>
 
@@ -76,11 +76,11 @@ $ bundle exec rails g controller test index</p>
 </code></pre>
 
 <p>$ rm app/assets/javascripts/test.js.coffee
-$ echo 'alert("Hello TypeScript")' > app/assets/javascripts/test.js.ts
+$ echo &lsquo;alert(&ldquo;Hello TypeScript&rdquo;)&rsquo; > app/assets/javascripts/test.js.ts
 $ bundle exec rails s
 ```</p>
 
-<p>これで http://localhost:3000/test/index にアクセスすると、正しく alert が表示される。
+<p>これで <a href="http://localhost:3000/test/index">http://localhost:3000/test/index</a> にアクセスすると、正しく alert が表示される。
 いいぞ。</p>
 
 <p>次に JQuery が使ってみたい。
@@ -156,9 +156,9 @@ if (typeof result == 'undefined' &amp;&amp; result !== null) {
   
   <entry>
     <title type="html"><![CDATA[ActiveSupport 日時計算の罠]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time/"/>
+    <link href="http://tkawachi.github.io/blog/2012/12/08/a-trap-of-active-support-time/"/>
     <updated>2012-12-08T11:03:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/12/08/a-trap-of-active-support-time</id>
+    <id>http://tkawachi.github.io/blog/2012/12/08/a-trap-of-active-support-time</id>
     <content type="html"><![CDATA[<p>ActiveSupport の日時計算はとても便利です。直感的な記法でスラスラ書けちゃいます。
 でもハマるポイントもありますので注意してください。
 というか昨日僕がやらかしたことの告白です。</p>
@@ -169,13 +169,13 @@ if (typeof result == 'undefined' &amp;&amp; result !== null) {
 t1 = Time.new(2012, 12, 1)</p>
 
 <p>t2 = t1 + 1.day
-t2 - t1 == 1.day # => true</p>
+t2 &ndash; t1 == 1.day # => true</p>
 
 <p>t3 = t1 + 1.month
-t3 - t1 == 1.month # => false
+t3 &ndash; t1 == 1.month # => false
 ```</p>
 
-<p>a = b + c だったら普通 a - b = c だろうと思うのですが、最後の式は false を返します。
+<p>a = b + c だったら普通 a &ndash; b = c だろうと思うのですが、最後の式は false を返します。
 なぜだかわかりますか？</p>
 
 <!-- more -->
@@ -202,9 +202,9 @@ year に関してはうるう年の時に同じ症状が発生します。</p>
   
   <entry>
     <title type="html"><![CDATA[Rails の JavaScript (CoffeeScript) でローカライゼーションを簡単に]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/12/06/i18n-js/"/>
+    <link href="http://tkawachi.github.io/blog/2012/12/06/i18n-js/"/>
     <updated>2012-12-06T23:37:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/12/06/i18n-js</id>
+    <id>http://tkawachi.github.io/blog/2012/12/06/i18n-js</id>
     <content type="html"><![CDATA[<p>Rails 3.2 のプロジェクトで作業していて JavaScript (CoffeeScript) でのローカライゼーションをしたくなりました。
 調べてみたところ <a href="https://github.com/fnando/i18n-js">i18n-js</a> が簡単につかえてよさそうな感じです。</p>
 
@@ -257,9 +257,9 @@ I18n.t("hello", {defaultValue: "こんちは"});
   
   <entry>
     <title type="html"><![CDATA[Run rspec faster for Rails 3.1]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/"/>
+    <link href="http://tkawachi.github.io/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/"/>
     <updated>2012-01-22T21:07:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1</id>
+    <id>http://tkawachi.github.io/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1</id>
     <content type="html"><![CDATA[<p>個人プロジェクトで Rails 3.1 のアプリケーションを書いていたのだが、<code>rake spec</code> の
 実行が遅くてイライラしていた。
 1回の実行に 10 秒程度が掛かっていた。
@@ -296,17 +296,17 @@ spork を用いたテストの実行をファイル書き換え時に行うこ�
 
 <p>``` ruby Gemfile
 group :development do
-  gem 'spork'
-  gem 'guard'
-  gem 'rb-fsevent', :require => false
-  gem 'ruby_gntp'
-  gem 'guard-rspec'
-  gem 'guard-spork'
+  gem &lsquo;spork&rsquo;
+  gem &lsquo;guard&rsquo;
+  gem &lsquo;rb-fsevent&rsquo;, :require => false
+  gem &lsquo;ruby_gntp&rsquo;
+  gem &lsquo;guard-rspec&rsquo;
+  gem &lsquo;guard-spork&rsquo;
 end</p>
 
 <p>group :development, :test do
-  gem 'rspec-rails', '~> 2.6'
-  gem 'webrat'
+  gem &lsquo;rspec-rails&rsquo;, &lsquo;~> 2.6&rsquo;
+  gem &lsquo;webrat&rsquo;
 end
 ```</p>
 

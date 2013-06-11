@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: DocBook | tkawachi Blog]]></title>
-  <link href="http://tkawachi.github.com/blog/categories/docbook/atom.xml" rel="self"/>
-  <link href="http://tkawachi.github.com/"/>
-  <updated>2013-05-08T14:38:50+09:00</updated>
-  <id>http://tkawachi.github.com/</id>
+  <link href="http://tkawachi.github.io/blog/categories/docbook/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-11T22:46:58+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Generating HTML from DocBook]]></title>
-    <link href="http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook/"/>
+    <link href="http://tkawachi.github.io/blog/2012/11/19/generating-html-from-docbook/"/>
     <updated>2012-11-19T00:28:00+09:00</updated>
-    <id>http://tkawachi.github.com/blog/2012/11/19/generating-html-from-docbook</id>
+    <id>http://tkawachi.github.io/blog/2012/11/19/generating-html-from-docbook</id>
     <content type="html"><![CDATA[<p>これまで DocBook には縁がなかったのですが、とある DocBook 形式の .xml ファイルを HTML に変換したくなりました。
 DocBook project で用意されている xslt を xlstproc コマンドであててあげれば良いようです。</p>
 
