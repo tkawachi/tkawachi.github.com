@@ -1,0 +1,48 @@
+---
+layout: post
+title: loan pattern
+date: 2013-06-11 22:07
+comments: true
+categories: scala
+---
+
+最近仕事で scala を書いてまして、
+Java 延長線上として使う分には全く問題ないのだが、
+scala ぽいこととなるとかなり怪しい。
+なので初歩から少しずつ勉強して、その様子を晒しておくことにする。
+
+今日は loan pattern。
+リソース解放を忘れずに行うためのパターン。
+C++ では RAII, golang では defer を使う場面で使うやつ。
+
+以下、基本形。
+
+``` scala
+  def using[A, R <: {def close()}](r: R)(f: R => A): A =
+    try {
+      f(r)
+    } finally {
+      r.close()
+    }
+
+  // 使いかた
+  using(new FileWriter("xyz")) {
+    (f) => // f に対する操作
+  }
+```
+
+
+ポイント
+
+* parameterized type の R には structural type で upper bound を指定する(`R <: {def close()}`)。
+  これにより R には `close()` メソッドを持つ任意の型を受け付けられる。
+  Structural typing は scala で duck typing できる機能。便利。
+  R の upper bound に trait や class を指定すると継承関係がある型しか使えないので
+  汎用性が下がり残念な気持ちになる。注意。
+
+それにしても名前が覚えづらい。
+
+参考
+
+* [Scala using（ローンパターン）](http://www.ne.jp/asahi/hishidama/home/tech/scala/sample/using.html)
+
