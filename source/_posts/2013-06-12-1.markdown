@@ -1,0 +1,15 @@
+---
+layout: post
+title: 型境界
+date: 2013-06-12 21:36
+comments: true
+categories: scala
+---
+
+Type parameter の境界指定方法。
+
+* upper bound (`A <: U`): A は U またはその子クラス
+* lower bound (`A >: L`): A は L またはその親クラス
+
+両方指定する(`A >: L <: U`)ことも可能。
+

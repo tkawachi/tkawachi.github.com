@@ -15,6 +15,8 @@ scala ぽいこととなるとかなり怪しい。
 リソース解放を忘れずに行うためのパターン。
 C++ では RAII, golang では defer を使う場面で使うやつ。
 
+<!-- more -->
+
 以下、基本形。
 
 ``` scala
@@ -46,3 +48,6 @@ C++ では RAII, golang では defer を使う場面で使うやつ。
 
 * [Scala using（ローンパターン）](http://www.ne.jp/asahi/hishidama/home/tech/scala/sample/using.html)
 
+---
+
+2013/6/12: parameterized type R の指定には upper bound で structural type を指定するのではなく、 view bound (`R <% {def close()}`) で structural type を指定する方が汎用性が高い。
