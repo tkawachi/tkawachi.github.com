@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-06-11T22:46:58+09:00</updated>
+  <updated>2013-06-12T23:29:14+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -14,11 +14,28 @@
 
   
   <entry>
+    <title type="html"><![CDATA[型境界]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/06/12/1/"/>
+    <updated>2013-06-12T21:36:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/06/12/1</id>
+    <content type="html"><![CDATA[<p>Type parameter の境界指定方法。</p>
+
+<ul>
+<li>upper bound (<code>A &lt;: U</code>): A は U またはその子クラス</li>
+<li>lower bound (<code>A &gt;: L</code>): A は L またはその親クラス</li>
+</ul>
+
+
+<p>両方指定する(<code>A &gt;: L &lt;: U</code>)ことも可能。</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[loan pattern]]></title>
     <link href="http://tkawachi.github.io/blog/2013/06/11/1/"/>
     <updated>2013-06-11T22:07:00+09:00</updated>
     <id>http://tkawachi.github.io/blog/2013/06/11/1</id>
-    <content type="html"><![CDATA[<p>最近 scala を書いてあることがありまして、
+    <content type="html"><![CDATA[<p>最近仕事で scala を書いてまして、
 Java 延長線上として使う分には全く問題ないのだが、
 scala ぽいこととなるとかなり怪しい。
 なので初歩から少しずつ勉強して、その様子を晒しておくことにする。</p>
@@ -26,6 +43,9 @@ scala ぽいこととなるとかなり怪しい。
 <p>今日は loan pattern。
 リソース解放を忘れずに行うためのパターン。
 C++ では RAII, golang では defer を使う場面で使うやつ。</p>
+
+<!-- more -->
+
 
 <p>以下、基本形。</p>
 
@@ -73,6 +93,10 @@ R の upper bound に trait や class を指定すると継承関係がある型
 <li><a href="http://www.ne.jp/asahi/hishidama/home/tech/scala/sample/using.html">Scala using（ローンパターン）</a></li>
 </ul>
 
+
+<hr />
+
+<p>2013/6/12: parameterized type R の指定には upper bound で structural type を指定するのではなく、 view bound (<code>R &lt;% {def close()}</code>) で structural type を指定する方が汎用性が高い。</p>
 ]]></content>
   </entry>
   
@@ -1182,62 +1206,6 @@ spork を用いたテストの実行をファイル書き換え時に行うこ�
 <code>kawachi.cloudfoundry.me</code> は VM が持つ IP アドレスになっているようです。</p>
 
 <p>あとは <code>cloudfoundry.com</code> と同様に利用出来るとのこと。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Trying Micro Cloud Foundry 1.1.0]]></title>
-    <link href="http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/"/>
-    <updated>2012-01-03T14:19:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0</id>
-    <content type="html"><![CDATA[<p>前々から気になっていた Micro Cloud Foundry を試してみます。
-Cloud Foundry は VMware 社が開発している open source の PaaS です。
-Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめたものです。</p>
-
-<p>参考にしたのは <a href="http://support.cloudfoundry.com/entries/20316811-micro-cloud-foundry-installation-setup">Micro Cloud Foundry Installation &amp; Setup</a>。</p>
-
-<!-- more -->
-
-
-<p>まず仮想マシンを <a href="http://www.cloudfoundry.com/">Clound Foundry のページ</a>
-からダウンロードします。
-1GBあるので結構時間がかかります。
-BitTorrent で配布してくれとリクエストをだしておきました。</p>
-
-<p>ダウンロード後、展開して <code>micro.vmx</code> を  VMware Fusion 4.1.1 で開こうとするとエラーになる。
-どうやら <code>.vmx</code> が Steinberg VST Mixer Settings に関連付けられていることが問題のようだ。
-以前 Cubase というアプリをインストールしたが、それが干渉している模様。
-<a href="http://communities.vmware.com/thread/239695">VMware のコミュニティページ</a>
-を参考にして <code>micro/</code> ディレクトリを <code>micro.vmwarevm/</code> に改名して
-ダブルクリックすることで起動できた。</p>
-
-<p>あとは
-<a href="http://support.cloudfoundry.com/entries/20316811-micro-cloud-foundry-installation-setup">参考ページ</a>
-通り、、と行きたいところですが問題発生。</p>
-
-<p><code>Enter Micro Cloud Foundry configuration token:</code> と聞かれたところで
-自分の token を入力しても
-<code>Unable to contact cloudfoundry.com to redeem configuration token</code>
-というエラーが表示される。
-ネットワークの設定がうまくいっていないのか、はたまた <code>cloudfoundry.com</code> が
-ダウンしているのか。
-<code>Configure vcap.me instead?</code> と聞かれたのでとりあえず y した。</p>
-
-<pre><code>Micro Cloud Foundry is now bound to localhost (127.0.0.1)
-You must use ssh tunneling to access it
-Press return to continue 
-</code></pre>
-
-<p>と表示された。return を押して続き。</p>
-
-<p>下の画面のとおり「5分かかるよ」と言われた。</p>
-
-<p><img src="https://lh3.googleusercontent.com/-ScF3kpSyiJ0/TwKwn8CpQiI/AAAAAAAAGSM/n1Lcx5EFHw0/s800/Screen%252520Shot%2525202012-01-03%252520at%25252016.30.13.png"></p>
-
-<p>がしかし、待っても待っても返ってこない。1時間以上は待ったが。
-どうしたことだろう？</p>
-
-<p>とりあえず今回はここまで。次回はなんとか動かしたい。</p>
 ]]></content>
   </entry>
   

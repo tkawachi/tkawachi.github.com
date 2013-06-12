@@ -9,12 +9,12 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="最近 scala を書いてあることがありまして、
+  <meta name="description" content="最近仕事で scala を書いてまして、
 Java 延長線上として使う分には全く問題ないのだが、
 scala ぽいこととなるとかなり怪しい。
 なので初歩から少しずつ勉強して、その様子を晒しておくことにする。 今日は loan pattern。
 リソース解放を忘れずに行うためのパターン。
-C &hellip;">
+C++ &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -106,7 +106,7 @@ C &hellip;">
   </header>
 
 
-<div class="entry-content"><p>最近 scala を書いてあることがありまして、
+<div class="entry-content"><p>最近仕事で scala を書いてまして、
 Java 延長線上として使う分には全く問題ないのだが、
 scala ぽいこととなるとかなり怪しい。
 なので初歩から少しずつ勉強して、その様子を晒しておくことにする。</p>
@@ -114,6 +114,9 @@ scala ぽいこととなるとかなり怪しい。
 <p>今日は loan pattern。
 リソース解放を忘れずに行うためのパターン。
 C++ では RAII, golang では defer を使う場面で使うやつ。</p>
+
+<!-- more -->
+
 
 <p>以下、基本形。</p>
 
@@ -161,6 +164,10 @@ R の upper bound に trait や class を指定すると継承関係がある型
 <li><a href="http://www.ne.jp/asahi/hishidama/home/tech/scala/sample/using.html">Scala using（ローンパターン）</a></li>
 </ul>
 
+
+<hr />
+
+<p>2013/6/12: parameterized type R の指定には upper bound で structural type を指定するのではなく、 view bound (<code>R &lt;% {def close()}</code>) で structural type を指定する方が汎用性が高い。</p>
 </div>
 
 
@@ -213,6 +220,8 @@ R の upper bound に trait や class を指定すると継承関係がある型
         <a class="basic-alignment left" href="/blog/2013/04/25/typescript-and-rails-again/" title="Previous Post: RailsでTypeScript、再び">&laquo; RailsでTypeScript、再び</a>
       
       
+        <a class="basic-alignment right" href="/blog/2013/06/12/1/" title="Next Post: 型境界">型境界 &raquo;</a>
+      
     </p>
   </footer>
 </article>
@@ -232,6 +241,10 @@ R の upper bound に trait や class を指定すると継承関係がある型
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/12/1/">型境界</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/11/1/">Loan Pattern</a>
       </li>
     
@@ -245,10 +258,6 @@ R の upper bound に trait や class を指定すると継承関係がある型
     
       <li class="post">
         <a href="/blog/2013/02/11/passion-study/">情熱の持ち方・燃やし方？</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/01/06/jquery-deferred/">jQueryのDeferredとPromise</a>
       </li>
     
   </ul>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: scala | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-06-11T22:46:58+09:00</updated>
+  <updated>2013-06-12T23:29:14+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -14,11 +14,28 @@
 
   
   <entry>
+    <title type="html"><![CDATA[型境界]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/06/12/1/"/>
+    <updated>2013-06-12T21:36:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/06/12/1</id>
+    <content type="html"><![CDATA[<p>Type parameter の境界指定方法。</p>
+
+<ul>
+<li>upper bound (<code>A &lt;: U</code>): A は U またはその子クラス</li>
+<li>lower bound (<code>A &gt;: L</code>): A は L またはその親クラス</li>
+</ul>
+
+
+<p>両方指定する(<code>A &gt;: L &lt;: U</code>)ことも可能。</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[loan pattern]]></title>
     <link href="http://tkawachi.github.io/blog/2013/06/11/1/"/>
     <updated>2013-06-11T22:07:00+09:00</updated>
     <id>http://tkawachi.github.io/blog/2013/06/11/1</id>
-    <content type="html"><![CDATA[<p>最近 scala を書いてあることがありまして、
+    <content type="html"><![CDATA[<p>最近仕事で scala を書いてまして、
 Java 延長線上として使う分には全く問題ないのだが、
 scala ぽいこととなるとかなり怪しい。
 なので初歩から少しずつ勉強して、その様子を晒しておくことにする。</p>
@@ -26,6 +43,9 @@ scala ぽいこととなるとかなり怪しい。
 <p>今日は loan pattern。
 リソース解放を忘れずに行うためのパターン。
 C++ では RAII, golang では defer を使う場面で使うやつ。</p>
+
+<!-- more -->
+
 
 <p>以下、基本形。</p>
 
@@ -67,6 +87,10 @@ R の upper bound に trait や class を指定すると継承関係がある型
 <li><a href="http://www.ne.jp/asahi/hishidama/home/tech/scala/sample/using.html">Scala using（ローンパターン）</a></li>
 </ul>
 
+
+<hr />
+
+<p>2013/6/12: parameterized type R の指定には upper bound で structural type を指定するのではなく、 view bound (<code>R &lt;% {def close()}</code>) で structural type を指定する方が汎用性が高い。</p>
 ]]></content>
   </entry>
   

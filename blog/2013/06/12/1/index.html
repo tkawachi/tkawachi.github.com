@@ -5,11 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: JavaScript - tkawachi Blog</title>
+  <title>型境界 - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Category: JavaScript">
+  <meta name="description" content="Type parameter の境界指定方法。 upper bound (A &lt;: U): A は U またはその子クラス
+lower bound (A &gt;: L): A は L またはその親クラス 両方指定する(A &gt;: L &lt;: U)ことも可能。
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.ioblog/categories/javascript">
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/06/12/1">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
@@ -74,36 +76,103 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: JavaScript</h1>
+    
+      <h1 class="entry-title">型境界</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-12T21:36:00+09:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>Type parameter の境界指定方法。</p>
 
-  
-  <h2>2012</h2>
-
-<article>
-  
-<h1><a href="/blog/2012/12/06/i18n-js/">Rails の JavaScript (CoffeeScript) でローカライゼーションを簡単に</a></h1>
-<time datetime="2012-12-06T23:37:00+09:00" pubdate><span class='month'>Dec</span> <span class='day'>06</span> <span class='year'>2012</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/i18n/'>I18N</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/rails/'>Rails</a></span>
-</footer>
+<ul>
+<li>upper bound (<code>A &lt;: U</code>): A は U またはその子クラス</li>
+<li>lower bound (<code>A &gt;: L</code>): A は L またはその親クラス</li>
+</ul>
 
 
-</article>
-
+<p>両方指定する(<code>A &gt;: L &lt;: U</code>)ことも可能。</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-12T21:36:00+09:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/scala/'>scala</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/06/12/1/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/06/12/1/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/06/11/1/" title="Previous Post: loan pattern">&laquo; loan pattern</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -169,7 +238,10 @@
       var disqus_shortname = 'tkawachiblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/06/12/1/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2013/06/12/1/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
