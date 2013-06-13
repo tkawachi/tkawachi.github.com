@@ -4,7 +4,7 @@
   <title><![CDATA[Category: AWS | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-06-12T23:29:14+09:00</updated>
+  <updated>2013-06-13T16:56:28+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[s3:ListBucketVersions]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/06/13/1/"/>
+    <updated>2013-06-13T16:44:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/06/13/1</id>
+    <content type="html"><![CDATA[<p>IAM でアクセス権限を管理するのは面倒だ。
+まず権限の種類が覚えきれない。</p>
+
+<p>s3:ListBucket を許可していたのに、
+Ruby の AWS SDK で
+<a href="http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/S3/Bucket.html#empty%3F-instance_method"><code>AWS::S3::Bucket#empty?</code></a>
+にて例外が発生した。</p>
+
+<!-- more -->
+
+
+<p>調べてみたら、バージョン付けされたオブジェクトも含めて list して、空かどうか確認しているようだ。
+この場合は s3:ListBucket ではなく s3:ListBucketVersions を許可しなければならないようだ。
+たぶん IAM で権限管理を細かく管理している人はほとんどいないんじゃないかな。
+めんどうだもの。</p>
+
+<p>参考</p>
+
+<ul>
+<li><a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingIAMPolicies.html">Using IAM Policies</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[IAMユーザのS3アクセスをフォルダレベルで制限する]]></title>

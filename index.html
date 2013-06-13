@@ -9,9 +9,11 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Type parameter の境界指定方法。 upper bound (A &lt;: U): A は U またはその子クラス
-lower bound (A &gt;: L): A は L またはその親クラス 両方指定する(A &gt;: L &lt;: U)ことも可能。
-">
+  <meta name="description" content="IAM でアクセス権限を管理するのは面倒だ。
+まず権限の種類が覚えきれない。 s3:ListBucket を許可していたのに、
+Ruby の AWS SDK で
+AWS::S3::Bucket#empty?
+にて例外が発生した。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +79,53 @@ lower bound (A &gt;: L): A は L またはその親クラス 両方指定する(
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/13/1/">s3:ListBucketVersions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-13T16:44:00+09:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>IAM でアクセス権限を管理するのは面倒だ。
+まず権限の種類が覚えきれない。</p>
+
+<p>s3:ListBucket を許可していたのに、
+Ruby の AWS SDK で
+<a href="http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/S3/Bucket.html#empty%3F-instance_method"><code>AWS::S3::Bucket#empty?</code></a>
+にて例外が発生した。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/13/1/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -495,50 +544,6 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-09T11:27:00+09:00" pubdate data-updated="true">Dec 9<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Microsoft 発の型付き JavaScript こと TypeScript が人気ですね。
-<a href="https://github.com/klaustopher/typescript-rails">typescript-rails</a> という gem があったので、動くのか試してみました。</p>
-
-<p>結論から言っておくと、他のスクリプトやライブラリを参照する TypeScript をコンパイルすることが今回はできませんでした。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/12/09/trying-typescript-rails-out/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -554,6 +559,10 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/13/1/">s3:ListBucketVersions</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/12/1/">型境界</a>
       </li>
     
@@ -567,10 +576,6 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
     
       <li class="post">
         <a href="/blog/2013/02/17/backend-services/">使わないと損なバックエンドサービス</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/11/passion-study/">情熱の持ち方・燃やし方？</a>
       </li>
     
   </ul>

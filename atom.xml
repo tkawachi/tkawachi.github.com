@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-06-12T23:29:14+09:00</updated>
+  <updated>2013-06-13T16:56:28+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[s3:ListBucketVersions]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/06/13/1/"/>
+    <updated>2013-06-13T16:44:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/06/13/1</id>
+    <content type="html"><![CDATA[<p>IAM でアクセス権限を管理するのは面倒だ。
+まず権限の種類が覚えきれない。</p>
+
+<p>s3:ListBucket を許可していたのに、
+Ruby の AWS SDK で
+<a href="http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/S3/Bucket.html#empty%3F-instance_method"><code>AWS::S3::Bucket#empty?</code></a>
+にて例外が発生した。</p>
+
+<!-- more -->
+
+
+<p>調べてみたら、バージョン付けされたオブジェクトも含めて list して、空かどうか確認しているようだ。
+この場合は s3:ListBucket ではなく s3:ListBucketVersions を許可しなければならないようだ。
+たぶん IAM で権限管理を細かく管理している人はほとんどいないんじゃないかな。
+めんどうだもの。</p>
+
+<p>参考</p>
+
+<ul>
+<li><a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingIAMPolicies.html">Using IAM Policies</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[型境界]]></title>
@@ -1144,68 +1174,6 @@ spork を用いたテストの実行をファイル書き換え時に行うこ�
 <p>あとはソースコードを書き換えたら自動でテストが実行され、結果が Growl で通知される。</p>
 
 <p>ようやくテストを書くことが出来る。(実は今まで書いてなかった笑)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Trying Micro Cloud Foundry 1.1.0 その2]]></title>
-    <link href="http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/"/>
-    <updated>2012-01-03T19:31:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2</id>
-    <content type="html"><![CDATA[<p><a href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/">前回</a>
-は残念ながらインストールの途中で止まってしまいましたが、解決方法がわかりました。</p>
-
-<p>デフォルトで Bridge network になっているのですが、私の環境
-(VMware 4.1.1, Mac OS X Lion, WiFi)では VM で network が利用不可のようです。
-昔から無線で Bridge networking はハマることが多いです。
-以下の手順で回避できました。
-(
-<a href="http://support.cloudfoundry.com/entries/20382148-unable-to-cloudfoundry-com">ここ</a>
-や
-<a href="http://support.cloudfoundry.com/entries/20387172-unable-to-contact-cloudfoundry-com-to-redeem-configuration-token">ここ</a>
-を参考にしました。
-)</p>
-
-<!-- more -->
-
-
-<ol>
-<li>立ち上げて password 設定、network 設定で DHCP を指定、proxy を none に指定</li>
-<li>ここで Alt+F2 を押して別コンソールに移動。<code>root</code> ユーザでログイン。パスワードは前ステップで指定したもの。</li>
-<li>VMware の設定で Network Adapter を NAT に設定。</li>
-<li><code>/etc/init.d/networking restart</code> を実行。IP が取れることを確認。</li>
-<li>Alt+F1 を押して元のコンソールに移動。続きを実行。</li>
-</ol>
-
-
-<p>今度は数分で完了しました。</p>
-
-<p>Network につながらない場合のメッセージを見て、つながらなくても動くと理解しましたが、そうではないようです。</p>
-
-<p>続いては Host から <code>vmc</code> コマンドです。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ vmc target http://api.kawachi.cloudfoundry.me
-</span><span class='line'>Successfully targeted to [http://api.kawachi.cloudfoundry.me]
-</span><span class='line'>
-</span><span class='line'>$ vmc register
-</span><span class='line'>Email: hoho@fufu.com
-</span><span class='line'>Password: ******
-</span><span class='line'>Verify Password: ******
-</span><span class='line'>Creating New User: OK</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>api.kawachi.cloudfoundry.me</code> は <code>kawachi.cloudfoundry.me</code> の CNAME で、
-<code>kawachi.cloudfoundry.me</code> は VM が持つ IP アドレスになっているようです。</p>
-
-<p>あとは <code>cloudfoundry.com</code> と同様に利用出来るとのこと。</p>
 ]]></content>
   </entry>
   
