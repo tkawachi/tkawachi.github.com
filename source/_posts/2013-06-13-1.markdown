@@ -1,0 +1,26 @@
+---
+layout: post
+title: s3:ListBucketVersions
+date: 2013-06-13 16:44
+comments: true
+categories: AWS S3
+---
+
+IAM でアクセス権限を管理するのは面倒だ。
+まず権限の種類が覚えきれない。
+
+s3:ListBucket を許可していたのに、
+Ruby の AWS SDK で
+[`AWS::S3::Bucket#empty?`](http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/S3/Bucket.html#empty%3F-instance_method)
+にて例外が発生した。
+
+<!-- more -->
+
+調べてみたら、バージョン付けされたオブジェクトも含めて list して、空かどうか確認しているようだ。
+この場合は s3:ListBucket ではなく s3:ListBucketVersions を許可しなければならないようだ。
+たぶん IAM で権限管理を細かく管理している人はほとんどいないんじゃないかな。
+めんどうだもの。
+
+参考
+
+* [Using IAM Policies](http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingIAMPolicies.html)
