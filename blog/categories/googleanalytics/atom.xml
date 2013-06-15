@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: GoogleAnalytics | tkawachi Blog]]></title>
+  <link href="http://tkawachi.github.io/blog/categories/googleanalytics/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-15T21:44:24+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
+  <author>
+    <name><![CDATA[KAWACHI Takashi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress で universal analytics へ切り替え]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/06/15/1/"/>
+    <updated>2013-06-15T21:35:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/06/15/1</id>
+    <content type="html"><![CDATA[<p>この blog では google analytics を入れているが、それを今年の春に公開された
+<a href="https://support.google.com/analytics/answer/2790010?hl=ja">universal analytics</a>
+に切り替えてみた。
+なんか色々できることが増えてるみたい。</p>
+
+<p>まず、既存のプロパティをそのまま universal analytics へ移行することは出来ない。
+Google Analytics のプロパティを新しく作る必要があった。</p>
+
+<!-- more -->
+
+
+<p>次にするのは JavaScript スニペットの更新。
+今までは <code>ga.js</code> を読み込んでいたが、これが <code>analytics.js</code> に変わる。
+イベント送信時の syntax も変わる。</p>
+
+<p>この blog で使っている octopress では、<code>analytics.js</code> に対応していない。
+<a href="https://github.com/tkawachi/tkawachi.github.com/commit/2ecc6d3f6548de37e6ba02d0d8ac1134dc3778c0">こんな感じ</a>
+でちょいちょいと変更したところ無事に動いているようだ。</p>
+
+<p>セッションのタイムアウト時間が設定できるようになっていたり、できることが増えているようだが、まだ良くわかっていない。
+ともあれ切り替えは無事にできた。</p>
+]]></content>
+  </entry>
+  
+</feed>

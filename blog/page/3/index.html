@@ -9,9 +9,10 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="前回
-は残念ながらインストールの途中で止まってしまいましたが、解決方法がわかりました。 デフォルトで Bridge network になっているのですが、私の環境
-(VMware 4.1.1, Mac OS X Lion, WiFi)では VM で network が利用不可のようです。 &hellip;">
+  <meta name="description" content="個人プロジェクトで Rails 3.1 のアプリケーションを書いていたのだが、rake spec の
+実行が遅くてイライラしていた。
+1回の実行に 10 秒程度が掛かっていた。
+テスト実行は 0.5 ms 以下で終了していたので、残りの 9.5 s 以上は framework の開始 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +77,60 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/">Run Rspec Faster for Rails 3.1</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-22T21:07:00+09:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>個人プロジェクトで Rails 3.1 のアプリケーションを書いていたのだが、<code>rake spec</code> の
+実行が遅くてイライラしていた。
+1回の実行に 10 秒程度が掛かっていた。
+テスト実行は 0.5 ms 以下で終了していたので、残りの 9.5 s 以上は framework の開始
+などに費やされていると想像される。</p>
+
+<p>この状態で皆が満足するはずが無いと思い、少し調べたところ
+<a href="http://spork.rubyforge.org/">spork</a> が求めるもののようだ。
+これはテスト用サーバを別プロセスで起動しておき、drb で rspec などによるテスト実行を
+キックできるもののようだ。</p>
+
+<p>また <a href="https://github.com/guard/guard-spork">guard-spork</a> を使えば、
+spork を用いたテストの実行をファイル書き換え時に行うことができるようだ。
+またテスト結果の通知を Growl で行うことも出来るようだ。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -427,6 +482,10 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/06/15/1/">Octopress で Universal Analytics へ切り替え</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/06/13/1/">s3:ListBucketVersions</a>
       </li>
     
@@ -440,10 +499,6 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
     
       <li class="post">
         <a href="/blog/2013/04/25/typescript-and-rails-again/">RailsでTypeScript、再び</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/02/17/backend-services/">使わないと損なバックエンドサービス</a>
       </li>
     
   </ul>

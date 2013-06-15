@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-06-15T21:28:44+09:00</updated>
+  <updated>2013-06-15T21:44:24+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress で universal analytics へ切り替え]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/06/15/1/"/>
+    <updated>2013-06-15T21:35:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/06/15/1</id>
+    <content type="html"><![CDATA[<p>この blog では google analytics を入れているが、それを今年の春に公開された
+<a href="https://support.google.com/analytics/answer/2790010?hl=ja">universal analytics</a>
+に切り替えてみた。
+なんか色々できることが増えてるみたい。</p>
+
+<p>まず、既存のプロパティをそのまま universal analytics へ移行することは出来ない。
+Google Analytics のプロパティを新しく作る必要があった。</p>
+
+<!-- more -->
+
+
+<p>次にするのは JavaScript スニペットの更新。
+今までは <code>ga.js</code> を読み込んでいたが、これが <code>analytics.js</code> に変わる。
+イベント送信時の syntax も変わる。</p>
+
+<p>この blog で使っている octopress では、<code>analytics.js</code> に対応していない。
+<a href="https://github.com/tkawachi/tkawachi.github.com/commit/2ecc6d3f6548de37e6ba02d0d8ac1134dc3778c0">こんな感じ</a>
+でちょいちょいと変更したところ無事に動いているようだ。</p>
+
+<p>セッションのタイムアウト時間が設定できるようになっていたり、できることが増えているようだが、まだ良くわかっていない。
+ともあれ切り替えは無事にできた。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[s3:ListBucketVersions]]></title>
@@ -1060,120 +1089,6 @@ end</code></pre></noscript></div>
 <p>Mac 版 Spotify のブラウザっぽいものは CEF なのかな。</p>
 
 <p>Google Breakpad, Nu, MAObjCRuntime, KKGridView あたりはすぐ使うかも。要調査。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Run rspec faster for Rails 3.1]]></title>
-    <link href="http://tkawachi.github.io/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/"/>
-    <updated>2012-01-22T21:07:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1</id>
-    <content type="html"><![CDATA[<p>個人プロジェクトで Rails 3.1 のアプリケーションを書いていたのだが、<code>rake spec</code> の
-実行が遅くてイライラしていた。
-1回の実行に 10 秒程度が掛かっていた。
-テスト実行は 0.5 ms 以下で終了していたので、残りの 9.5 s 以上は framework の開始
-などに費やされていると想像される。</p>
-
-<p>この状態で皆が満足するはずが無いと思い、少し調べたところ
-<a href="http://spork.rubyforge.org/">spork</a> が求めるもののようだ。
-これはテスト用サーバを別プロセスで起動しておき、drb で rspec などによるテスト実行を
-キックできるもののようだ。</p>
-
-<p>また <a href="https://github.com/guard/guard-spork">guard-spork</a> を使えば、
-spork を用いたテストの実行をファイル書き換え時に行うことができるようだ。
-またテスト結果の通知を Growl で行うことも出来るようだ。</p>
-
-<!-- more -->
-
-
-<h2>How to setup</h2>
-
-<p>Growl でテスト結果を通知するための gem が幾つか存在するのだが、今日(2012/1/22)
-の時点では</p>
-
-<ul>
-<li><code>growl</code> は Growl v1.3 に対応していない</li>
-<li><a href="https://github.com/scottdavis/growl_notify"><code>growl_notify</code></a> は deprecated</li>
-<li><code>ruby_gntp</code> は Growl v1.3 とともに動いた</li>
-</ul>
-
-
-<p>というわけで <code>ruby_gntp</code> が良さそうだった。</p>
-
-<p>Gemfile の :development, :test 周りを以下のように変更する。</p>
-
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;spork&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;guard&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;rb-fsevent&#39;</span><span class="p">,</span> <span class="ss">:require</span> <span class="o">=&gt;</span> <span class="kp">false</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;ruby_gntp&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;guard-rspec&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;guard-spork&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">group</span> <span class="ss">:development</span><span class="p">,</span> <span class="ss">:test</span> <span class="k">do</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;rspec-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 2.6&#39;</span>
-</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;webrat&#39;</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>以下を実行。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle install
-</span><span class='line'><span class="nv">$ </span>spork --bootstrap
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>spec/spec_helper.rb</code> が spork によって書き換えられているので編集する。
-今までのコードを <code>Spork.prefork do … end</code> の中に入れてあげれば OK。
-<code>.rspec</code> を編集し、<code>--drb</code> という行を追加する。</p>
-
-<p>ここまでで spork が動作する。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>spork
-</span><span class='line'><span class="c"># 別のターミナルで</span>
-</span><span class='line'><span class="nv">$ </span>rspec .
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>続いて guard の設定。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>guard init spork
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>guard init rspec
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これで guard + spork が動作する。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>guard start
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>あとはソースコードを書き換えたら自動でテストが実行され、結果が Growl で通知される。</p>
-
-<p>ようやくテストを書くことが出来る。(実は今まで書いてなかった笑)</p>
 ]]></content>
   </entry>
   
