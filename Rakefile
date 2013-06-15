@@ -113,6 +113,7 @@ task :new_post, :title do |t, args|
     post.puts "categories: "
     post.puts "---"
   end
+  `open #{filename}`
 end
 
 # usage rake new_page[my-new-page] or rake new_page[my-new-page.html] or rake new_page (defaults to "new-page.markdown")

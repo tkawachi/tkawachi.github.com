@@ -1,0 +1,28 @@
+---
+layout: post
+title: Octopress で universal analytics へ切り替え
+date: 2013-06-15 21:35
+comments: true
+categories: GoogleAnalytics Octopress
+---
+
+この blog では google analytics を入れているが、それを今年の春に公開された
+[universal analytics](https://support.google.com/analytics/answer/2790010?hl=ja)
+に切り替えてみた。
+なんか色々できることが増えてるみたい。
+
+まず、既存のプロパティをそのまま universal analytics へ移行することは出来ない。
+Google Analytics のプロパティを新しく作る必要があった。
+
+<!-- more -->
+
+次にするのは JavaScript スニペットの更新。
+今までは `ga.js` を読み込んでいたが、これが `analytics.js` に変わる。
+イベント送信時の syntax も変わる。
+
+この blog で使っている octopress では、`analytics.js` に対応していない。
+[こんな感じ](https://github.com/tkawachi/tkawachi.github.com/commit/2ecc6d3f6548de37e6ba02d0d8ac1134dc3778c0)
+でちょいちょいと変更したところ無事に動いているようだ。
+
+セッションのタイムアウト時間が設定できるようになっていたり、できることが増えているようだが、まだ良くわかっていない。
+ともあれ切り替えは無事にできた。
