@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: reading | tkawachi Blog]]></title>
+  <link href="http://tkawachi.github.io/blog/categories/reading/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-06-16T21:00:31+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
+  <author>
+    <name><![CDATA[KAWACHI Takashi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[「すごい Haskell たのしく学ぼう！」読書 (1)]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/06/16/1/"/>
+    <updated>2013-06-16T20:49:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/06/16/1</id>
+    <content type="html"><![CDATA[<p>「Scala実践プログラミング」を読書したり、Scala 関連の blog を読んでいたりすると、
+「HaskellではこうやるのをScalaで実現するには云々」という話が多くて困る。
+なぜなら僕はHaskell知らないから。</p>
+
+<p>と開き直ってもしかたがないので Haskell の入門書として評価が高そうな「すごい Haskell たのしく学ぼう！」
+を購入した。
+Kindle版があるのは素晴らしい。</p>
+
+<p>読書メモを残しておく。今日はイントロを読んだ。</p>
+
+<ul>
+<li>Haskell はおもしろい</li>
+<li>困ったら freenode #haskell へ (日本語だとどこなんだろう？)</li>
+<li>純粋関数型言語で宣言的 (&lt;&ndash;> 命令形言語で手続き的)</li>
+<li>副作用なし。参照透明性(同じ引数で関数が呼ばれたら同じ値を返す)。</li>
+<li>遅延評価</li>
+<li>静的型付けで型推論あり。</li>
+<li>言語仕様は TheHaskellReport。最新は2010年。</li>
+<li>GHC: コンパイラと対話プログラム(ghci)</li>
+<li>ghci のコマンド
+
+<ul>
+<li>:q &mdash; 終了</li>
+<li>:l foo &mdash; foo.hs のロード</li>
+<li>:r &mdash; 最後の :l を再実行</li>
+</ul>
+</li>
+<li>ワークフロー
+
+<ol>
+<li>foo.hs を作る</li>
+<li>:l foo</li>
+<li>foo.hs を編集</li>
+<li>:r (以下繰り返し)</li>
+</ol>
+</li>
+</ul>
+
+
+<p>語り口が柔らかで読みやすい。</p>
+]]></content>
+  </entry>
+  
+</feed>

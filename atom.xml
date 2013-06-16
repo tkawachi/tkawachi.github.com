@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-06-15T21:44:24+09:00</updated>
+  <updated>2013-06-16T21:00:31+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,54 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[「すごい Haskell たのしく学ぼう！」読書 (1)]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/06/16/1/"/>
+    <updated>2013-06-16T20:49:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/06/16/1</id>
+    <content type="html"><![CDATA[<p>「Scala実践プログラミング」を読書したり、Scala 関連の blog を読んでいたりすると、
+「HaskellではこうやるのをScalaで実現するには云々」という話が多くて困る。
+なぜなら僕はHaskell知らないから。</p>
+
+<p>と開き直ってもしかたがないので Haskell の入門書として評価が高そうな「すごい Haskell たのしく学ぼう！」
+を購入した。
+Kindle版があるのは素晴らしい。</p>
+
+<p>読書メモを残しておく。今日はイントロを読んだ。</p>
+
+<ul>
+<li>Haskell はおもしろい</li>
+<li>困ったら freenode #haskell へ (日本語だとどこなんだろう？)</li>
+<li>純粋関数型言語で宣言的 (&lt;&ndash;> 命令形言語で手続き的)</li>
+<li>副作用なし。参照透明性(同じ引数で関数が呼ばれたら同じ値を返す)。</li>
+<li>遅延評価</li>
+<li>静的型付けで型推論あり。</li>
+<li>言語仕様は TheHaskellReport。最新は2010年。</li>
+<li>GHC: コンパイラと対話プログラム(ghci)</li>
+<li>ghci のコマンド
+
+<ul>
+<li>:q &mdash; 終了</li>
+<li>:l foo &mdash; foo.hs のロード</li>
+<li>:r &mdash; 最後の :l を再実行</li>
+</ul>
+</li>
+<li>ワークフロー
+
+<ol>
+<li>foo.hs を作る</li>
+<li>:l foo</li>
+<li>foo.hs を編集</li>
+<li>:r (以下繰り返し)</li>
+</ol>
+</li>
+</ul>
+
+
+<p>語り口が柔らかで読みやすい。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Octopress で universal analytics へ切り替え]]></title>
@@ -1042,53 +1090,6 @@ end</code></pre></noscript></div>
 <p>こんな感じのコードを例外送出前に呼んでおくと、付加情報と共に送られていく。</p>
 
 <p>これでどのコミットからどのコミットまで例外が起きてたかわかるようになった。便利便利。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Open sources used by spotify]]></title>
-    <link href="http://tkawachi.github.io/blog/2012/06/25/open-sources-used-by-spotify/"/>
-    <updated>2012-06-25T00:49:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2012/06/25/open-sources-used-by-spotify</id>
-    <content type="html"><![CDATA[<p>US などの iTunes store からダウンロードできる <a href="http://www.spotify.com/">Spotify</a> の iOS アプリの出来がとても良い。
-アプリ内に用意されている Lisence のページを見ていたら、利用している open source ソフトウェアの一覧が並んでいたので、ちゃんと出来てるアプリに使われているものはきっとちゃんとしているだろうということでメモしておく。</p>
-
-<ul>
-<li><a href="http://www.boost.org/">Boost</a></li>
-<li><a href="http://expat.sourceforge.net/">Expat</a></li>
-<li><a href="http://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible">FastDelegate</a> C++ の member function pointer に代わる何か？</li>
-<li><a href="http://sourceforge.net/projects/giflib/">giflib</a> GIF</li>
-<li><a href="http://libjpeg.sourceforge.net/">libjpeg</a> JPEG</li>
-<li><a href="http://www.libpng.org/pub/png/libpng.html">libpng</a> PNG</li>
-<li><a href="http://xiph.org/ogg/">libogg</a> Ogg</li>
-<li><a href="http://xiph.org/vorbis/">libvorbis</a> Vorbis</li>
-<li><a href="http://wss.co.uk/pinknoise/tremolo/">Tremolo</a> Tremolo is an ARM optimised version of the Tremor lib from xiph.org. For those that don&rsquo;t know, the Tremor lib is an integer only library for doing Ogg Vorbis decompression.</li>
-<li><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html">Mersenne Twister</a> Mersenne Twister(以下MT)は、松本眞 ・西村拓士（アルファベット順）により1996年から1997年に渡って 開発された疑似乱数生成アルゴリズムです。</li>
-<li><a href="https://ccrma.stanford.edu/software/snd/">Snd</a> Snd is a sound editor. Spotify では resampling にコードを流量。</li>
-<li><a href="http://zlib.net/">zlib</a></li>
-<li><a href="http://nsis.sourceforge.net/Main_Page">NSIS</a> Windows のインストーラ作成システム。</li>
-<li><a href="http://sourceforge.net/projects/wtl/">Windows Template Library</a> Windows Template Library (WTL) is a C++ library for developing Windows applications and UI components. It extends ATL (Active Template Library) and provides a set of classes for controls, dialogs, frame windows, GDI objects, and more.</li>
-<li><a href="http://growl.info/">Growl</a></li>
-<li><a href="http://www.lua.org/">Lua</a></li>
-<li><a href="http://programming.nu/index">Nu</a> Nu is an interpreted object-oriented language. Its syntax comes from Lisp, but Nu is semantically closer to Ruby than Lisp. Nu is implemented in Objective-C and is designed to take full advantange of the Objective-C runtime and the many mature class libraries written in Objective-C.</li>
-<li><a href="http://stig.github.com/json-framework/">SBJSON</a></li>
-<li><a href="http://allseeing-i.com/ASIHTTPRequest/">ASIHTTPRequest</a></li>
-<li><a href="https://github.com/mikeash/MAObjCRuntime">MAObjCRuntime</a> MAObjCRuntime is an ObjC wrapper around the Objective-C runtime APIs. If that&rsquo;s confusing, it provides a nice object-oriented interface around (some of) the C functions in /usr/include/objc.</li>
-<li><a href="http://code.google.com/p/google-breakpad/">Google Breakpad</a> An open-source multi-platform crash reporting system</li>
-<li><a href="http://zendold.lojcomm.com.br/icarousel/">iCarousel</a> iCarousel is an open source (free) javascript tool for creating carousel like widgets.</li>
-<li><a href="https://github.com/jdg/MBProgressHUD">MBProgressHUD</a> MBProgressHUD is an iOS drop-in class that displays a translucent HUD with an indicator and/or labels while work is being done in a background thread</li>
-<li><a href="https://github.com/kolinkrewinkel/KKGridView">KKGridView</a> High-performance iOS grid view (MIT license). iOS6 では iOS SDK に類似の view controller を入れたので不要に。</li>
-<li><a href="https://github.com/robbiehanson/KissXML">KissXML</a> KissXML provides a drop-in replacement for Apple&rsquo;s NSXML class culster in environments without NSXML (e.g. iOS).</li>
-<li><a href="https://github.com/booyah/protobuf-objc">ProtobufObjc</a></li>
-<li><a href="https://github.com/facebook/facebook-ios-sdk">Facebook</a></li>
-<li><a href="http://www.chromium.org/">Chronium</a></li>
-<li><a href="http://code.google.com/p/chromiumembedded/">CEF</a> The Chromium Embedded Framework (CEF) is an open source project founded by Marshall Greenblatt in 2008 to develop a Web browser control based on the Google Chromium project. CEF currently supports a range of programming languages and operating systems and can be easily integrated into both new and existing applications.</li>
-</ul>
-
-
-<p>Mac 版 Spotify のブラウザっぽいものは CEF なのかな。</p>
-
-<p>Google Breakpad, Nu, MAObjCRuntime, KKGridView あたりはすぐ使うかも。要調査。</p>
 ]]></content>
   </entry>
   
