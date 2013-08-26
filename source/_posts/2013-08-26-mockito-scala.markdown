@@ -107,3 +107,8 @@ ScalaTestでMockitoを使うためのお勉強ノート
 
     // 一度も呼ばれてないことを確認
     verify(m, never).method1(anyInt)
+
+## より進んだ使い方
+
+[Mockitoのドキュメント](http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html)
+に書いてある。
