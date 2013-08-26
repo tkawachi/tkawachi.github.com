@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-06-16T21:00:31+09:00</updated>
+  <updated>2013-08-26T10:15:30+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,127 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[ScalaTestでMockito]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/08/26/mockito-scala/"/>
+    <updated>2013-08-26T10:14:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/08/26/mockito-scala</id>
+    <content type="html"><![CDATA[<p>ScalaTestでMockitoを使うためのお勉強ノート</p>
+
+<h2>Setup</h2>
+
+<p><code>build.sbt</code> に追加。</p>
+
+<pre><code>libraryDependencies ++= Seq(
+  "org.scalatest" %% "scalatest" % "1.9.1" % "test",
+  "org.mockito" % "mockito-core" % "1.9.5" % "test"
+)
+</code></pre>
+
+<p>テストで <code>MockitoSugar</code> を mixin し、以下の import 行を追加。</p>
+
+<pre><code>import org.mockito.Matchers._
+import org.mockito.Mockito._
+</code></pre>
+
+<h2>Mock作成</h2>
+
+<pre><code>// ClassToMock のモックを作成
+val m = mock[ClassToMock]
+</code></pre>
+
+<p>作ったモックはデフォルトで全メソッドコールに対して <code>null</code> を返す。
+メソッドの戻り値として<code>null</code>ではなくモックを返したい時は次のようにする。</p>
+
+<pre><code>// メソッド呼び出しでモックを返すモック
+mock[ClassToMock](RETURNS_MOCKS)
+// 返されたモックもモックを返すモック
+mock[ClassToMock](RETURNS_DEEP_STUBS)
+</code></pre>
+
+<h2>引数に応じて戻り値を変える</h2>
+
+<p><code>when(メソッド呼び出し).thenReturn(戻り値)</code> で登録する。
+メソッド呼び出し部の引き数には <code>any</code> で任意の型の任意の値に、<code>anyString</code>, <code>anyBoolean</code>, <code>anyByte</code>, <code>anyChar</code>などで基本的な型の任意の値に <code>anyVararg</code> で任意の可変引き数にマッチさせることができる。</p>
+
+<pre><code>// m.method1(何か) が呼ばれたら 10 を返す
+when(m.method1(any())).thenReturn(10)
+</code></pre>
+
+<p>引数が２つ以上あり、いずれかで <code>any</code> などのマッチャーを使った場合には、他の引き数もマッチャーにする必要がある。
+オブジェクトが等しいことを示すマッチャーは <code>eq(obj)</code> で作れる。</p>
+
+<p>後から登録したものが先にマッチするので、条件のゆるいもの（マッチ範囲が広いもの）を先に書く。</p>
+
+<h3>１回目、２回目で違う値を返す</h3>
+
+<p><code>thenReturn()</code> の可変引き数版を使う</p>
+
+<pre><code>// 最初は 10, 次は 20, それ以降はずっと 30 を返す
+when(m.method1()).thenReturn(10, 20, 30)
+</code></pre>
+
+<h2>例外を起こす</h2>
+
+<pre><code>// method1() が呼ばれたら例外を起こす
+when(m.method1()).thenThrow(new RuntimeException("Gau gau"))
+</code></pre>
+
+<p><code>thenReturn</code> と同じように１回目、２回目で違う例外を起こすことも可能。
+むしろ <code>thenReturn</code> と組み合わせることができる。</p>
+
+<pre><code>when(m.method1())
+  .thenReturn(10, 20) // １回目は10, ２回目は20を返す
+  .thenThrow(new FooException, new BarException) // ３、４回目は例外
+  .thenReturn(30) // ５回目以降は30を返す
+</code></pre>
+
+<h2>オブジェクトの一部をモックする(spy)</h2>
+
+<p><code>mock[ClassToMock]</code> はフルのモック。一部だけモックしたい場合はこっち。<code>spy</code>と呼ぶ。</p>
+
+<pre><code>// obj は普通のオブジェクト
+val s = spy(obj)
+// s.method1(何か) が呼ばれたら obj の実装を使わずに 10 を返す。
+doReturn(10).when(s).method1(any())
+</code></pre>
+
+<p><code>thenReturn</code> が <code>doReturn</code> になって順番が代わり、メソッド呼び出しも <code>when</code> の外に出す。
+<code>thenReturn</code>の書き方では実際のメソッドが呼ばれるので、呼ばれては困るときにこちらの書き方をする。</p>
+
+<h2>メソッドが呼び出されたことを確認する(verify)</h2>
+
+<p><code>when()</code>, <code>thenReturn()</code>, <code>doReturn()</code> などは関数呼び出しの前に用意する。
+用意したものがテスト中で呼び出されなくても問題ない。</p>
+
+<p>呼び出されたことを確認するには <code>verify()</code> を使う。</p>
+
+<pre><code>// テストを実行
+m.method1(123);
+// method1() が何らかの整数引き数で呼び出されたことを確認
+verify(m).method1(anyInt);
+</code></pre>
+
+<p>複数回呼び出されたことを確認するときは、<code>verify()</code>の第二引き数で回数指定をする。</p>
+
+<pre><code>// 2回呼び出されたことを確認
+verify(m, times(2)).method1(anyInt)
+// 少なくとも2回
+verify(m, atLeast(2)).method1(anyInt)
+// 多くとも3回
+verify(m, atMost(3)).method1(anyInt)
+</code></pre>
+
+<h3>呼び出されてないことを確認する</h3>
+
+<p><code>never</code> を使う。</p>
+
+<pre><code>// 一度も呼ばれてないことを確認
+verify(m, never).method1(anyInt)
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[「すごい Haskell たのしく学ぼう！」読書 (1)]]></title>
@@ -1035,61 +1156,6 @@ s3:ListBucket, s3:GetBucketLocation を許可するには、以下の様な stat
 <p>上記の方法でアプリケーションが利用する API に応じて object レベル, bucket レベルの action を許可すれば、今回の目的が達成できます。</p>
 
 <p>なお、S3 すべての action についてこれらの指定で動作することを検証したわけではないので、必要に応じてみなさまご確認ください。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Sending git revision to Exceptional.io]]></title>
-    <link href="http://tkawachi.github.io/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/"/>
-    <updated>2012-09-13T20:44:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io</id>
-    <content type="html"><![CDATA[<p><a href="https://www.exceptional.io">Exceptional.io</a> は Ruby アプリケーションで起きた例外を集約して管理するサービスだ。</p>
-
-<p>例外が起きた時に困るのが、それってどのバージョンで起きたバグ？ってことがわからないこと。
-日付が記録されているので調べればわからなくはないけど、面倒だよね。</p>
-
-<p>Exceptional.io では付加情報を付け加えて送ることができるので、以下の utility class をつかって git の revision 情報を取得し、それを送るようにしてみた。</p>
-
-<div><script src='https://gist.github.com/3713816.js'></script>
-<noscript><pre><code># coding: UTF-8
-class GitUtil
-  class &lt;&lt; self
-    # Current source code revision
-    def revision
-      rev = capistrano_revision
-      rev = command_revision unless rev
-      rev.try(:chomp)
-    end
-
-    private
-    def capistrano_revision
-      begin
-        revision_file = &quot;#{Rails.root}/REVISION&quot;
-        return File.read(revision_file) if File.exists? revision_file
-      rescue IOError =&gt; e
-        Rails.logger.info(e)
-      end
-      nil
-    end
-
-    def command_revision
-      rev = `cd '#{Rails.root}' &amp;&amp; git rev-list --max-count=1 HEAD`
-      $? == 0 ? rev : nil
-    end
-  end
-end</code></pre></noscript></div>
-
-
-<p>あとは</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Exceptional</span><span class="o">.</span><span class="n">context</span><span class="p">({</span><span class="n">git_revision</span><span class="p">:</span> <span class="no">GitUtil</span><span class="o">.</span><span class="n">revision</span><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>こんな感じのコードを例外送出前に呼んでおくと、付加情報と共に送られていく。</p>
-
-<p>これでどのコミットからどのコミットまで例外が起きてたかわかるようになった。便利便利。</p>
 ]]></content>
   </entry>
   
