@@ -41,7 +41,7 @@ ScalaTestでMockitoを使うためのお勉強ノート
 メソッド呼び出し部の引き数には `any` で任意の型の任意の値に、`anyString`, `anyBoolean`, `anyByte`, `anyChar`などで基本的な型の任意の値に `anyVararg` で任意の可変引き数にマッチさせることができる。
 
     // m.method1(何か) が呼ばれたら 10 を返す
-    when(m.method1(any())).thenReturn(10)
+    when(m.method1(any)).thenReturn(10)
 
 引数が２つ以上あり、いずれかで `any` などのマッチャーを使った場合には、他の引き数もマッチャーにする必要がある。
 オブジェクトが等しいことを示すマッチャーは `eq(obj)` で作れる。
@@ -75,10 +75,13 @@ ScalaTestでMockitoを使うためのお勉強ノート
     // obj は普通のオブジェクト
     val s = spy(obj)
     // s.method1(何か) が呼ばれたら obj の実装を使わずに 10 を返す。
-    doReturn(10).when(s).method1(any())
+    doReturn(10).when(s).method1(any[ClassOfArg])
 
 `thenReturn` が `doReturn` になって順番が代わり、メソッド呼び出しも `when` の外に出す。
 `thenReturn`の書き方では実際のメソッドが呼ばれるので、呼ばれては困るときにこちらの書き方をする。
+
+この記法の場合は `any` を使うときに型を指定しなければならなかった
+（理由はわかってない）。
 
 ## メソッドが呼び出されたことを確認する(verify)
 
