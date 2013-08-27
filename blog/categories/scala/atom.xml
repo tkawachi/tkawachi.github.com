@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Scala | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-08-26T10:15:30+09:00</updated>
+  <updated>2013-08-27T10:03:31+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -57,7 +57,7 @@ mock[ClassToMock](RETURNS_DEEP_STUBS)
 メソッド呼び出し部の引き数には <code>any</code> で任意の型の任意の値に、<code>anyString</code>, <code>anyBoolean</code>, <code>anyByte</code>, <code>anyChar</code>などで基本的な型の任意の値に <code>anyVararg</code> で任意の可変引き数にマッチさせることができる。</p>
 
 <pre><code>// m.method1(何か) が呼ばれたら 10 を返す
-when(m.method1(any())).thenReturn(10)
+when(m.method1(any)).thenReturn(10)
 </code></pre>
 
 <p>引数が２つ以上あり、いずれかで <code>any</code> などのマッチャーを使った場合には、他の引き数もマッチャーにする必要がある。
@@ -95,11 +95,14 @@ when(m.method1()).thenThrow(new RuntimeException("Gau gau"))
 <pre><code>// obj は普通のオブジェクト
 val s = spy(obj)
 // s.method1(何か) が呼ばれたら obj の実装を使わずに 10 を返す。
-doReturn(10).when(s).method1(any())
+doReturn(10).when(s).method1(any[ClassOfArg])
 </code></pre>
 
 <p><code>thenReturn</code> が <code>doReturn</code> になって順番が代わり、メソッド呼び出しも <code>when</code> の外に出す。
 <code>thenReturn</code>の書き方では実際のメソッドが呼ばれるので、呼ばれては困るときにこちらの書き方をする。</p>
+
+<p>この記法の場合は <code>any</code> を使うときに型を指定しなければならなかった
+（理由はわかってない）。</p>
 
 <h2>メソッドが呼び出されたことを確認する(verify)</h2>
 
@@ -131,6 +134,11 @@ verify(m, atMost(3)).method1(anyInt)
 <pre><code>// 一度も呼ばれてないことを確認
 verify(m, never).method1(anyInt)
 </code></pre>
+
+<h2>より進んだ使い方</h2>
+
+<p><a href="http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html">Mockitoのドキュメント</a>
+に書いてある。</p>
 ]]></content>
   </entry>
   
