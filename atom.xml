@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-08-27T10:03:31+09:00</updated>
+  <updated>2013-09-15T21:31:22+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,169 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[akka memo]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/09/15/akka-memo/"/>
+    <updated>2013-09-15T21:30:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/09/15/akka-memo</id>
+    <content type="html"><![CDATA[<p>Scala 2.10 から付いてくる Akka の Actor についてのお勉強メモ。
+全然まとまっていないが晒しておく。</p>
+
+<!-- more -->
+
+
+<h2>概念</h2>
+
+<h3>Actor</h3>
+
+<p><code>akka.actor.Actor</code>。
+メッセージを受けて処理をする人。</p>
+
+<h3>Mailbox</h3>
+
+<p>Actorへのメッセージが溜まるところ。</p>
+
+<h3>Supervision</h3>
+
+<p>Actor間の依存関係のこと。
+Actorインスタンスはツリー構造になっている。
+親が supervisor となる。</p>
+
+<p>Actor が失敗したらどうするかは supervisor の actor が制御する。</p>
+
+<p>親 actor が shutdown したら、その子どもは全て shutdown する。</p>
+
+<p>タスクのまとまり毎にサブツリーを形成するようにすると良いらしい。</p>
+
+<h3>Actor Path</h3>
+
+<p>Actorインスタンスにはツリー構造上の位置を表す文字列がついており、これを actor path と呼ぶ。
+<code>/</code>, <code>/user</code>, <code>/user/abc</code> など。</p>
+
+<h3>ActorSystem</h3>
+
+<p><code>akka.actor.ActorSystem</code>。
+ツリー全体を管理するもの。
+ActorSystemはスレッドを何本も使う重い構造なので沢山作りすぎない。</p>
+
+<h3>Router</h3>
+
+<p>Actor の一種。メッセージを受け取って他の actor に投げる(Routingする)。
+投げられる側を routee と呼ぶ。
+Routee は router の子どもになる。</p>
+
+<p>以下の様な router が提供されている。どのようにルーティングするかは名前から大体想像がつく。
+ロードバランサ的なやつですかね。</p>
+
+<ul>
+<li>akka.routing.RoundRobinRouter</li>
+<li>akka.routing.RandomRouter</li>
+<li>akka.routing.SmallestMailboxRouter</li>
+<li>akka.routing.BroadcastRouter</li>
+<li>akka.routing.ScatterGatherFirstCompletedRouter</li>
+<li>akka.routing.ConsistentHashingRouter</li>
+</ul>
+
+
+<h3>Props</h3>
+
+<p><code>akka.actor.Props</code>。
+Actorをインスタンス化する際の設定。
+Immutable なので複数の actor をインスタンス化する際に使いまわせる。</p>
+
+<h2>ライフサイクル</h2>
+
+<p>生まれてから死ぬまで。</p>
+
+<p>停止信号を受け取ると以下の手順で止まる。</p>
+
+<ol>
+<li>mailbox メッセージの処理をやめる</li>
+<li>子どもに停止信号を送る</li>
+<li>全ての子どもから停止完了がくるのを待つ</li>
+<li>自分自身の停止完了プロセスを実行
+
+<ol>
+<li><code>postStop()</code> を呼び出す</li>
+<li>mailbox をダンプ</li>
+<li><code>DeathWatch</code> に停止完了を知らせる</li>
+<li>親に停止完了を知らせる</li>
+</ol>
+</li>
+</ol>
+
+
+<h3>止めかたのパターン</h3>
+
+<ul>
+<li>ActorSystem を shutdown() する。</li>
+<li>PoisonPill を actor に送る。通常メッセージと同じように mailbox に送られ、処理されるときに actor が停止する。</li>
+<li><code>context.stop(self)</code>, <code>context.stop(child)</code> で止める。</li>
+</ul>
+
+
+<h3>殺しかた</h3>
+
+<ul>
+<li>Kill を送ると即座に死ぬ</li>
+</ul>
+
+
+<h3>問題が起きたときの判断</h3>
+
+<p>以下のいずれか。</p>
+
+<ul>
+<li>Resume</li>
+<li>Restart</li>
+<li>Terminate</li>
+<li>Escalate</li>
+</ul>
+
+
+<h3>Restart</h3>
+
+<ul>
+<li>子どもをterminate。自分をterminate。</li>
+<li>子どもの mailbox は保持される。 mailbox を破棄したい時は supervisor が terminate, recreate すること。</li>
+</ul>
+
+
+<h3>ストラテジー</h3>
+
+<ul>
+<li>one-for-one strategy &mdash; default
+
+<ul>
+<li>Restart (defaultDecider)</li>
+</ul>
+</li>
+<li>all-for-one strategy</li>
+</ul>
+
+
+<p><a href="http://doc.akka.io/docs/akka/snapshot/general/supervision.html#supervision-restart">What Restarting Means</a></p>
+
+<p>失敗は３つのカテゴリに分けられる。</p>
+
+<ul>
+<li>特定のメッセージを処理する際のプログラムエラー</li>
+<li>メッセージを処理する際に使われる外部リソースの一時的なエラー</li>
+<li>Actorの内部状態が壊れた</li>
+</ul>
+
+
+<p>内部状態が壊れたら内部状態を破棄しなければならない。Supervisorや他の子どもが壊れた内部状態の影響を受けなければ、restartするのがベスト。
+Restartの際には内部的に新しい Actor がインスタンス化され、ActorRefの参照しているものが切り替わる。
+ActorRef の存在意義のひとつは、この切り替え。</p>
+
+<p>Actorが内部で作った子 Actor の ActorRef を外部に保持していると、
+Actor restart 時に無効な参照になる。</p>
+
+<p>ガーディアン直下の actor に対応する ActorRef は ActorSystem 終了時まで有効だろうと思う。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ScalaTestでMockito]]></title>
@@ -1097,73 +1260,6 @@ DocBook 用の xslt をインストールするのに Homebrew を使います�
 
 <p>こんなかんじで無事に book.xml から book.html を生成することができました。
 DocBook って難しくて怖いイメージがあったんですが意外に簡単にでした。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[IAMユーザのS3アクセスをフォルダレベルで制限する]]></title>
-    <link href="http://tkawachi.github.io/blog/2012/11/18/how-to-restrict-s3-for-folder-access/"/>
-    <updated>2012-11-18T19:29:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2012/11/18/how-to-restrict-s3-for-folder-access</id>
-    <content type="html"><![CDATA[<p>AWS の IAM でユーザを作り、S3 bucket の特定の path 以下にのみアクセスを与えるということを設定したかったのですが、情報を見つけられず時間をつかってしまったので共有しておきます。
-(参考: <a href="https://forums.aws.amazon.com/message.jspa?messageID=245525">Giving a user permission to acceess just a folder within a bucket</a>)</p>
-
-<p>現状 AWS では bucket 数上限が 100, IAM ユーザ数制限が 5000 になっています。
-利用者1人に 1 IAM ユーザを発行すると 5000 人で使えるわけですが、
-bucket 毎に共有設定を行った場合は 100 共有までです。
-同一 bucket 内で path を切り替えて共有した場合は bucket 数上限は関係なくなるので嬉しい、というわけです。</p>
-
-<p>まず最初に S3 の IAM policy に関するAWS の公式ドキュメントは
-<a href="http://docs.amazonwebservices.com/AmazonS3/latest/dev/UsingIAMPolicies.html">Using IAM Policies</a>
-です。
-Bucket レベルの指定は arn:aws:s3:::bucket_name に対して行い、 object レベルの指定は arn:aws:s3:::bucket_name/key_name に対して行います。</p>
-
-<p>同ページ内の Example 5: Allow a partner to drop files into a specific portion of the corporate bucket がやりたいこととほぼ同じ設定になります。</p>
-
-<p>Object レベルの指定で path 以下にアクセスを制限したいときは * が使えます。
-my_bucket bucket の shared/ 以下に s3:PutObject を許可するには、以下のような statement を追加します。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  "Effect":"Allow",
-</span><span class='line'>  "Action":"s3:PutObject",
-</span><span class='line'>  "Resource":"arn:aws:s3:::my_bucket/shared/*"
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上記は object レベルでの指定になります。
-S3を利用するアプリケーションによっては object レベルの API だけではなく bucket レベルでの API も使うものがあります。</p>
-
-<p>Bucket レベルの指定で path 以下にアクセスを制限したいときは Condition, StringLike を使います。
-s3:ListBucket, s3:GetBucketLocation を許可するには、以下の様な statement を追加します。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  "Effect": "Allow",
-</span><span class='line'>  "Action": ["s3:ListBucket", "s3:GetBucketLocation"],
-</span><span class='line'>  "Resource": "arn:aws:s3:::my_bucket",
-</span><span class='line'>  "Condition": {
-</span><span class='line'>    "StringLike": {
-</span><span class='line'>    "s3:prefix": "shared/*"
-</span><span class='line'>  }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<p>上記の方法でアプリケーションが利用する API に応じて object レベル, bucket レベルの action を許可すれば、今回の目的が達成できます。</p>
-
-<p>なお、S3 すべての action についてこれらの指定で動作することを検証したわけではないので、必要に応じてみなさまご確認ください。</p>
 ]]></content>
   </entry>
   
