@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Scala | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-09-15T21:31:22+09:00</updated>
+  <updated>2013-09-16T22:21:59+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,101 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[sbt build definition]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/09/16/sbt-build-definition/"/>
+    <updated>2013-09-16T22:17:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/09/16/sbt-build-definition</id>
+    <content type="html"><![CDATA[<p><a href="http://scalajp.github.io/sbt-getting-started-guide-ja/">始める sbt</a>
+を以前読んだときは
+<a href="http://scalajp.github.io/sbt-getting-started-guide-ja/basic-def/">.sbt ビルド定義</a>
+のところでぐっと難しくなってよくわからなくなった。
+今日復習したのでメモ。</p>
+
+<p>最初にまとめ。</p>
+
+<ul>
+<li><code>key := value</code> は新しい設定項目を追加する関数のようなもの(<code>Setting[T]</code>)を定義する。</li>
+<li><code>Setting[T]</code> の入力は変更されない。</li>
+<li><code>.sbt</code> を読み込むと <code>Setting[T]</code> のリストができる。<code>Setting[T]</code> のリストは、依存関係を考慮してソートされた後に適用される。</li>
+<li><code>.sbt</code> の空行で区切られた塊は Scala の式。文ではないので <code>val</code>, <code>object</code>, <code>class</code> などは書けない。</li>
+<li><code>key := value</code> は <code>key.:=(value)</code> といったメソッド呼び出しを別の書き方にしたもの。</li>
+<li>sbtデフォルトの設定項目は
+<a href="https://github.com/sbt/sbt/blob/0.13/main/src/main/scala/sbt/Keys.scala"><code>sbt.Keys</code></a>
+に定義されている。</li>
+<li><code>TaskKey[T]</code> は毎回計算されるキー。</li>
+<li>sbtコンソールでアクセスするときは <code>SettingKey[T]</code>, <code>TaskKey[T]</code> などを呼び出す際の第一引き数文字列を使う。</li>
+<li>キーの詳細はsbtコンソールから <code>inspect</code> で確認できる。</li>
+</ul>
+
+
+<!-- more -->
+
+
+<p><code>Setting[T]</code> は、設定を入力に与えると、新しいキーと値のペアを追加したり、既存のキーを新しい値で追加したりといった変換を表す。
+変換っていうのは、なにかを入力されたら、それを変更した結果を返すということで、関数みたいな概念で捉えればいいのだろう。
+<code>Setting[T]</code>は関数型の精神に則り、入力値は変更しない。</p>
+
+<p><code>.sbt</code> ファイル中の <code>key := value</code> は変換(<code>Setting[T]</code>)を定義している。
+たとえば <code>name := "hello"</code> とあれば、キーが<code>name</code>で値が<code>"hello"</code>のペアを追加・上書きする変換を定義する。
+<code>T</code> は設定値の型なので、この場合は <code>Setting[String]</code> が定義されたことになる。</p>
+
+<p><code>.sbt</code> ファイルには変換が沢山含まれているので、結果として変換(<code>Setting[T]</code>)のリストができる。</p>
+
+<p><code>Setting[T]</code> のリストに、sbt のデフォルトの設定を入力すると、<code>.sbt</code>ファイルが反映された設定が得られる。
+<code>Setting[T]</code>が入力値を変更しないのでsbtのデフォルトの設定は変更されない。</p>
+
+<p><code>.sbt</code> ファイルで <code>name := "hello"</code> と書いたら、<code>name.:=("hello")</code> のこと。
+<code>key</code> の型は <code>SettingKey[String]</code> で、 <code>:=</code> は <code>String</code> を引数にとり <code>Setting[String]</code> を返す。
+間違った型の値を代入しようとした場合には(例：<code>name := 1</code>)、型チェックでエラーになる。</p>
+
+<p><code>:=</code> メソッドの他にも <code>+=</code> （リストへの要素追加）などがある。</p>
+
+<p>sbtに用意されている設定項目（キー）は
+<a href="https://github.com/sbt/sbt/blob/0.13/main/src/main/scala/sbt/Keys.scala"><code>sbt.Keys</code></a>
+object に <code>SettingKey[T]</code> 型で定義されている。
+<code>.sbt</code>ファイルの内容が評価される時は <code>import sbt.Keys._</code> された状態なので、 <code>sbt.Keys._</code> はパッケージ修飾なしに参照できる。
+<a href="https://github.com/sbt/sbt/blob/0.13/main/src/main/scala/sbt/Keys.scala"><code>sbt.Keys</code></a>
+は重要。
+設定項目を探すときにちょくちょく参照することになる気がする。</p>
+
+<p>たとえば <code>name</code> はこんな感じ。</p>
+
+<pre><code>val name = SettingKey[String]("name", "Project name.", APlusSetting)
+</code></pre>
+
+<p>前述のように<code>SettingKey[String]</code>であることがわかる。</p>
+
+<p><a href="https://github.com/sbt/sbt/blob/0.13/main/src/main/scala/sbt/Keys.scala"><code>sbt.Keys</code></a>
+には <code>SettingKey[T]</code> 型以外にも、 <code>TaskKey[T]</code>, <code>InputKey[T]</code>, <code>AttributeKey[T]</code> 型の値が定義されてる。
+<code>compile</code> のように sbt コンソールから入力するたびに実行してくれないと困るものは
+<code>TaskKey[T]</code> として定義されている。
+たとえば <code>compile</code> はこんな感じ。</p>
+
+<pre><code>val compile = TaskKey[Analysis]("compile", "Compiles sources.", APlusTask)
+</code></pre>
+
+<p><code>SettingKey[T]</code>は一度計算されると結果が保持される。
+<code>TaskKey[T]</code>は毎回計算される。
+<code>SettingKey[T]</code>は<code>TaskKey[T]</code>に依存できない。</p>
+
+<p><code>InputKey[T]</code>, <code>AttributeKey[T]</code> はまだ知らない。</p>
+
+<p>sbtコンソールから入力するのはキーコンストラクタの第一引き数の文字列。</p>
+
+<pre><code>val scalacOptions = TaskKey[Seq[String]]("scalac-options", "Options for the Scala compiler.")
+</code></pre>
+
+<p>とあったら <code>scalac-options</code> がsbtコンソールから入力時に指定する文字列になる。
+<code>sbt.Keys</code> に CamelCase で定義されたものは大体コンソール入力時には小文字、ハイフン区切りになっている。</p>
+
+<p>キーに関する情報はsbtコンソールから <code>inspect キー名</code> で得られる。</p>
+
+<p><code>.sbt</code> ファイルの先頭に <code>import</code> 文を複数行書ける。<code>import</code> 文の間は空行をあけなくていい。
+他の <code>SettingKey[T]</code> を参照するときに使うのかな。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[akka memo]]></title>

@@ -9,8 +9,12 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Scala 2.10 から付いてくる Akka の Actor についてのお勉強メモ。
-全然まとまっていないが晒しておく。 ">
+  <meta name="description" content="始める sbt
+を以前読んだときは
+.sbt ビルド定義
+のところでぐっと難しくなってよくわからなくなった。
+今日復習したのでメモ。 最初にまとめ。 key := value は新しい設定項目を追加する関数のようなもの(Setting[T])を定義する。
+Setting[T] の入力は変更されない &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -75,6 +79,68 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/16/sbt-build-definition/">Sbt Build Definition</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-16T22:17:00+09:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://scalajp.github.io/sbt-getting-started-guide-ja/">始める sbt</a>
+を以前読んだときは
+<a href="http://scalajp.github.io/sbt-getting-started-guide-ja/basic-def/">.sbt ビルド定義</a>
+のところでぐっと難しくなってよくわからなくなった。
+今日復習したのでメモ。</p>
+
+<p>最初にまとめ。</p>
+
+<ul>
+<li><code>key := value</code> は新しい設定項目を追加する関数のようなもの(<code>Setting[T]</code>)を定義する。</li>
+<li><code>Setting[T]</code> の入力は変更されない。</li>
+<li><code>.sbt</code> を読み込むと <code>Setting[T]</code> のリストができる。<code>Setting[T]</code> のリストは、依存関係を考慮してソートされた後に適用される。</li>
+<li><code>.sbt</code> の空行で区切られた塊は Scala の式。文ではないので <code>val</code>, <code>object</code>, <code>class</code> などは書けない。</li>
+<li><code>key := value</code> は <code>key.:=(value)</code> といったメソッド呼び出しを別の書き方にしたもの。</li>
+<li>sbtデフォルトの設定項目は
+<a href="https://github.com/sbt/sbt/blob/0.13/main/src/main/scala/sbt/Keys.scala"><code>sbt.Keys</code></a>
+に定義されている。</li>
+<li><code>TaskKey[T]</code> は毎回計算されるキー。</li>
+<li>sbtコンソールでアクセスするときは <code>SettingKey[T]</code>, <code>TaskKey[T]</code> などを呼び出す際の第一引き数文字列を使う。</li>
+<li>キーの詳細はsbtコンソールから <code>inspect</code> で確認できる。</li>
+</ul>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/16/sbt-build-definition/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -637,51 +703,6 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/11/passion-study/">情熱の持ち方・燃やし方？</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-11T22:28:00+09:00" pubdate data-updated="true">Feb 11<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>情熱が燃えていない。
-結婚して子どもができ幸せであるが、今ひとつのめり込めるものがない。
-好きなものはある。プログラミングが好きだ。
-しかし覚えたての学生時代ほど燃えてはいない。
-その他に趣味といえる趣味はない。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/02/11/passion-study/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -697,6 +718,10 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/16/sbt-build-definition/">Sbt Build Definition</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/15/akka-memo/">Akka Memo</a>
       </li>
     
@@ -710,10 +735,6 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
     
       <li class="post">
         <a href="/blog/2013/06/15/1/">Octopress で Universal Analytics へ切り替え</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/13/1/">s3:ListBucketVersions</a>
       </li>
     
   </ul>
