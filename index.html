@@ -9,12 +9,10 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="始める sbt
-を以前読んだときは
-.sbt ビルド定義
-のところでぐっと難しくなってよくわからなくなった。
-今日復習したのでメモ。 最初にまとめ。 key := value は新しい設定項目を追加する関数のようなもの(Setting[T])を定義する。
-Setting[T] の入力は変更されない &hellip;">
+  <meta name="description" content="7 Patterns to Refactor Fat ActiveRecord Models
+という記事があり、読もう読もうと思いつつ1年くらい経ってしまった。
+ようやく読んだので理解した内容を書いておく。
+コード例は元記事のもの。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +77,50 @@ Setting[T] の入力は変更されない &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/21/active-model-7-pattern/">ActiveRecord のモデルを整理する7つのパターン</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-21T21:18:00+09:00" pubdate data-updated="true">Sep 21<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">7 Patterns to Refactor Fat ActiveRecord Models</a>
+という記事があり、読もう読もうと思いつつ1年くらい経ってしまった。
+ようやく読んだので理解した内容を書いておく。
+コード例は元記事のもの。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/21/active-model-7-pattern/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -657,52 +699,6 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/02/17/backend-services/">使わないと損なバックエンドサービス</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-02-17T18:47:00+09:00" pubdate data-updated="true">Feb 17<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://slash7.com/company/">slash7</a> の Thomas Fuchs さんが自分たちのサービス
-<a href="http://mir.aculo.us/2013/02/16/running-a-saas-here-are-some-services-youll-find-useful/">Freckle で使っている有償サービス群を紹介</a>している。
-小さいチームでは自分のビジネスのコアに集中し、それ以外の部分に力を分散させるべからずというのはまさにその通り。</p>
-
-<p>紹介されていたサービスは以下のとおり。
-知らないサービスもいくつかあるなあ。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/02/17/backend-services/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -718,6 +714,10 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/21/active-model-7-pattern/">ActiveRecord のモデルを整理する7つのパターン</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/16/sbt-build-definition/">Sbt Build Definition</a>
       </li>
     
@@ -731,10 +731,6 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
     
       <li class="post">
         <a href="/blog/2013/06/16/1/">「すごい Haskell たのしく学ぼう！」読書 (1)</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/06/15/1/">Octopress で Universal Analytics へ切り替え</a>
       </li>
     
   </ul>

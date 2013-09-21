@@ -1,0 +1,556 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>ActiveRecord のモデルを整理する7つのパターン - tkawachi Blog</title>
+  <meta name="author" content="KAWACHI Takashi">
+
+  
+  <meta name="description" content="7 Patterns to Refactor Fat ActiveRecord Models
+という記事があり、読もう読もうと思いつつ1年くらい経ってしまった。
+ようやく読んだので理解した内容を書いておく。
+コード例は元記事のもの。 Rails で thin controller, fat &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/09/21/active-model-7-pattern">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-526921-5', 'tkawachi.github.io');
+  ga('send', 'pageview');
+
+</script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">tkawachi Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tkawachi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">ActiveRecord のモデルを整理する7つのパターン</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-21T21:18:00+09:00" pubdate data-updated="true">Sep 21<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">7 Patterns to Refactor Fat ActiveRecord Models</a>
+という記事があり、読もう読もうと思いつつ1年くらい経ってしまった。
+ようやく読んだので理解した内容を書いておく。
+コード例は元記事のもの。</p>
+
+<!-- more -->
+
+
+<p>Rails で thin controller, fat model を心がけていると、model がマジで激太りしてヤバくなる。
+実際に自分が仕事で書いている rails アプリも激太りしててヤバい。
+この blog の筆者が作っている <a href="https://codeclimate.com/">CodeClimate</a> で C 判定をもらう程度には肥満体型になっている。</p>
+
+<h2>Mixinに抜き出さない!</h2>
+
+<p>Model が太ってきた時に考えるのは <code>ActiveSupport::Concern</code> を使って感心事を抜き出して、Mixin にすることだと思う。
+実際に手元のアプリでも <code>models/concerns/</code> なんていうディレクトリがあったりする。</p>
+
+<p>でもこれはアンチパターン。
+Mixin は継承と同じように複雑さを増す。
+やってみると、さほど綺麗に分けられないんだよね。
+記事では mixin はするな、と書いてある。</p>
+
+<p>ここからがパターンの紹介。</p>
+
+<h2>1. Value object の抽出</h2>
+
+<p><a href="http://en.wikipedia.org/wiki/Value_object">Value object</a>
+は値が等しければ等しいとされるようなオブジェクトで、だいたいは immutable。
+この value object を抜き出して、関連するロジックを抜き出したクラスに移す。</p>
+
+<p>どんなときに使うか？
+属性に強く結びついたロジックがあるとき。</p>
+
+<p>例として挙げられているのは、電話番号、お金など。
+CodeClimate には AからF の値をとる <code>Rating</code> value object があるらしい。</p>
+
+<pre><code>class Rating
+  include Comparable
+
+  def self.from_cost(cost)
+    if cost &lt;= 2
+      new("A")
+    elsif cost &lt;= 4
+      new("B")
+    elsif cost &lt;= 8
+      new("C")
+    elsif cost &lt;= 16
+      new("D")
+    else
+      new("F")
+    end
+  end
+
+  def initialize(letter)
+    @letter = letter
+  end
+
+  def better_than?(other)
+    self &gt; other
+  end
+
+  def &lt;=&gt;(other)
+    other.to_s &lt;=&gt; to_s
+  end
+
+  def hash
+    @letter.hash
+  end
+
+  def eql?(other)
+    to_s == other.to_s
+  end
+
+  def to_s
+    @letter.to_s
+  end
+end
+</code></pre>
+
+<p><code>cost</code> から rating を計算するロジックと、比較ロジックがこのクラスに抜き出されている。
+<code>#hash</code>, <code>#eql?</code> を定義しておくと、hash key として使うことができる。</p>
+
+<p>ActiveRecord 側。
+<code>rating</code> は DB に保存された値から計算される値みたい。</p>
+
+<pre><code>class ConstantSnapshot &lt; ActiveRecord::Base
+  # …
+
+  def rating
+    @rating ||= Rating.from_cost(cost)
+  end
+end
+</code></pre>
+
+<p>Value object として抜き出せるものがあれば、間違いなく抜き出したほうがいいね。</p>
+
+<h2>2. Service object の抽出</h2>
+
+<p>以下の基準の１つ以上に合致したときには service object の抜き出しを薦めている。</p>
+
+<ul>
+<li>アクションが複雑なとき</li>
+<li>アクションが複数のモデルに触るとき</li>
+<li>アクションが外部サービスとやりとりするとき</li>
+<li>アクションがモデルの主な関心事ではないとき</li>
+<li>アクションを実行するのにいくつもの方法があるとき（GoFのストラテジパターン）</li>
+</ul>
+
+
+<p>以下の例はユーザ認証を行う service object。</p>
+
+<pre><code>class UserAuthenticator
+  def initialize(user)
+    @user = user
+  end
+
+  def authenticate(unencrypted_password)
+    return false unless @user
+
+    if BCrypt::Password.new(@user.password_digest) == unencrypted_password
+      @user
+    else
+      false
+    end
+  end
+end
+</code></pre>
+
+<p>ここで <code>user</code> がモデルで、認証というアクションを service object として抽出している。</p>
+
+<p>結局のところ「複雑なメソッド（群）を見つけたら別のクラスにしましょう」ということかな。</p>
+
+<h2>3. Form object の抽出</h2>
+
+<p>フォームの submit で複数のモデルが更新される場合などに使うパターン。
+以下の例は <code>User</code> と <code>Company</code> の両方を更新する。</p>
+
+<pre><code>class Signup
+  include Virtus
+
+  extend ActiveModel::Naming
+  include ActiveModel::Conversion
+  include ActiveModel::Validations
+
+  attr_reader :user
+  attr_reader :company
+
+  attribute :name, String
+  attribute :company_name, String
+  attribute :email, String
+
+  validates :email, presence: true
+  # … more validations …
+
+  # Forms are never themselves persisted
+  def persisted?
+    false
+  end
+
+  def save
+    if valid?
+      persist!
+      true
+    else
+      false
+    end
+  end
+
+private
+
+  def persist!
+    @company = Company.create!(name: company_name)
+    @user = @company.users.create!(name: name, email: email)
+  end
+end
+</code></pre>
+
+<p><code>Signup</code> クラスは <a href="https://github.com/solnic/virtus">Virtus</a> を使うことで、
+ActiveModel のように属性を持つことができる。
+<a href="http://api.rubyonrails.org/classes/ActiveModel/Naming.html"><code>ActiveModel::Naming</code></a>と
+<a href="http://api.rubyonrails.org/classes/ActiveModel/Conversion.html"><code>ActiveModel::Conversion</code></a>は、つけとくと良いことがあるみたい。
+<a href="http://api.rubyonrails.org/classes/ActiveModel/Validations.html"><code>ActiveModel::Validations</code></a> を include することで validation も掛けられる。</p>
+
+<h2>4. Query object の抽出</h2>
+
+<p>複雑なクエリを発行するときは query object を使うといいかも。
+放置されたアカウントを探す query object の例。</p>
+
+<pre><code>class AbandonedTrialQuery
+  def initialize(relation = Account.scoped)
+    @relation = relation
+  end
+
+  def find_each(&amp;block)
+    @relation.
+      where(plan: nil, invites_count: 0).
+      find_each(&amp;block)
+  end
+end
+</code></pre>
+
+<p>コンストラクタに渡されているのは <code>ActiveRecord::Relation</code> のインスタンス。
+他の条件がついた relation を渡すと、クエリを組み立てることができる。</p>
+
+<pre><code>old_accounts = Account.where("created_at &lt; ?", 1.month.ago)
+old_abandoned_trials = AbandonedTrialQuery.new(old_accounts)
+</code></pre>
+
+<p>この手のクラスは隔離した状態でのテストを頑張らず、DBにアクセスする形でテストしたほうがいい。</p>
+
+<h2>5. View object の導入</h2>
+
+<p>表示に限ったロジックを書いている場合には、それを抜き出すことを考える。
+「もし別のインターフェース（例えば音声コントロールのUI）を実装するときに必要かな？」と考えて No なら view object が向いてる。
+以下は Code Climate のドーナツチャートの例。</p>
+
+<pre><code>class DonutChart
+  def initialize(snapshot)
+    @snapshot = snapshot
+  end
+
+  def cache_key
+    @snapshot.id.to_s
+  end
+
+  def data
+    # pull data from @snapshot and turn it into a JSON structure
+  end
+end
+</code></pre>
+
+<h2>6. Policy object の抽出</h2>
+
+<p>読み込みポリシーに特化したオブジェクト。
+ビジネスルールをひとつカプセル化する。</p>
+
+<p>Service object に似ているが、service object は操作、 policy object は読み込みを担当。
+Query object にも似ているが、query object は SQL 発行、 policy object はメモリ上のドメインモデル読み込みを担当する。</p>
+
+<pre><code>class ActiveUserPolicy
+  def initialize(user)
+    @user = user
+  end
+
+  def active?
+    @user.email_confirmed? &amp;&amp;
+    @user.last_login_at &gt; 14.days.ago
+  end
+end
+</code></pre>
+
+<p>上記の例は、だれが &ldquo;active?&rdquo; か、という定義を与えている。</p>
+
+<h2>7. Decorator の抽出</h2>
+
+<p>既存の機能の上に機能を足したいときに使うパターン。
+たとえばコメント書き込み時に、Facebook wall へもポストするような時に使う。</p>
+
+<pre><code>class FacebookCommentNotifier
+  def initialize(comment)
+    @comment = comment
+  end
+
+  def save
+    @comment.save &amp;&amp; post_to_wall
+  end
+
+private
+
+  def post_to_wall
+    Facebook.post(title: @comment.title, user: @comment.author)
+  end
+end
+</code></pre>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-21T21:18:00+09:00" pubdate data-updated="true">Sep 21<span>st</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/activerecord/'>ActiveRecord</a>, <a class='category' href='/blog/categories/designpattern/'>DesignPattern</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/09/21/active-model-7-pattern/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/09/21/active-model-7-pattern/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/09/16/sbt-build-definition/" title="Previous Post: sbt build definition">&laquo; sbt build definition</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/09/21/active-model-7-pattern/">ActiveRecord のモデルを整理する7つのパターン</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/16/sbt-build-definition/">Sbt Build Definition</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/15/akka-memo/">Akka Memo</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/08/26/mockito-scala/">ScalaTestでMockito</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/06/16/1/">「すごい Haskell たのしく学ぼう！」読書 (1)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/110309119188108264538?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<div class="fb-activity" data-site="http://tkawachi.github.com/" data-app-id="445203802205922" data-width="260" data-height="300" data-header="true" data-linktarget="_top" data-recommendations="false"></div>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - KAWACHI Takashi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tkawachiblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/09/21/active-model-7-pattern/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2013/09/21/active-model-7-pattern/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
