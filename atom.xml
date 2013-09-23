@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-09-21T21:19:00+09:00</updated>
+  <updated>2013-09-24T00:40:53+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,113 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[テストデータのセットアップに trait を使う]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/09/23/use-trait-to-setup-test-data/"/>
+    <updated>2013-09-23T23:59:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/09/23/use-trait-to-setup-test-data</id>
+    <content type="html"><![CDATA[<p>9月半ばから始まった
+<a href="https://www.coursera.org/course/progfun">Functional Programming Principles in Scala</a>
+を受講している。
+課題内のテストの書き方でこうやるのか、というところがあったのでメモ。</p>
+
+<p>テストケース間でデータを共有したいときがある。
+たとえば以下の例では <code>data1</code> と <code>data2</code> が共通なので共通化したくなる。</p>
+
+<pre><code>class FooSuite extends FunSuite {
+    test("test A") {
+        val data1 = new FooData(…)
+        val data2 = new FooData(…)
+        // tests with data1 and data2
+    }
+
+    test("test B") {
+        val data1 = new FooData(…)
+        val data2 = new FooData(…)
+        // another tests with data1 and data2
+    }
+}
+</code></pre>
+
+<p>普通は以下のようにメンバ変数にすると思う。</p>
+
+<pre><code>class FooSuite extends FunSuite {
+    val data1 = new FooData(…)
+    val data2 = new FooData(…)
+
+    test("test A") {
+        // tests with data1 and data2
+    }
+
+    test("test B") {
+        // another tests with data1 and data2
+    }
+}
+</code></pre>
+
+<p>この方法は少し問題がある。</p>
+
+<ul>
+<li><code>new FooData(…)</code> が例外を出した場合に、<code>FooSuite</code> のインスタンス化に失敗するという問題がある</li>
+<li><code>FooData</code> が mutable な場合に、前に実行したテストの内容により結果が変わる可能性がある</li>
+</ul>
+
+
+<p>課題のテストケースでは trait を使って以下のようにしていた。</p>
+
+<pre><code>class FooSuite extends FunSuite {
+    trait TestData {
+        val data1 = new FooData(…)
+        val data2 = new FooData(…)
+    }
+
+    test("test A") {
+        new TestData {
+            // tests with data1 and data2
+        }
+    }
+
+    test("test B") {
+        new TestData {
+            // another tests with data1 and data2
+        }
+    }
+}
+</code></pre>
+
+<p>各テスト内で <code>TestData</code> trait を継承した無名クラスを作り、無名クラスのコンストラクタ内でテストを実行する。
+こうすることで <code>new FooData(…)</code> の実行はテスト実行時になり、各テストごとにデータが初期化されるので、上にあげた問題が解消する。</p>
+
+<p><a href="http://www.scalatest.org/user_guide/sharing_fixtures">Sharing fixtures</a> をみると他の方法もいろいろある。
+一番上にある Calling get-fixture methods が一番単純ぽい。
+この方法で例を書き換えるとこうなる。</p>
+
+<pre><code>class FooSuite extends FunSuite {
+    def fixture = new {
+        val data1 = new FooData(…)
+        val data2 = new FooData(…)
+    }
+
+    test("test A") {
+        val f = fixture
+        // tests with f.data1 and f.data2
+    }
+
+    test("test B") {
+        val f = fixture
+        import f._
+        // another tests with data1 and data2
+    }
+}
+</code></pre>
+
+<p>無名クラスのメンバとしてテストデータを作る。
+こっちのほうがインデント少なくていいかも。
+<code>import f._</code> すれば <code>f.</code> prefix 要らないしね。
+<code>new</code> のあとクラス名無くてもコンパイル通るんだ… 知らなかったよ。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[ActiveRecord のモデルを整理する7つのパターン]]></title>
@@ -1539,29 +1646,6 @@ year に関してはうるう年の時に同じ症状が発生します。</p>
 
 
 <p>便利に使わせていただきます。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress に Facebook recommendations bar を設置]]></title>
-    <link href="http://tkawachi.github.io/blog/2012/12/02/facebook-recommendations-bar-for-octopress/"/>
-    <updated>2012-12-02T10:18:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2012/12/02/facebook-recommendations-bar-for-octopress</id>
-    <content type="html"><![CDATA[<p>この blog は
-<a href="http://octopress.org/">Octopress</a> を使って github pages で書いています。</p>
-
-<p>Facebook recommendations bar を追加してみました。
-Facebook の <a href="https://developers.facebook.com/docs/reference/plugins/recommendationsbar/">Recommendations Bar</a>
-のページから blog 用の Facebook application をひとつ作って、code snippet を吐き出します。</p>
-
-<p>あとは
-<a href="https://github.com/tkawachi/tkawachi.github.com/blob/31482db539e901af1f7f5af28d071e4a4a0c01e0/source/_layouts/post.html#L45-L53">このように</a>
-<code>source/_layouts/post.html</code> を書き換えます。
-Github pages だと何を変更したかも github で見られるのが嬉しいですね。</p>
-
-<p>Blog の like 数が少なすぎるのでしょう。まだおすすめがちゃんと出ないようですが、 like 数が増えると出るようになるのでしょうか。</p>
-
-<p><a href="http://sessan.hatenablog.com/entry/2012/09/27/172013">sessanの日記 &ndash; はてなブログにFacebookのRecommendations Barを設置する</a> を参考にしました。</p>
 ]]></content>
   </entry>
   
