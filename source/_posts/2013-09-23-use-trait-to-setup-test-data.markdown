@@ -28,7 +28,7 @@ categories: Scala
         }
     }
 
-普通は以下のようにメンバ変数にすると思う。
+普通は以下のようにメンバ変数にしたくなると思う。
 
     class FooSuite extends FunSuite {
         val data1 = new FooData(…)
