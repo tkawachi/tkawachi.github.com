@@ -20,6 +20,8 @@ Scala の implicit のお勉強メモ。
 * 型パラメータ情報を実行時に使いたいとき。implicit パラメータをつかう。
 * 共通のインタフェースを持たないクラス群に、共通のインタフェースをあとづけするとき (CONCEPT pattern)。implicit パラメータをつかう。
 
+<!-- more -->
+
 ### pimp my library pattern
 
 既存クラスに対してメソッドをあと付けしたいときに使う。
