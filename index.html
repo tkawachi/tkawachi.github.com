@@ -9,11 +9,8 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="9月半ばから始まった
-Functional Programming Principles in Scala
-を受講している。
-課題内のテストの書き方でこうやるのか、というところがあったのでメモ。 テストケース間でデータを共有したいときがある。
-たとえば以下の例では data1 と data2 &hellip;">
+  <meta name="description" content="Scala の implicit のお勉強メモ。 なぜ implicit を使いたくなるか？ コード片を見ただけではわからなくなるので、暗黙的な記述はあまり使わない方がいいんじゃないかと個人的に思うのだけど。
+それでも便利な使い道があるから使われているみたい。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +75,62 @@ Functional Programming Principles in Scala
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/28/scala-implicit/">Scalaのimplicit</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-28T22:16:00+09:00" pubdate data-updated="true">Sep 28<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Scala の implicit のお勉強メモ。</p>
+
+<h2>なぜ implicit を使いたくなるか？</h2>
+
+<p>コード片を見ただけではわからなくなるので、暗黙的な記述はあまり使わない方がいいんじゃないかと個人的に思うのだけど。
+それでも便利な使い道があるから使われているみたい。</p>
+
+<p>今自分が知っているところで次のパターンがあるみたい。
+他の便利な使い方もきっとあるんじゃなかろうか。</p>
+
+<ul>
+<li>既存のクラスを変更せずにメソッドを追加したいとき (pimp my library pattern)。 implicit な関数, implicit なクラスを使う。</li>
+<li>型パラメータ情報を実行時に使いたいとき。implicit パラメータをつかう。</li>
+<li>共通のインタフェースを持たないクラス群に、共通のインタフェースをあとづけするとき (CONCEPT pattern)。implicit パラメータをつかう。</li>
+</ul>
+
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/09/28/scala-implicit/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -730,54 +783,6 @@ Ruby の AWS SDK で
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/11/1/">Loan Pattern</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-11T22:07:00+09:00" pubdate data-updated="true">Jun 11<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近仕事で scala を書いてまして、
-Java 延長線上として使う分には全く問題ないのだが、
-scala ぽいこととなるとかなり怪しい。
-なので初歩から少しずつ勉強して、その様子を晒しておくことにする。</p>
-
-<p>今日は loan pattern。
-リソース解放を忘れずに行うためのパターン。
-C++ では RAII, golang では defer を使う場面で使うやつ。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/06/11/1/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -793,6 +798,10 @@ C++ では RAII, golang では defer を使う場面で使うやつ。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/09/28/scala-implicit/">Scalaのimplicit</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/23/use-trait-to-setup-test-data/">テストデータのセットアップに Trait を使う</a>
       </li>
     
@@ -806,10 +815,6 @@ C++ では RAII, golang では defer を使う場面で使うやつ。</p>
     
       <li class="post">
         <a href="/blog/2013/09/15/akka-memo/">Akka Memo</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/08/26/mockito-scala/">ScalaTestでMockito</a>
       </li>
     
   </ul>

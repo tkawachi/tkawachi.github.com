@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Scala | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-09-24T00:50:56+09:00</updated>
+  <updated>2013-09-29T00:06:13+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,155 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Scalaのimplicit]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/09/28/scala-implicit/"/>
+    <updated>2013-09-28T22:16:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/09/28/scala-implicit</id>
+    <content type="html"><![CDATA[<p>Scala の implicit のお勉強メモ。</p>
+
+<h2>なぜ implicit を使いたくなるか？</h2>
+
+<p>コード片を見ただけではわからなくなるので、暗黙的な記述はあまり使わない方がいいんじゃないかと個人的に思うのだけど。
+それでも便利な使い道があるから使われているみたい。</p>
+
+<p>今自分が知っているところで次のパターンがあるみたい。
+他の便利な使い方もきっとあるんじゃなかろうか。</p>
+
+<ul>
+<li>既存のクラスを変更せずにメソッドを追加したいとき (pimp my library pattern)。 implicit な関数, implicit なクラスを使う。</li>
+<li>型パラメータ情報を実行時に使いたいとき。implicit パラメータをつかう。</li>
+<li>共通のインタフェースを持たないクラス群に、共通のインタフェースをあとづけするとき (CONCEPT pattern)。implicit パラメータをつかう。</li>
+</ul>
+
+
+<!-- more -->
+
+
+<h3>pimp my library pattern</h3>
+
+<p>既存クラスに対してメソッドをあと付けしたいときに使う。
+既存クラスが自分のメンテナンスできる範囲で書き換えてOKならこのパターン使わなくていいと思う。
+既存クラスがサードパーティライブラリから提供されている場合など、書き換えられない、書き換えるのが面倒ときに使う。</p>
+
+<p>やり方は 2.9 以前の場合は</p>
+
+<ol>
+<li>既存クラスをクラスのラッパークラスを定義する</li>
+<li>既存クラスからラッパークラスへの暗黙的変換関数を定義する(implicit 関数)</li>
+</ol>
+
+
+<p>(pimp my library pattern)で、2.10 以降の場合は <a href="http://docs.scala-lang.org/overviews/core/implicit-classes.html">implicit class</a> が導入されたのでこれを使うんだと思う。</p>
+
+<p>ここでは <code>Int</code> 型に関数 <code>f1</code> をあと付けしたいとする。</p>
+
+<h4>pimp my libarary pattern</h4>
+
+<p>pimp my library pattern ではまずラッパークラスを定義して、</p>
+
+<pre><code>class MyRichInt(x: Int) {
+    def f1 = …
+}
+</code></pre>
+
+<p>暗黙的変換関数を定義する。</p>
+
+<pre><code>object MyRichInt {
+    implicit def intToMyRichInt(x: Int) = new MyRichInt(x)
+}
+</code></pre>
+
+<p>使う時は暗黙的変換関数を import すれば、メソッドが増えたように感じる。</p>
+
+<pre><code>import MyRichInt._
+123.f1 // new MyRichInt(123).f1 相当
+</code></pre>
+
+<h4>Implicit class</h4>
+
+<p>Implict class 2.10 から導入された機能。
+pimy my library pattern が簡単に書けるようになった感じ。
+こんな感じで定義。</p>
+
+<pre><code>object Helpers {
+    implicit class IntWithF(x: Int) {
+        def f1 = …
+    }
+}
+</code></pre>
+
+<p>使う時は import する。
+既存クラスに存在しないメンバを呼び出した場合に、暗黙的に変換できるクラスにメンバがあれば、コンパイラさんが変換→呼び出しという風にしてくれる。</p>
+
+<pre><code>import Helpers._
+123.f1 // new IntWithF(123).f1 相当
+</code></pre>
+
+<p>これでプログラマ的には既存の Int 型には無かったメンバ <code>f1</code> が増えたかのように扱える。</p>
+
+<p>関連する項目として
+<a href="http://docs.scala-lang.org/ja/overviews/core/value-classes.html">value class</a>
+がある。
+これを一緒に使えば暗黙変換するとき <code>new</code> されなくなる（メモリ割り当てされなくなる）ので
+使えるときは使うのがいい。
+頻繁に使われるものの場合は速くなりそう。</p>
+
+<h3>型パラメータ情報を実行時に使いたいとき</h3>
+
+<p>JVMは型パラメータをコンパイル時に消しちゃうので実行時には型パラメータの情報は使えない。
+<code>def f[A] = new A // 間違い</code> とかしたいときに困る。</p>
+
+<p>そんなときは最後の引き数リストに implicit な <code>ClassTag</code> を受け取るようにすればいいみたい。</p>
+
+<pre><code>def f[A](implicit c: ClassTag[A]) = c.runtimeClass.newInstance().asInstanceOf[A]
+</code></pre>
+
+<p><code>c</code> 経由でインスタンスを作ったり出来る。
+呼び出し時は <code>c</code> を渡す必要はない。
+<code>f[Int]</code> などとして呼び出せる。</p>
+
+<h3>CONCEPT pattern</h3>
+
+<p>既存のクラス群が共通インタフェースを持ってたらひとつの関数で同じように処理できるのに、、ってときに使うパターン。
+既存のクラスが書き換えられるなら、インタフェースを新規に作って実装しちゃってもいいんじゃないかと思わなくもないけど、アルゴリズムに関連する部分は分けておきたいなんてこともあるのかもしれない。</p>
+
+<p>この共通インタフェースのことを concept っていうらしい。</p>
+
+<p><code>Int</code> と <code>String</code> が両方共 <code>double</code> っていう関数を持っていたら、ステキなアルゴリズム（関数）がかけるのになあ、とする。</p>
+
+<pre><code>trait DoubleConcept[A] {
+    // 共通インタフェース
+    def double(v: A): A
+}
+implicit val doubleInt = new DoubleCondept[Int] {
+    // Int の double 定義
+    def double(v: Int) = v * 2
+}
+implicit val doubleString = new DoubleConcept[String] {
+    // String の double 定義
+    def double(v: String) = v + v
+}
+
+def suteki[A](v: A)(implicit c: DoubleCondept[A]) = … // c.double(v) を使ったステキアルゴリズム
+
+suteki(123) // suteki(123)(doubleInt) 相当
+suteki("ABC") // suteki(ABC)(doubleString) 相当
+</code></pre>
+
+<p>型ごとの共通インタフェース実装を implicit val として定義しておいて、 implicit なパラメータリストでそれを暗黙的に渡す。
+暗黙的過ぎて難しい。</p>
+
+<p>ともあれ <code>suteki</code> 関数のなかでは <code>Int</code> と <code>String</code> が両方共 <code>double</code> という共通操作を持っているという前提で関数がかける。
+<code>suteki</code>関数呼び出し時の <code>v</code> 引き数の型により、<code>c</code> が <code>doubleInt</code> なのか <code>doubleString</code> なのかはコンパイラが選択してくれる。</p>
+
+<h2>雑感</h2>
+
+<p>Scala の implicit は黒魔術。
+使いたくなるパターンは多くなさそうなので用途を抑えておけば理解しやすい。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[テストデータのセットアップに trait を使う]]></title>
