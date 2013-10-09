@@ -133,6 +133,9 @@ Function1 を見なおしてみるとルールに合致していることが確�
 contravariant な T はパラメタにきており、covariant な U は戻り値にきている。
 問題なし。
 
+Scala では immutable な collection は covariant, mutable な collection は invariant になっているらしい。
+きっと Java の例にあるような実行時エラーをコンパイル時に捕まえるにはそうするしか無いんだろうな。
+
 ## List を covariant にする話
 
     trait List[+T] {…}
