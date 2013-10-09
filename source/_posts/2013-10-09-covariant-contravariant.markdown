@@ -142,7 +142,7 @@ contravariant な T はパラメタにきており、covariant な U は戻り�
 みたいな感じ。
 
 `Nil` のときの `T` は `Nothing`。
-`Nothing` は全ての型のサブクラス（`Nothing` <: なんでも）。
+`Nothing` は全ての型の subtype（`Nothing` <: なんでも）。
 List は covariant なので `List[Nothing]` <: `List[なんでも]` となる。
 どの `T` の `List[T]` に対しても `Nil` を使えるので便利。
 
