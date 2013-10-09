@@ -9,8 +9,16 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Rails 3.2 のプロジェクトで作業していて JavaScript (CoffeeScript) でのローカライゼーションをしたくなりました。
-調べてみたところ i18n-js が簡単につかえてよさそうな感じです。 まずは Gemfile に追加して bundle install 。 &hellip;">
+  <meta name="description" content="ActiveSupport の日時計算はとても便利です。直感的な記法でスラスラ書けちゃいます。
+でもハマるポイントもありますので注意してください。
+というか昨日僕がやらかしたことの告白です。 下のコードを見てください。 1
+2
+3
+4
+5
+6
+7
+t1 = Time.new(2012, 12, 1 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -75,6 +83,71 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/12/08/a-trap-of-active-support-time/">ActiveSupport 日時計算の罠</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-08T11:03:00+09:00" pubdate data-updated="true">Dec 8<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>ActiveSupport の日時計算はとても便利です。直感的な記法でスラスラ書けちゃいます。
+でもハマるポイントもありますので注意してください。
+というか昨日僕がやらかしたことの告白です。</p>
+
+<p>下のコードを見てください。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">t1</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">t2</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span>
+</span><span class='line'><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span> <span class="o">==</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span> <span class="c1"># =&gt; true</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">t3</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="n">month</span>
+</span><span class='line'><span class="n">t3</span> <span class="o">-</span> <span class="n">t1</span> <span class="o">==</span> <span class="mi">1</span><span class="o">.</span><span class="n">month</span> <span class="c1"># =&gt; false</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>a = b + c だったら普通 a &ndash; b = c だろうと思うのですが、最後の式は false を返します。
+なぜだかわかりますか？</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/12/08/a-trap-of-active-support-time/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -701,51 +774,6 @@ spork を用いたテストの実行をファイル書き換え時に行うこ�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/">Trying Micro Cloud Foundry 1.1.0</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-03T14:19:00+09:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>前々から気になっていた Micro Cloud Foundry を試してみます。
-Cloud Foundry は VMware 社が開発している open source の PaaS です。
-Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめたものです。</p>
-
-<p>参考にしたのは <a href="http://support.cloudfoundry.com/entries/20316811-micro-cloud-foundry-installation-setup">Micro Cloud Foundry Installation &amp; Setup</a>。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -763,6 +791,10 @@ Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめた�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/09/covariant-contravariant/">Covariantとcontravariant</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/28/scala-implicit/">Scalaのimplicit</a>
       </li>
     
@@ -776,10 +808,6 @@ Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめた�
     
       <li class="post">
         <a href="/blog/2013/09/16/sbt-build-definition/">Sbt Build Definition</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/15/akka-memo/">Akka Memo</a>
       </li>
     
   </ul>

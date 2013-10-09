@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: contravariant | tkawachi Blog]]></title>
+  <link href="http://tkawachi.github.io/blog/categories/contravariant/atom.xml" rel="self"/>
+  <link href="http://tkawachi.github.io/"/>
+  <updated>2013-10-10T00:32:20+09:00</updated>
+  <id>http://tkawachi.github.io/</id>
+  <author>
+    <name><![CDATA[KAWACHI Takashi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Covariantとcontravariant]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/10/09/covariant-contravariant/"/>
+    <updated>2013-10-09T23:06:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/10/09/covariant-contravariant</id>
+    <content type="html"><![CDATA[<p>今日 <a href="https://www.coursera.org/course/progfun">Functional Programming Principles in Scala</a> で聞いた話が難しかったのでメモ。</p>
+
+<!-- more -->
+
+
+<h2>Subtype</h2>
+
+<p>書き方として A &lt;: B と書けば A は B の subtype であることを示す。
+A >: B と書けば A は B の supertype、言い換えれば B は A の subtype であることを示す。</p>
+
+<p>Subtype とは何か？というのは Liskov substitution principle というので定義されている。
+「A &lt;: B であれば、B型の値に対して出来ることならなんでもA型の値に対して出来る」ということらしい。</p>
+
+<p>クラス階層で言えば、 A &lt;: B というのは A が B の subclass または A == B ってこと。</p>
+
+<p>Subtype の概念はクラス階層にとどまらない。
+こんな型が定義されていたら、</p>
+
+<pre><code>class Base
+class Derived extends Base
+type A = Base =&gt; Derived
+type B = Derived =&gt; Base
+</code></pre>
+
+<p>A と B の間にクラス階層はないが、B がおける場所には A もおける。
+つまり A &lt;: B。
+なぜなら</p>
+
+<ul>
+<li>B の引き数は Derived で A の引数は Base なので、B の引き数ならなんでも A の引き数として使える</li>
+<li>B の戻り値は Base で A の戻り値は Derived なので、A の戻り値ならなんでも B の戻り値として使える</li>
+</ul>
+
+
+<p>から。</p>
+
+<p>関数の場合は一般に A2 &lt;: A1 かつ B1 &lt;: B2 のときに (A1 => B1) &lt;: (A2 => B2) が成り立つ。
+理由は上と同じ。</p>
+
+<h2>Variant</h2>
+
+<p>C[T]がパラメータ化された型で A, B が A &lt;: B であるとき、C[A] と C[B] の関係は3パターン。</p>
+
+<ul>
+<li>C[A] &lt;: C[B] &mdash; このとき C は covariant（共変）</li>
+<li>C[A] >: C[B] &mdash; このとき C は contravarinat（反変）</li>
+<li>C[A] と C[B] の間に subtype の関係なし &mdash; このとき C は invariant（不変）。nonvariant とも言うらしい。</li>
+</ul>
+
+
+<p>Scala ではタイプパラメタの前に <code>+</code> とか <code>-</code> とかつけて covariant や contravariant を表現する。何も付けなかったら invariant ね。</p>
+
+<pre><code>class C[+A] // C は covariant
+class C[-A] // C は contravariant
+class C[A]  // C は invariant
+</code></pre>
+
+<p>Function object は covariant, contravariant を使ってる。</p>
+
+<pre><code>trait Function1[-T, +U] {
+    def apply(x: T): U
+}
+</code></pre>
+
+<p><code>A =&gt; B</code> は <code>Function[A, B]</code> と同じ。
+で、<code>Function1</code> の T は contravariant, U は invariant ということなので、</p>
+
+<pre><code>class A1
+class A2 extends A1
+class A3 extends A2
+</code></pre>
+
+<p>とあったときに <code>A2 =&gt; A2</code> 型の値は <code>A3 =&gt; A1</code> 型が求められるところならどこでも使える。</p>
+
+<h3>Java の配列</h3>
+
+<p>Java の配列は covariant。</p>
+
+<pre><code>class Base {…}
+class Derived1 extends Base {…}
+class Derived2 extends Base {…}
+</code></pre>
+
+<p>が定義されていてると以下の様なことができる。</p>
+
+<pre><code>Derived1[] a = new Derived1[]{ new Derived1() }
+Base[] b = a
+b[0] = new Derived2()
+Derived1 s = a[0]
+</code></pre>
+
+<p>1行目は普通。</p>
+
+<p>2行目は super class である <code>Base</code> の配列に代入しようとしている。
+<code>a</code> には <code>Base[]</code> 型がきて欲しいが、Java の配列は covariant なので <code>Base[]</code> が来れる場所には <code>Derived1[]</code> が来ても良い。
+なので2行目も通る。</p>
+
+<p>3行目では <code>b[0]</code> に値を代入している。
+<code>b[0]</code> の型は <code>Base</code>。
+<code>Derived2</code> は <code>Base</code> の subclass なので問題ない。</p>
+
+<p>4行目では <code>Derived1</code> 型の <code>a[0]</code> を別の <code>Derived1</code> 型の変数に代入している。
+これも問題無さそう。</p>
+
+<p>という訳でコンパイルは通る。
+でも <code>a</code> と <code>b</code> は同じ配列を指していて、3行目で <code>Derived2</code> 型の値に入れ替えてる。
+だから <code>a[0]</code> （と<code>b[0]</code>）には <code>Derived2</code> 型の値が入っているはず。
+4行目ではそれを <code>Derived1</code> 型の値に代入している。
+なにかおかしい。</p>
+
+<p>Javaではコンパイルエラーにはならず、3行目実行時に ArrayStoreException が投げられる。
+残念。</p>
+
+<h2>Scala の variance check</h2>
+
+<p>Java の（問題含みの）配列を scala 的に表現すると</p>
+
+<pre><code>class Array[+T] {
+    def update(x: T)
+}
+</code></pre>
+
+<p>となる。
+問題は covariant な型パラメータ T がメソッドの引数になっていること。</p>
+
+<p>Scala のコンパイラはこの問題を防ぐために variant check というものを行う。
+いろいろ細かいルールはあるそうだが、大まかには以下のとおり。</p>
+
+<ul>
+<li>covariant な型パラメータはメソッドの戻り値にしか使っちゃダメ</li>
+<li>contravariant な型パラメータはメソッドのパラメタにしか使っちゃダメ</li>
+<li>invariant な型パラメータはどこに使ってもいい</li>
+</ul>
+
+
+<p>Function1 を見なおしてみるとルールに合致していることが確認できる。</p>
+
+<pre><code>trait Function1[-T, +U] {
+    def apply(x: T): U
+}
+</code></pre>
+
+<p>contravariant な T はパラメタにきており、covariant な U は戻り値にきている。
+問題なし。</p>
+
+<h2>List を covariant にする話</h2>
+
+<pre><code>trait List[+T] {…}
+object Nil extends List[Nothing] {…}
+class Cons[T] extends List[T] {…}
+</code></pre>
+
+<p>みたいな感じ。</p>
+
+<p><code>Nil</code> のときの <code>T</code> は <code>Nothing</code>。
+<code>Nothing</code> は全ての型のサブクラス（<code>Nothing</code> &lt;: なんでも）。
+List は covariant なので <code>List[Nothing]</code> &lt;: <code>List[なんでも]</code> となる。
+どの <code>T</code> の <code>List[T]</code> に対しても <code>Nil</code> を使えるので便利。</p>
+
+<p>リストの先頭に要素を追加する <code>prepend</code> メソッドを定義したい。</p>
+
+<pre><code>trait List[+T] {
+    def prepend(elem: T): List[T] = new Cons(elem, this)
+}
+</code></pre>
+
+<p>一見これで良さそうだが、
+<code>error: covariant type T occurs in contravariant position in type T of value elem</code>
+というコンパイルエラーになる。
+Variance check が活躍してる。
+たしかに covariant な型パラメータは戻り値にしか使っちゃいけなかったんだ。</p>
+
+<p>正しい定義はこうなる。</p>
+
+<pre><code>trait List[+T] {
+    def prepend[U &gt;: T](elem: U): List[U] = new Cons(elem, this)
+}
+</code></pre>
+
+<p>これは variance check を通る。U は contravariant で引き数のところに使われているから。
+戻り値型は <code>List[U]</code> だが U そのものじゃないので contravariant 扱いじゃないんだろう。</p>
+
+<pre><code>class Base
+class Derived1 extends Base
+class Derived2 extends Base
+def f(xs: List[Derived1], x: Derived2) = xs.prepend(x)
+</code></pre>
+
+<p>さてこのとき <code>f()</code> の戻り値型はなんだろうか？
+<code>prepend()</code> の戻り値なので <code>List[U]</code> 型になるはず。
+<code>xs</code> が <code>List[Derived1]</code> 型なので <code>T</code> は <code>Derived1</code> で決まり。</p>
+
+<p><code>U</code>を決めるのに型推論が活躍する。
+<code>U</code> は <code>x</code> の型なので <code>Derived2</code> だろうか？
+しかし  <code>Derived2</code> だとすると <code>U &gt;: T</code> が満たせない（<code>Derived2</code> は <code>Derived1</code> の supertype ではない）。
+というわけで型推論さんは、<code>Derived2</code> と <code>Derived1</code> の共通の親である <code>Base</code> が <code>U</code> だと結論付ける。
+したがって <code>f()</code> の戻り値型は <code>List[Base]</code> ということになる。</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -9,12 +9,9 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="最近仕事で scala を書いてまして、
-Java 延長線上として使う分には全く問題ないのだが、
-scala ぽいこととなるとかなり怪しい。
-なので初歩から少しずつ勉強して、その様子を晒しておくことにする。 今日は loan pattern。
-リソース解放を忘れずに行うためのパターン。
-C++ &hellip;">
+  <meta name="description" content="Type parameter の境界指定方法。 upper bound (A &lt;: U): A は U またはその子クラス
+lower bound (A &gt;: L): A は L またはその親クラス 両方指定する(A &gt;: L &lt;: U)ことも可能。
+">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +76,50 @@ C++ &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/12/1/">型境界</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-12T21:36:00+09:00" pubdate data-updated="true">Jun 12<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Type parameter の境界指定方法。</p>
+
+<ul>
+<li>upper bound (<code>A &lt;: U</code>): A は U またはその子クラス</li>
+<li>lower bound (<code>A &gt;: L</code>): A は L またはその親クラス</li>
+</ul>
+
+
+<p>両方指定する(<code>A &gt;: L &lt;: U</code>)ことも可能。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -497,71 +538,6 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/12/08/a-trap-of-active-support-time/">ActiveSupport 日時計算の罠</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-08T11:03:00+09:00" pubdate data-updated="true">Dec 8<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>ActiveSupport の日時計算はとても便利です。直感的な記法でスラスラ書けちゃいます。
-でもハマるポイントもありますので注意してください。
-というか昨日僕がやらかしたことの告白です。</p>
-
-<p>下のコードを見てください。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">t1</span> <span class="o">=</span> <span class="no">Time</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">t2</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span>
-</span><span class='line'><span class="n">t2</span> <span class="o">-</span> <span class="n">t1</span> <span class="o">==</span> <span class="mi">1</span><span class="o">.</span><span class="n">day</span> <span class="c1"># =&gt; true</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">t3</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">.</span><span class="n">month</span>
-</span><span class='line'><span class="n">t3</span> <span class="o">-</span> <span class="n">t1</span> <span class="o">==</span> <span class="mi">1</span><span class="o">.</span><span class="n">month</span> <span class="c1"># =&gt; false</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>a = b + c だったら普通 a &ndash; b = c だろうと思うのですが、最後の式は false を返します。
-なぜだかわかりますか？</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/12/08/a-trap-of-active-support-time/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -579,6 +555,10 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/09/covariant-contravariant/">Covariantとcontravariant</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/09/28/scala-implicit/">Scalaのimplicit</a>
       </li>
     
@@ -592,10 +572,6 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
     
       <li class="post">
         <a href="/blog/2013/09/16/sbt-build-definition/">Sbt Build Definition</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/15/akka-memo/">Akka Memo</a>
       </li>
     
   </ul>
