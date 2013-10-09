@@ -246,6 +246,9 @@ Derived1 s = a[0]
 <p>contravariant な T はパラメタにきており、covariant な U は戻り値にきている。
 問題なし。</p>
 
+<p>Scala では immutable な collection は covariant, mutable な collection は invariant になっているらしい。
+きっと Java の例にあるような実行時エラーをコンパイル時に捕まえるにはそうするしか無いんだろうな。</p>
+
 <h2>List を covariant にする話</h2>
 
 <pre><code>trait List[+T] {…}
