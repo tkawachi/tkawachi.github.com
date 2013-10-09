@@ -256,7 +256,7 @@ class Cons[T] extends List[T] {…}
 <p>みたいな感じ。</p>
 
 <p><code>Nil</code> のときの <code>T</code> は <code>Nothing</code>。
-<code>Nothing</code> は全ての型のサブクラス（<code>Nothing</code> &lt;: なんでも）。
+<code>Nothing</code> は全ての型の subtype（<code>Nothing</code> &lt;: なんでも）。
 List は covariant なので <code>List[Nothing]</code> &lt;: <code>List[なんでも]</code> となる。
 どの <code>T</code> の <code>List[T]</code> に対しても <code>Nil</code> を使えるので便利。</p>
 

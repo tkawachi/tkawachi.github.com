@@ -4,7 +4,7 @@
   <title><![CDATA[Category: invariant | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/invariant/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-10-10T00:32:20+09:00</updated>
+  <updated>2013-10-10T00:43:43+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -173,7 +173,7 @@ class Cons[T] extends List[T] {…}
 <p>みたいな感じ。</p>
 
 <p><code>Nil</code> のときの <code>T</code> は <code>Nothing</code>。
-<code>Nothing</code> は全ての型のサブクラス（<code>Nothing</code> &lt;: なんでも）。
+<code>Nothing</code> は全ての型の subtype（<code>Nothing</code> &lt;: なんでも）。
 List は covariant なので <code>List[Nothing]</code> &lt;: <code>List[なんでも]</code> となる。
 どの <code>T</code> の <code>List[T]</code> に対しても <code>Nil</code> を使えるので便利。</p>
 
