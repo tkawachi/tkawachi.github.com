@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-10-11T14:36:57+09:00</updated>
+  <updated>2013-10-14T13:11:50+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,114 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[scala の for]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/10/14/scala-for/"/>
+    <updated>2013-10-14T11:35:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/10/14/scala-for</id>
+    <content type="html"><![CDATA[<p>C や Java と同じように Scala にも for がある。</p>
+
+<p>昔の Java におけるfor 文は、C と同じように <code>for (初期化; 継続条件; カウンタ更新)</code> という形しかなかった。
+Java 5.0 で導入された拡張for文（<code>for (型 変数: コレクション)</code>の形）では <code>java.lang.Iterable</code> を実装したオブジェクトならなんでも繰り返しができるようになった。
+便利になったなあと思ったのを覚えてる（2004年の話）。</p>
+
+<h2>文法</h2>
+
+<p>Scala で C の for 的なものをやろうとすると</p>
+
+<pre><code>// C では
+for (int i = 0; i &lt; 10; i++) { … }
+// Scala では
+for (i &lt;- 0 until 10) { … }
+</code></pre>
+
+<p>となるので「 <code>for (i &lt;- 初期値 until 上限)</code> という固定形なんだー」と最初は思ったのだが、そうではなく <code>for (i &lt;- 初期値.until(上限))</code> であり <code>for (i &lt;- obj)</code> が for 式のパターンである。
+ここで<code>初期値.until(上限)</code> は <code>Range</code> 型の値を返す。</p>
+
+<!-- more -->
+
+
+<p>Scala の言語仕様によると for 式は以下の文法をもつ。</p>
+
+<pre><code>Expr1 ::= ‘for’ (‘(’ Enumerators ‘)’ | ‘{’ Enumerators ‘}’) {nl} [‘yield’] Expr    Enumerators ::= Generator {semi Enumerator}
+Enumerator ::= Generator                    | Guard                    | ‘val’ Pattern1 ‘=’ Expr    Generator ::= Pattern1 ‘&lt;-’ Expr [Guard]    Guard ::= ‘if’ PostfixExpr
+</code></pre>
+
+<p><code>Enumerator</code> の最後のパターンで <code>‘val’ Pattern1 ‘=’ Expr</code> とあるが、この val は deprecated になったようだ。
+（Scala の言語仕様は更新が追いついていないらしく、現時点の最新（2.10.3）の言語仕様書は現時点で存在しない。）</p>
+
+<h2>for式関連メソッド</h2>
+
+<p>Scala の for 式は <code>foreach()</code>, <code>map()</code>, <code>flapMap()</code>, <code>withFilter()</code> が実装されていればなんでも回せる。
+全てが必要なわけではなく、用いられるパターンによって必要なメソッドが決まる。</p>
+
+<p><code>foreach()</code> が必要なパターン。 <code>yield</code> なしの時。</p>
+
+<pre><code>for (i &lt;- obj) { … }
+// 書き換えると
+obj.foreach { case i =&gt; … }
+</code></pre>
+
+<p><code>map()</code> が必要なパターン。
+Generator がひとつだけで <code>yield</code> で値を返す時。</p>
+
+<pre><code>for (i &lt;- obj) yield { … }
+// 書き換えると
+obj.map { case i =&gt; … }
+</code></pre>
+
+<p><code>flatMap()</code> が必要なパターン。
+Generator が複数あり、<code>yield</code> で値を返す時。</p>
+
+<pre><code>for (i &lt;- obj1; j &lt;- obj2) yield { … }
+// 書き換えると
+obj1.flatMap { case i =&gt; for (j &lt;- obj2) yield { … } }
+// obj1 には flatMap が必要。obj2 には map が必要。
+</code></pre>
+
+<p><code>withFilter()</code> が必要なパターン。
+Guard があるとき。</p>
+
+<pre><code>for (i &lt;- obj1 if i &lt; 0) { … }
+// 書き換えると
+obj1.withFilter(i =&gt; i &lt; 0).foreach { case i =&gt; … }
+</code></pre>
+
+<p>こんな感じで書き換えできるので、本質的には for 式要らないんだと思う。
+でも複数の generator を回す時とか、<code>foreach</code> や <code>map</code>, <code>flatMap</code> で書くとネストが深くなってしまうので、for文だとスッキリかけて嬉しいってのはある。</p>
+
+<h2>繰り返し以外の文脈</h2>
+
+<p>必要なメソッドさえ揃っていればいいので、繰り返し以外の文脈で用いることができる。</p>
+
+<p>たとえば <code>scala.Option</code> はオプショナルな値を表す。
+値があるかもしれないし無いかもしれないという文脈で、Javaで null を使いたく場面で使う。
+<code>Option</code> では for 式に関連するメソッドが、値がある時には関数を実行し、そうでなければ何もせず値なしを結果とするという意味合いで定義されている。</p>
+
+<pre><code>for (i &lt;- Some(1); j &lt;- Some(2)) yield i + j // Some(3)
+for (i &lt;- Some(1); j &lt;- None) yield i + j    // None
+</code></pre>
+
+<p>上記のように「<code>Option</code> 型の値がいくつかあり、全ての値が存在している時に何かする」というのが for 文で実現できる。</p>
+
+<p>他にも <code>scala.concurrent.Future</code> は将来的に得られる値を表現する型で、
+for式関連のメソッドは値が得られた時に関数を実行するように定義されている。</p>
+
+<pre><code>val f1: Future[Int] = …
+val f2: Future[Int] = …
+val f3: Future[Int] = for (v1 &lt;- f1; v2 &lt;- f2) yield v1 + v2
+</code></pre>
+
+<p>ここでは <code>f1</code>, <code>f2</code> の値が将来得られたら <code>v1 + v2</code> を計算するという、コールバックの登録的な意味合いを持っている。</p>
+
+<p><a href="https://github.com/jsuereth/scala-arm">scala-arm</a> では、最後にリソースを開放するという意味合いを for 式関連メソッドに持たせることで、for 式の最後でのリソース解放を実現している。</p>
+
+<h2>まとめ</h2>
+
+<p><code>foreach</code>, <code>map</code>, <code>flatMap</code>, <code>withFilter</code> というメソッドの定義次第で for 式の使い道は無限大。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Covariantとcontravariant]]></title>
@@ -1741,153 +1849,6 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
 これからもっと増えていくだろう。</p>
 
 <p>perl でいうところの CPAN が Emacs にできたということだ。素晴らしい。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rails で TypeScript を動かそうとして失敗した記録]]></title>
-    <link href="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/"/>
-    <updated>2012-12-09T11:27:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out</id>
-    <content type="html"><![CDATA[<p>Microsoft 発の型付き JavaScript こと TypeScript が人気ですね。
-<a href="https://github.com/klaustopher/typescript-rails">typescript-rails</a> という gem があったので、動くのか試してみました。</p>
-
-<p>結論から言っておくと、他のスクリプトやライブラリを参照する TypeScript をコンパイルすることが今回はできませんでした。</p>
-
-<!-- more -->
-
-
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>rails new typescript-rails-test -T
-</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;gem &quot;typescript-rails&quot;&#39;</span> &gt;&gt; Gemfile
-</span><span class='line'><span class="nv">$ </span>bundle
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails g controller <span class="nb">test </span>index
-</span><span class='line'>      create  app/controllers/test_controller.rb
-</span><span class='line'>       route  get <span class="s2">&quot;test/index&quot;</span>
-</span><span class='line'>      invoke  erb
-</span><span class='line'>      create    app/views/test
-</span><span class='line'>      create    app/views/test/index.html.erb
-</span><span class='line'>      invoke  helper
-</span><span class='line'>      create    app/helpers/test_helper.rb
-</span><span class='line'>      invoke  assets
-</span><span class='line'>      invoke    coffee
-</span><span class='line'>      create      app/assets/javascripts/test.js.coffee
-</span><span class='line'>      invoke    scss
-</span><span class='line'>      create      app/assets/stylesheets/test.css.scss
-</span><span class='line'><span class="nv">$ </span>rm app/assets/javascripts/test.js.coffee
-</span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;alert(&quot;Hello TypeScript&quot;)&#39;</span> &gt; app/assets/javascripts/test.js.ts
-</span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails s
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>これで <a href="http://localhost:3000/test/index">http://localhost:3000/test/index</a> にアクセスすると、正しく alert が表示される。
-いいぞ。</p>
-
-<p>次に JQuery が使ってみたい。</p>
-
-<figure class='code'><figcaption><span>app/assets/javascripts/test.js.ts</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>  <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;document ready&quot;</span><span class="p">)</span>
-</span><span class='line'><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>うーむ。エラーがおきた。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='text'><span class='line'>SyntaxError: (4,1): The name &#39;$&#39; does not exist in the current scope
-</span><span class='line'>  (in /Users/kawachi/gitworks/typescript-rails-test/app/assets/javascripts/test.js.ts)
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a href="https://github.com/klaustopher/typescript-rails/issues/5">Issue #5</a>
-に報告されている問題と同一。
-<code>/// &lt;reference path="jquery.d.ts" /&gt;</code> という行をいれて <code>$</code> の存在を TypeScript compiler に知らしめねばならないらしいが、これが今のところできないようだ。</p>
-
-<p><a href="https://github.com/TimothyKlim/typescript-ruby/issues/1">https://github.com/TimothyKlim/typescript-ruby/issues/1</a>
-によれば、compiler 内の IO class が利用している CommonJS の機能を ExecJS が隠してしまっているのが原因とのこと。
-ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
-
-<p>これが ExecJS から node を叩くときにソースコードをラッピングするものだが、
-よく見ると module, exports, require, console が undefined にされていることがわかる。(<code>result = program();</code> のところで引数に何も渡されていない)
-隠されている CommonJS の機能とはきっとこのことを言っているのだろう。</p>
-
-<figure class='code'><figcaption><span>execjs/support/node_runner.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">program</span><span class="p">,</span> <span class="nx">execJS</span><span class="p">)</span> <span class="p">{</span> <span class="nx">execJS</span><span class="p">(</span><span class="nx">program</span><span class="p">)</span> <span class="p">})(</span><span class="kd">function</span><span class="p">(</span><span class="nx">module</span><span class="p">,</span> <span class="nx">exports</span><span class="p">,</span> <span class="nx">require</span><span class="p">,</span> <span class="nx">console</span><span class="p">)</span> <span class="p">{</span> <span class="err">#</span><span class="p">{</span><span class="nx">source</span><span class="p">}</span>
-</span><span class='line'><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">program</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kd">var</span> <span class="nx">output</span><span class="p">,</span> <span class="nx">print</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">string</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">process</span><span class="p">.</span><span class="nx">stdout</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">string</span><span class="p">);</span>
-</span><span class='line'>  <span class="p">};</span>
-</span><span class='line'>  <span class="k">try</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">result</span> <span class="o">=</span> <span class="nx">program</span><span class="p">();</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">result</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">result</span> <span class="o">!==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="nx">print</span><span class="p">(</span><span class="s1">&#39;[&quot;ok&quot;]&#39;</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">try</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">print</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">([</span><span class="s1">&#39;ok&#39;</span><span class="p">,</span> <span class="nx">result</span><span class="p">]));</span>
-</span><span class='line'>      <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">print</span><span class="p">(</span><span class="s1">&#39;[&quot;err&quot;]&#39;</span><span class="p">);</span>
-</span><span class='line'>      <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nx">print</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">([</span><span class="s1">&#39;err&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">]));</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><a href="https://github.com/sstephenson/execjs/issues/91">このへん</a>
-をみると ExecJS の作者は、副作用を与えるこれらの機能を ExecJS に取り込むつもりは毛頭ないようだ。</p>
-
-<p>上のコードを手元で少し書き換えて module, exports, require を書き潰さないようにしてみたが、やはり同じエラーが出た。
-ということは、これらの関数が undefined になっていることが直接の理由ではないということか。</p>
-
-<p><a href="http://vividcode.hatenablog.com/entry/ts/run-on-rhino">JavaScript 処理系 Rhino で TypeScript コンパイラのビルドを試してみた</a>
-によると TypeScript がサポートしているのは Node.js と JScript だけなので、Node.js の存在を前提として TypeScript compiler を動かすモジュール作ったほうが早そうな感じ。</p>
-
-<p>時間が取れたら作りたいな。</p>
 ]]></content>
   </entry>
   

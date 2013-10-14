@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Scala | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-10-11T14:36:57+09:00</updated>
+  <updated>2013-10-14T13:11:50+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,114 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[scala の for]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/10/14/scala-for/"/>
+    <updated>2013-10-14T11:35:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/10/14/scala-for</id>
+    <content type="html"><![CDATA[<p>C や Java と同じように Scala にも for がある。</p>
+
+<p>昔の Java におけるfor 文は、C と同じように <code>for (初期化; 継続条件; カウンタ更新)</code> という形しかなかった。
+Java 5.0 で導入された拡張for文（<code>for (型 変数: コレクション)</code>の形）では <code>java.lang.Iterable</code> を実装したオブジェクトならなんでも繰り返しができるようになった。
+便利になったなあと思ったのを覚えてる（2004年の話）。</p>
+
+<h2>文法</h2>
+
+<p>Scala で C の for 的なものをやろうとすると</p>
+
+<pre><code>// C では
+for (int i = 0; i &lt; 10; i++) { … }
+// Scala では
+for (i &lt;- 0 until 10) { … }
+</code></pre>
+
+<p>となるので「 <code>for (i &lt;- 初期値 until 上限)</code> という固定形なんだー」と最初は思ったのだが、そうではなく <code>for (i &lt;- 初期値.until(上限))</code> であり <code>for (i &lt;- obj)</code> が for 式のパターンである。
+ここで<code>初期値.until(上限)</code> は <code>Range</code> 型の値を返す。</p>
+
+<!-- more -->
+
+
+<p>Scala の言語仕様によると for 式は以下の文法をもつ。</p>
+
+<pre><code>Expr1 ::= ‘for’ (‘(’ Enumerators ‘)’ | ‘{’ Enumerators ‘}’) {nl} [‘yield’] Expr    Enumerators ::= Generator {semi Enumerator}
+Enumerator ::= Generator                    | Guard                    | ‘val’ Pattern1 ‘=’ Expr    Generator ::= Pattern1 ‘&lt;-’ Expr [Guard]    Guard ::= ‘if’ PostfixExpr
+</code></pre>
+
+<p><code>Enumerator</code> の最後のパターンで <code>‘val’ Pattern1 ‘=’ Expr</code> とあるが、この val は deprecated になったようだ。
+（Scala の言語仕様は更新が追いついていないらしく、現時点の最新（2.10.3）の言語仕様書は現時点で存在しない。）</p>
+
+<h2>for式関連メソッド</h2>
+
+<p>Scala の for 式は <code>foreach()</code>, <code>map()</code>, <code>flapMap()</code>, <code>withFilter()</code> が実装されていればなんでも回せる。
+全てが必要なわけではなく、用いられるパターンによって必要なメソッドが決まる。</p>
+
+<p><code>foreach()</code> が必要なパターン。 <code>yield</code> なしの時。</p>
+
+<pre><code>for (i &lt;- obj) { … }
+// 書き換えると
+obj.foreach { case i =&gt; … }
+</code></pre>
+
+<p><code>map()</code> が必要なパターン。
+Generator がひとつだけで <code>yield</code> で値を返す時。</p>
+
+<pre><code>for (i &lt;- obj) yield { … }
+// 書き換えると
+obj.map { case i =&gt; … }
+</code></pre>
+
+<p><code>flatMap()</code> が必要なパターン。
+Generator が複数あり、<code>yield</code> で値を返す時。</p>
+
+<pre><code>for (i &lt;- obj1; j &lt;- obj2) yield { … }
+// 書き換えると
+obj1.flatMap { case i =&gt; for (j &lt;- obj2) yield { … } }
+// obj1 には flatMap が必要。obj2 には map が必要。
+</code></pre>
+
+<p><code>withFilter()</code> が必要なパターン。
+Guard があるとき。</p>
+
+<pre><code>for (i &lt;- obj1 if i &lt; 0) { … }
+// 書き換えると
+obj1.withFilter(i =&gt; i &lt; 0).foreach { case i =&gt; … }
+</code></pre>
+
+<p>こんな感じで書き換えできるので、本質的には for 式要らないんだと思う。
+でも複数の generator を回す時とか、<code>foreach</code> や <code>map</code>, <code>flatMap</code> で書くとネストが深くなってしまうので、for文だとスッキリかけて嬉しいってのはある。</p>
+
+<h2>繰り返し以外の文脈</h2>
+
+<p>必要なメソッドさえ揃っていればいいので、繰り返し以外の文脈で用いることができる。</p>
+
+<p>たとえば <code>scala.Option</code> はオプショナルな値を表す。
+値があるかもしれないし無いかもしれないという文脈で、Javaで null を使いたく場面で使う。
+<code>Option</code> では for 式に関連するメソッドが、値がある時には関数を実行し、そうでなければ何もせず値なしを結果とするという意味合いで定義されている。</p>
+
+<pre><code>for (i &lt;- Some(1); j &lt;- Some(2)) yield i + j // Some(3)
+for (i &lt;- Some(1); j &lt;- None) yield i + j    // None
+</code></pre>
+
+<p>上記のように「<code>Option</code> 型の値がいくつかあり、全ての値が存在している時に何かする」というのが for 文で実現できる。</p>
+
+<p>他にも <code>scala.concurrent.Future</code> は将来的に得られる値を表現する型で、
+for式関連のメソッドは値が得られた時に関数を実行するように定義されている。</p>
+
+<pre><code>val f1: Future[Int] = …
+val f2: Future[Int] = …
+val f3: Future[Int] = for (v1 &lt;- f1; v2 &lt;- f2) yield v1 + v2
+</code></pre>
+
+<p>ここでは <code>f1</code>, <code>f2</code> の値が将来得られたら <code>v1 + v2</code> を計算するという、コールバックの登録的な意味合いを持っている。</p>
+
+<p><a href="https://github.com/jsuereth/scala-arm">scala-arm</a> では、最後にリソースを開放するという意味合いを for 式関連メソッドに持たせることで、for 式の最後でのリソース解放を実現している。</p>
+
+<h2>まとめ</h2>
+
+<p><code>foreach</code>, <code>map</code>, <code>flatMap</code>, <code>withFilter</code> というメソッドの定義次第で for 式の使い道は無限大。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Scalaのimplicit]]></title>
@@ -524,135 +632,6 @@ ActorRef の存在意義のひとつは、この切り替え。</p>
 Actor restart 時に無効な参照になる。</p>
 
 <p>ガーディアン直下の actor に対応する ActorRef は ActorSystem 終了時まで有効だろうと思う。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ScalaTestでMockito]]></title>
-    <link href="http://tkawachi.github.io/blog/2013/08/26/mockito-scala/"/>
-    <updated>2013-08-26T10:14:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2013/08/26/mockito-scala</id>
-    <content type="html"><![CDATA[<p>ScalaTestでMockitoを使うためのお勉強ノート</p>
-
-<h2>Setup</h2>
-
-<p><code>build.sbt</code> に追加。</p>
-
-<pre><code>libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "1.9.1" % "test",
-  "org.mockito" % "mockito-core" % "1.9.5" % "test"
-)
-</code></pre>
-
-<p>テストで <code>MockitoSugar</code> を mixin し、以下の import 行を追加。</p>
-
-<pre><code>import org.mockito.Matchers._
-import org.mockito.Mockito._
-</code></pre>
-
-<h2>Mock作成</h2>
-
-<pre><code>// ClassToMock のモックを作成
-val m = mock[ClassToMock]
-</code></pre>
-
-<p>作ったモックはデフォルトで全メソッドコールに対して <code>null</code> を返す。
-メソッドの戻り値として<code>null</code>ではなくモックを返したい時は次のようにする。</p>
-
-<pre><code>// メソッド呼び出しでモックを返すモック
-mock[ClassToMock](RETURNS_MOCKS)
-// 返されたモックもモックを返すモック
-mock[ClassToMock](RETURNS_DEEP_STUBS)
-</code></pre>
-
-<h2>引数に応じて戻り値を変える</h2>
-
-<p><code>when(メソッド呼び出し).thenReturn(戻り値)</code> で登録する。
-メソッド呼び出し部の引き数には <code>any</code> で任意の型の任意の値に、<code>anyString</code>, <code>anyBoolean</code>, <code>anyByte</code>, <code>anyChar</code>などで基本的な型の任意の値に <code>anyVararg</code> で任意の可変引き数にマッチさせることができる。</p>
-
-<pre><code>// m.method1(何か) が呼ばれたら 10 を返す
-when(m.method1(any)).thenReturn(10)
-</code></pre>
-
-<p>引数が２つ以上あり、いずれかで <code>any</code> などのマッチャーを使った場合には、他の引き数もマッチャーにする必要がある。
-オブジェクトが等しいことを示すマッチャーは <code>eq(obj)</code> で作れる。</p>
-
-<p>後から登録したものが先にマッチするので、条件のゆるいもの（マッチ範囲が広いもの）を先に書く。</p>
-
-<h3>１回目、２回目で違う値を返す</h3>
-
-<p><code>thenReturn()</code> の可変引き数版を使う</p>
-
-<pre><code>// 最初は 10, 次は 20, それ以降はずっと 30 を返す
-when(m.method1()).thenReturn(10, 20, 30)
-</code></pre>
-
-<h2>例外を起こす</h2>
-
-<pre><code>// method1() が呼ばれたら例外を起こす
-when(m.method1()).thenThrow(new RuntimeException("Gau gau"))
-</code></pre>
-
-<p><code>thenReturn</code> と同じように１回目、２回目で違う例外を起こすことも可能。
-むしろ <code>thenReturn</code> と組み合わせることができる。</p>
-
-<pre><code>when(m.method1())
-  .thenReturn(10, 20) // １回目は10, ２回目は20を返す
-  .thenThrow(new FooException, new BarException) // ３、４回目は例外
-  .thenReturn(30) // ５回目以降は30を返す
-</code></pre>
-
-<h2>オブジェクトの一部をモックする(spy)</h2>
-
-<p><code>mock[ClassToMock]</code> はフルのモック。一部だけモックしたい場合はこっち。<code>spy</code>と呼ぶ。</p>
-
-<pre><code>// obj は普通のオブジェクト
-val s = spy(obj)
-// s.method1(何か) が呼ばれたら obj の実装を使わずに 10 を返す。
-doReturn(10).when(s).method1(any[ClassOfArg])
-</code></pre>
-
-<p><code>thenReturn</code> が <code>doReturn</code> になって順番が代わり、メソッド呼び出しも <code>when</code> の外に出す。
-<code>thenReturn</code>の書き方では実際のメソッドが呼ばれるので、呼ばれては困るときにこちらの書き方をする。</p>
-
-<p>この記法の場合は <code>any</code> を使うときに型を指定しなければならなかった
-（理由はわかってない）。</p>
-
-<h2>メソッドが呼び出されたことを確認する(verify)</h2>
-
-<p><code>when()</code>, <code>thenReturn()</code>, <code>doReturn()</code> などは関数呼び出しの前に用意する。
-用意したものがテスト中で呼び出されなくても問題ない。</p>
-
-<p>呼び出されたことを確認するには <code>verify()</code> を使う。</p>
-
-<pre><code>// テストを実行
-m.method1(123);
-// method1() が何らかの整数引き数で呼び出されたことを確認
-verify(m).method1(anyInt);
-</code></pre>
-
-<p>複数回呼び出されたことを確認するときは、<code>verify()</code>の第二引き数で回数指定をする。</p>
-
-<pre><code>// 2回呼び出されたことを確認
-verify(m, times(2)).method1(anyInt)
-// 少なくとも2回
-verify(m, atLeast(2)).method1(anyInt)
-// 多くとも3回
-verify(m, atMost(3)).method1(anyInt)
-</code></pre>
-
-<h3>呼び出されてないことを確認する</h3>
-
-<p><code>never</code> を使う。</p>
-
-<pre><code>// 一度も呼ばれてないことを確認
-verify(m, never).method1(anyInt)
-</code></pre>
-
-<h2>より進んだ使い方</h2>
-
-<p><a href="http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html">Mockitoのドキュメント</a>
-に書いてある。</p>
 ]]></content>
   </entry>
   

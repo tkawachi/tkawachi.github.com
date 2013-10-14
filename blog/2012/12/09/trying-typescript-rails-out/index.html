@@ -32,16 +32,17 @@ typescript-rails という gem があったので、動くのか試してみま�
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-5']);
+    _gaq.push(['_trackPageview']);
 
-  ga('create', 'UA-526921-5', 'tkawachi.github.io');
-  ga('send', 'pageview');
-
-</script>
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
 
 
 </head>
@@ -276,7 +277,7 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/" data-via="" data-counturl="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/" data-via="" data-counturl="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -313,6 +314,10 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/14/scala-for/">Scala の For</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/09/covariant-contravariant/">Covariantとcontravariant</a>
       </li>
     
@@ -326,10 +331,6 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
     
       <li class="post">
         <a href="/blog/2013/09/21/active-model-7-pattern/">ActiveRecord のモデルを整理する7つのパターン</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/16/sbt-build-definition/">Sbt Build Definition</a>
       </li>
     
   </ul>
@@ -375,7 +376,7 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -408,7 +409,7 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

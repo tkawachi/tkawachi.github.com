@@ -9,9 +9,9 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="前々から気になっていた Micro Cloud Foundry を試してみます。
-Cloud Foundry は VMware 社が開発している open source の PaaS です。
-Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめたものです &hellip;">
+  <meta name="description" content="前回
+は残念ながらインストールの途中で止まってしまいましたが、解決方法がわかりました。 デフォルトで Bridge network になっているのですが、私の環境
+(VMware 4.1.1, Mac OS X Lion, WiFi)では VM で network が利用不可のようです。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -33,16 +33,17 @@ Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめた�
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-5']);
+    _gaq.push(['_trackPageview']);
 
-  ga('create', 'UA-526921-5', 'tkawachi.github.io');
-  ga('send', 'pageview');
-
-</script>
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
 
 
 </head>
@@ -76,6 +77,59 @@ Micro Cloud Foundry は PaaS 環境を VMware の仮想マシンにまとめた�
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/">Trying Micro Cloud Foundry 1.1.0 その2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-03T19:31:00+09:00" pubdate data-updated="true">Jan 3<span>rd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://tkawachi.github.com/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/">前回</a>
+は残念ながらインストールの途中で止まってしまいましたが、解決方法がわかりました。</p>
+
+<p>デフォルトで Bridge network になっているのですが、私の環境
+(VMware 4.1.1, Mac OS X Lion, WiFi)では VM で network が利用不可のようです。
+昔から無線で Bridge networking はハマることが多いです。
+以下の手順で回避できました。
+(
+<a href="http://support.cloudfoundry.com/entries/20382148-unable-to-cloudfoundry-com">ここ</a>
+や
+<a href="http://support.cloudfoundry.com/entries/20387172-unable-to-contact-cloudfoundry-com-to-redeem-configuration-token">ここ</a>
+を参考にしました。
+)</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -374,6 +428,10 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/14/scala-for/">Scala の For</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/09/covariant-contravariant/">Covariantとcontravariant</a>
       </li>
     
@@ -387,10 +445,6 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
     
       <li class="post">
         <a href="/blog/2013/09/21/active-model-7-pattern/">ActiveRecord のモデルを整理する7つのパターン</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/16/sbt-build-definition/">Sbt Build Definition</a>
       </li>
     
   </ul>
@@ -432,7 +486,7 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -465,7 +519,7 @@ JavaFlow の日本語記事はほとんど見当たらない様子ですので�
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

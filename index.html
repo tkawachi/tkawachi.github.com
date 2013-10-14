@@ -9,7 +9,8 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="今日 Functional Programming Principles in Scala で聞いた話が難しかったのでメモ。 ">
+  <meta name="description" content="C や Java と同じように Scala にも for がある。 昔の Java におけるfor 文は、C と同じように for (初期化; 継続条件; カウンタ更新) という形しかなかった。
+Java 5.0 で導入された拡張for文（for (型 変数: コレクション)の形）では java. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -31,16 +32,17 @@
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
   
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-5']);
+    _gaq.push(['_trackPageview']);
 
-  ga('create', 'UA-526921-5', 'tkawachi.github.io');
-  ga('send', 'pageview');
-
-</script>
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
 
 
 </head>
@@ -74,6 +76,64 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/scala-for/">Scala の For</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T11:35:00+09:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>C や Java と同じように Scala にも for がある。</p>
+
+<p>昔の Java におけるfor 文は、C と同じように <code>for (初期化; 継続条件; カウンタ更新)</code> という形しかなかった。
+Java 5.0 で導入された拡張for文（<code>for (型 変数: コレクション)</code>の形）では <code>java.lang.Iterable</code> を実装したオブジェクトならなんでも繰り返しができるようになった。
+便利になったなあと思ったのを覚えてる（2004年の話）。</p>
+
+<h2>文法</h2>
+
+<p>Scala で C の for 的なものをやろうとすると</p>
+
+<pre><code>// C では
+for (int i = 0; i &lt; 10; i++) { … }
+// Scala では
+for (i &lt;- 0 until 10) { … }
+</code></pre>
+
+<p>となるので「 <code>for (i &lt;- 初期値 until 上限)</code> という固定形なんだー」と最初は思ったのだが、そうではなく <code>for (i &lt;- 初期値.until(上限))</code> であり <code>for (i &lt;- obj)</code> が for 式のパターンである。
+ここで<code>初期値.until(上限)</code> は <code>Range</code> 型の値を返す。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/14/scala-for/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -732,53 +792,6 @@ Google Analytics のプロパティを新しく作る必要があった。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/13/1/">s3:ListBucketVersions</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-13T16:44:00+09:00" pubdate data-updated="true">Jun 13<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>IAM でアクセス権限を管理するのは面倒だ。
-まず権限の種類が覚えきれない。</p>
-
-<p>s3:ListBucket を許可していたのに、
-Ruby の AWS SDK で
-<a href="http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/S3/Bucket.html#empty%3F-instance_method"><code>AWS::S3::Bucket#empty?</code></a>
-にて例外が発生した。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/06/13/1/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -794,6 +807,10 @@ Ruby の AWS SDK で
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/14/scala-for/">Scala の For</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/09/covariant-contravariant/">Covariantとcontravariant</a>
       </li>
     
@@ -807,10 +824,6 @@ Ruby の AWS SDK で
     
       <li class="post">
         <a href="/blog/2013/09/21/active-model-7-pattern/">ActiveRecord のモデルを整理する7つのパターン</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/16/sbt-build-definition/">Sbt Build Definition</a>
       </li>
     
   </ul>
@@ -852,7 +865,7 @@ Ruby の AWS SDK で
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -885,7 +898,7 @@ Ruby の AWS SDK で
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

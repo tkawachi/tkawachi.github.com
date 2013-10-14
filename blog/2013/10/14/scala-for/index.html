@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>scala の for - tkawachi Blog</title>
+  <meta name="author" content="KAWACHI Takashi">
+
+  
+  <meta name="description" content="C や Java と同じように Scala にも for がある。 昔の Java におけるfor 文は、C と同じように for (初期化; 継続条件; カウンタ更新) という形しかなかった。
+Java 5.0 で導入された拡張for文（for (型 変数: コレクション)の形）では java. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/10/14/scala-for">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-5']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">tkawachi Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tkawachi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Scala の For</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T11:35:00+09:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>C や Java と同じように Scala にも for がある。</p>
+
+<p>昔の Java におけるfor 文は、C と同じように <code>for (初期化; 継続条件; カウンタ更新)</code> という形しかなかった。
+Java 5.0 で導入された拡張for文（<code>for (型 変数: コレクション)</code>の形）では <code>java.lang.Iterable</code> を実装したオブジェクトならなんでも繰り返しができるようになった。
+便利になったなあと思ったのを覚えてる（2004年の話）。</p>
+
+<h2>文法</h2>
+
+<p>Scala で C の for 的なものをやろうとすると</p>
+
+<pre><code>// C では
+for (int i = 0; i &lt; 10; i++) { … }
+// Scala では
+for (i &lt;- 0 until 10) { … }
+</code></pre>
+
+<p>となるので「 <code>for (i &lt;- 初期値 until 上限)</code> という固定形なんだー」と最初は思ったのだが、そうではなく <code>for (i &lt;- 初期値.until(上限))</code> であり <code>for (i &lt;- obj)</code> が for 式のパターンである。
+ここで<code>初期値.until(上限)</code> は <code>Range</code> 型の値を返す。</p>
+
+<!-- more -->
+
+
+<p>Scala の言語仕様によると for 式は以下の文法をもつ。</p>
+
+<pre><code>Expr1 ::= ‘for’ (‘(’ Enumerators ‘)’ | ‘{’ Enumerators ‘}’) {nl} [‘yield’] Expr    Enumerators ::= Generator {semi Enumerator}
+Enumerator ::= Generator                    | Guard                    | ‘val’ Pattern1 ‘=’ Expr    Generator ::= Pattern1 ‘&lt;-’ Expr [Guard]    Guard ::= ‘if’ PostfixExpr
+</code></pre>
+
+<p><code>Enumerator</code> の最後のパターンで <code>‘val’ Pattern1 ‘=’ Expr</code> とあるが、この val は deprecated になったようだ。
+（Scala の言語仕様は更新が追いついていないらしく、現時点の最新（2.10.3）の言語仕様書は現時点で存在しない。）</p>
+
+<h2>for式関連メソッド</h2>
+
+<p>Scala の for 式は <code>foreach()</code>, <code>map()</code>, <code>flapMap()</code>, <code>withFilter()</code> が実装されていればなんでも回せる。
+全てが必要なわけではなく、用いられるパターンによって必要なメソッドが決まる。</p>
+
+<p><code>foreach()</code> が必要なパターン。 <code>yield</code> なしの時。</p>
+
+<pre><code>for (i &lt;- obj) { … }
+// 書き換えると
+obj.foreach { case i =&gt; … }
+</code></pre>
+
+<p><code>map()</code> が必要なパターン。
+Generator がひとつだけで <code>yield</code> で値を返す時。</p>
+
+<pre><code>for (i &lt;- obj) yield { … }
+// 書き換えると
+obj.map { case i =&gt; … }
+</code></pre>
+
+<p><code>flatMap()</code> が必要なパターン。
+Generator が複数あり、<code>yield</code> で値を返す時。</p>
+
+<pre><code>for (i &lt;- obj1; j &lt;- obj2) yield { … }
+// 書き換えると
+obj1.flatMap { case i =&gt; for (j &lt;- obj2) yield { … } }
+// obj1 には flatMap が必要。obj2 には map が必要。
+</code></pre>
+
+<p><code>withFilter()</code> が必要なパターン。
+Guard があるとき。</p>
+
+<pre><code>for (i &lt;- obj1 if i &lt; 0) { … }
+// 書き換えると
+obj1.withFilter(i =&gt; i &lt; 0).foreach { case i =&gt; … }
+</code></pre>
+
+<p>こんな感じで書き換えできるので、本質的には for 式要らないんだと思う。
+でも複数の generator を回す時とか、<code>foreach</code> や <code>map</code>, <code>flatMap</code> で書くとネストが深くなってしまうので、for文だとスッキリかけて嬉しいってのはある。</p>
+
+<h2>繰り返し以外の文脈</h2>
+
+<p>必要なメソッドさえ揃っていればいいので、繰り返し以外の文脈で用いることができる。</p>
+
+<p>たとえば <code>scala.Option</code> はオプショナルな値を表す。
+値があるかもしれないし無いかもしれないという文脈で、Javaで null を使いたく場面で使う。
+<code>Option</code> では for 式に関連するメソッドが、値がある時には関数を実行し、そうでなければ何もせず値なしを結果とするという意味合いで定義されている。</p>
+
+<pre><code>for (i &lt;- Some(1); j &lt;- Some(2)) yield i + j // Some(3)
+for (i &lt;- Some(1); j &lt;- None) yield i + j    // None
+</code></pre>
+
+<p>上記のように「<code>Option</code> 型の値がいくつかあり、全ての値が存在している時に何かする」というのが for 文で実現できる。</p>
+
+<p>他にも <code>scala.concurrent.Future</code> は将来的に得られる値を表現する型で、
+for式関連のメソッドは値が得られた時に関数を実行するように定義されている。</p>
+
+<pre><code>val f1: Future[Int] = …
+val f2: Future[Int] = …
+val f3: Future[Int] = for (v1 &lt;- f1; v2 &lt;- f2) yield v1 + v2
+</code></pre>
+
+<p>ここでは <code>f1</code>, <code>f2</code> の値が将来得られたら <code>v1 + v2</code> を計算するという、コールバックの登録的な意味合いを持っている。</p>
+
+<p><a href="https://github.com/jsuereth/scala-arm">scala-arm</a> では、最後にリソースを開放するという意味合いを for 式関連メソッドに持たせることで、for 式の最後でのリソース解放を実現している。</p>
+
+<h2>まとめ</h2>
+
+<p><code>foreach</code>, <code>map</code>, <code>flatMap</code>, <code>withFilter</code> というメソッドの定義次第で for 式の使い道は無限大。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T11:35:00+09:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/scala/'>Scala</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/10/14/scala-for/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/10/14/scala-for/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/09/covariant-contravariant/" title="Previous Post: Covariantとcontravariant">&laquo; Covariantとcontravariant</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/scala-for/">Scala の For</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/09/covariant-contravariant/">Covariantとcontravariant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/28/scala-implicit/">Scalaのimplicit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/23/use-trait-to-setup-test-data/">テストデータのセットアップに Trait を使う</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/21/active-model-7-pattern/">ActiveRecord のモデルを整理する7つのパターン</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/110309119188108264538?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<div class="fb-activity" data-site="http://tkawachi.github.com/" data-app-id="445203802205922" data-width="260" data-height="300" data-header="true" data-linktarget="_top" data-recommendations="false"></div>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - KAWACHI Takashi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tkawachiblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/10/14/scala-for/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2013/10/14/scala-for/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
