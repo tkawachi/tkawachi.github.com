@@ -126,8 +126,13 @@ for (i &lt;- 0 until 10) { … }
 
 <p>Scala の言語仕様によると for 式は以下の文法をもつ。</p>
 
-<pre><code>Expr1 ::= ‘for’ (‘(’ Enumerators ‘)’ | ‘{’ Enumerators ‘}’) {nl} [‘yield’] Expr    Enumerators ::= Generator {semi Enumerator}
-Enumerator ::= Generator                    | Guard                    | ‘val’ Pattern1 ‘=’ Expr    Generator ::= Pattern1 ‘&lt;-’ Expr [Guard]    Guard ::= ‘if’ PostfixExpr
+<pre><code>Expr1 ::= ‘for’ (‘(’ Enumerators ‘)’ | ‘{’ Enumerators ‘}’) {nl} [‘yield’] Expr
+Enumerators ::= Generator {semi Enumerator}
+Enumerator ::= Generato
+                | Guard
+                | ‘val’ Pattern1 ‘=’ Expr
+Generator ::= Pattern1 ‘&lt;-’ Expr [Guard]
+Guard ::= ‘if’ PostfixExpr
 </code></pre>
 
 <p><code>Enumerator</code> の最後のパターンで <code>‘val’ Pattern1 ‘=’ Expr</code> とあるが、この val は deprecated になったようだ。
