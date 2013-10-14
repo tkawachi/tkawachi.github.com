@@ -30,7 +30,7 @@ Scala の言語仕様によると for 式は以下の文法をもつ。
 
     Expr1 ::= ‘for’ (‘(’ Enumerators ‘)’ | ‘{’ Enumerators ‘}’) {nl} [‘yield’] Expr
     Enumerators ::= Generator {semi Enumerator}
-    Enumerator ::= Generato
+    Enumerator ::= Generator
                     | Guard
                     | ‘val’ Pattern1 ‘=’ Expr
     Generator ::= Pattern1 ‘<-’ Expr [Guard]
