@@ -128,7 +128,7 @@ for (i &lt;- 0 until 10) { … }
 
 <pre><code>Expr1 ::= ‘for’ (‘(’ Enumerators ‘)’ | ‘{’ Enumerators ‘}’) {nl} [‘yield’] Expr
 Enumerators ::= Generator {semi Enumerator}
-Enumerator ::= Generato
+Enumerator ::= Generator
                 | Guard
                 | ‘val’ Pattern1 ‘=’ Expr
 Generator ::= Pattern1 ‘&lt;-’ Expr [Guard]
