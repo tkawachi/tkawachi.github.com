@@ -9,11 +9,10 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="IAM でアクセス権限を管理するのは面倒だ。
-まず権限の種類が覚えきれない。 s3:ListBucket を許可していたのに、
-Ruby の AWS SDK で
-AWS::S3::Bucket#empty?
-にて例外が発生した。 ">
+  <meta name="description" content="この blog では google analytics を入れているが、それを今年の春に公開された
+universal analytics
+に切り替えてみた。
+なんか色々できることが増えてるみたい。 まず、既存のプロパティをそのまま universal analytics へ移行することは出来ない &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +78,53 @@ AWS::S3::Bucket#empty?
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/15/1/">Octopress で Universal Analytics へ切り替え</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-15T21:35:00+09:00" pubdate data-updated="true">Jun 15<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>この blog では google analytics を入れているが、それを今年の春に公開された
+<a href="https://support.google.com/analytics/answer/2790010?hl=ja">universal analytics</a>
+に切り替えてみた。
+なんか色々できることが増えてるみたい。</p>
+
+<p>まず、既存のプロパティをそのまま universal analytics へ移行することは出来ない。
+Google Analytics のプロパティを新しく作る必要があった。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/06/15/1/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -497,53 +543,6 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/12/31/emacs-lisp-package-archive/">Emacs Lisp Package Archive</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-12-31T23:16:00+09:00" pubdate data-updated="true">Dec 31<span>st</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Macでの日本語の文書を読み書きするテキストエディタを探していた。
-Facebookでつぶやいていたらいろいろおすすめをいただいたのだが、これだ！！というものがなかった。
-それで Emacs に戻ろうと思った。</p>
-
-<p>ほぼ三年弱ぶりくらいに Emacs に戻ってきたのだが
-<a href="http://emacswiki.org/emacs/ELPA">ELPA</a>
-というパッケージマネージャがデフォルトで付いてきていて、ものすごく導入障壁が下がっていたのでメモしておく。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/12/31/emacs-lisp-package-archive/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -561,6 +560,10 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/14/random-forest-important-variables/">randomForestで重要な説明変数を見つける</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/14/scala-for/">Scala の For</a>
       </li>
     
@@ -574,10 +577,6 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
     
       <li class="post">
         <a href="/blog/2013/09/23/use-trait-to-setup-test-data/">テストデータのセットアップに Trait を使う</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/21/active-model-7-pattern/">ActiveRecord のモデルを整理する7つのパターン</a>
       </li>
     
   </ul>

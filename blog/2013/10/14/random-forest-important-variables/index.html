@@ -1,0 +1,366 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>randomForestで重要な説明変数を見つける - tkawachi Blog</title>
+  <meta name="author" content="KAWACHI Takashi">
+
+  
+  <meta name="description" content="Random forest といえば決定木を何本ももつアンサンブル学習で高い精度を持つ。
+けど、どの説明変数が効いているかは説明が難しいものだと思いこんでいた。
+ご近所のデータサイエンティストが R で効いている説明変数を出す方法を教えてくれたのでメモ。 ここでは R についてきている iris &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/10/14/random-forest-important-variables">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-5']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">tkawachi Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tkawachi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">randomForestで重要な説明変数を見つける</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T15:33:00+09:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Random forest といえば決定木を何本ももつアンサンブル学習で高い精度を持つ。
+けど、どの説明変数が効いているかは説明が難しいものだと思いこんでいた。
+ご近所のデータサイエンティストが R で効いている説明変数を出す方法を教えてくれたのでメモ。</p>
+
+<!-- more -->
+
+
+<p>ここでは R についてきている iris データセットを使う。
+irisはアヤメの種類に関するデータセットで、1936年という大昔に
+<a href="http://ja.wikipedia.org/wiki/%E3%83%AD%E3%83%8A%E3%83%AB%E3%83%89%E3%83%BB%E3%83%95%E3%82%A3%E3%83%83%E3%82%B7%E3%83%A3%E3%83%BC">フィッシャー</a>
+が論文で使った歴史のあるデータセットでもある。
+萼片 (sepal) の大きさ、花弁 (petal) の大きさ、アヤメの種類(species)が対になっている。</p>
+
+<pre><code># iris dataset 読み込み
+&gt; data("iris")
+&gt; str(iris)
+'data.frame':   150 obs. of  5 variables:
+ $ Sepal.Length: num  5.1 4.9 4.7 4.6 5 5.4 4.6 5 4.4 4.9 ...
+ $ Sepal.Width : num  3.5 3 3.2 3.1 3.6 3.9 3.4 3.4 2.9 3.1 ...
+ $ Petal.Length: num  1.4 1.4 1.3 1.5 1.4 1.7 1.4 1.5 1.4 1.5 ...
+ $ Petal.Width : num  0.2 0.2 0.2 0.2 0.2 0.4 0.3 0.2 0.2 0.1 ...
+ $ Species     : Factor w/ 3 levels "setosa","versicolor",..: 1 1 1 1 1 1 1 1 1 1 ...
+</code></pre>
+
+<p>さて、random forest でアヤメを分類する。
+手元にパッケージが入ってなかったのでそこから。</p>
+
+<pre><code>&gt; install.packages("randomForest")
+&gt; library(randomForest)
+&gt; (fit &lt;- randomForest(Species ~ ., data=iris))
+
+Call:
+ randomForest(formula = Species ~ ., data = iris) 
+               Type of random forest: classification
+                     Number of trees: 500
+No. of variables tried at each split: 2
+
+        OOB estimate of  error rate: 4.67%
+Confusion matrix:
+           setosa versicolor virginica class.error
+setosa         50          0         0        0.00
+versicolor      0         47         3        0.06
+virginica       0          4        46        0.08
+</code></pre>
+
+<p><code>fit</code> に random forest で学習したモデルを代入した。</p>
+
+<p>重要な説明変数は <code>importance()</code> で取り出すことができる。</p>
+
+<pre><code>&gt; importance(fit)
+             MeanDecreaseGini
+Sepal.Length        10.499305
+Sepal.Width          2.596317
+Petal.Length        43.614641
+Petal.Width         42.563816
+</code></pre>
+
+<p>どうやら花弁の大きさ(Petal.Length, Petal.Width)がアヤメの種類判定においては重要らしい。
+<code>varImpPlot(fit)</code> すると <code>importance(fit)</code> と同じ結果をグラフにしてくれるようだ。</p>
+
+<p><code>importance()</code> では重要な説明変数が分かったが、目的変数に対してどう効くのか、この例でいえば <code>Petal.Length</code> が大きかったらどの種類になりやすいのか、分からない。
+<code>partialPlot()</code> を使うと、どう影響するかが分かる。</p>
+
+<pre><code>&gt; partialPlot(fit, iris, Petal.Length, "setosa")
+</code></pre>
+
+<p><img src="/images/20131014/partialSetosa.png" alt="partialPlot for setosa" /></p>
+
+<pre><code>&gt; partialPlot(fit, iris, Petal.Length, "versicolor")
+</code></pre>
+
+<p><img src="/images/20131014/partialVersicolor.png" alt="partialPlot for setosa" /></p>
+
+<pre><code>&gt; partialPlot(fit, iris, Petal.Length, "virginica")
+</code></pre>
+
+<p><img src="/images/20131014/partialVirginica.png" alt="partialPlot for setosa" /></p>
+
+<p>これを見るに、Petal.Length がおおよそ３より小さい時には setosa、
+３から５の時には versicolor、５より大きい時には virginica である可能性が高いことが分かる。</p>
+
+<h2>まとめ</h2>
+
+<p>randomForest package の <code>importance()</code>, <code>varImpPlot()</code>, <code>partialPlot()</code> を使えば効いてる説明変数を見つけたり、効いている方向を確認したりできる。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-10-14T15:33:00+09:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/r/'>R</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/10/14/random-forest-important-variables/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/10/14/random-forest-important-variables/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/10/14/scala-for/" title="Previous Post: scala の for">&laquo; scala の for</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/random-forest-important-variables/">randomForestで重要な説明変数を見つける</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/scala-for/">Scala の For</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/09/covariant-contravariant/">Covariantとcontravariant</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/28/scala-implicit/">Scalaのimplicit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/09/23/use-trait-to-setup-test-data/">テストデータのセットアップに Trait を使う</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/110309119188108264538?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<div class="fb-activity" data-site="http://tkawachi.github.com/" data-app-id="445203802205922" data-width="260" data-height="300" data-header="true" data-linktarget="_top" data-recommendations="false"></div>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - KAWACHI Takashi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tkawachiblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/10/14/random-forest-important-variables/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2013/10/14/random-forest-important-variables/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

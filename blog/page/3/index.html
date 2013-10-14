@@ -9,8 +9,10 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Microsoft 発の型付き JavaScript こと TypeScript が人気ですね。
-typescript-rails という gem があったので、動くのか試してみました。 結論から言っておくと、他のスクリプトやライブラリを参照する TypeScript &hellip;">
+  <meta name="description" content="Macでの日本語の文書を読み書きするテキストエディタを探していた。
+Facebookでつぶやいていたらいろいろおすすめをいただいたのだが、これだ！！というものがなかった。
+それで Emacs に戻ろうと思った。 ほぼ三年弱ぶりくらいに Emacs に戻ってきたのだが
+ELPA &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +78,53 @@ typescript-rails という gem があったので、動くのか試してみま�
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/12/31/emacs-lisp-package-archive/">Emacs Lisp Package Archive</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-31T23:16:00+09:00" pubdate data-updated="true">Dec 31<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Macでの日本語の文書を読み書きするテキストエディタを探していた。
+Facebookでつぶやいていたらいろいろおすすめをいただいたのだが、これだ！！というものがなかった。
+それで Emacs に戻ろうと思った。</p>
+
+<p>ほぼ三年弱ぶりくらいに Emacs に戻ってきたのだが
+<a href="http://emacswiki.org/emacs/ELPA">ELPA</a>
+というパッケージマネージャがデフォルトで付いてきていて、ものすごく導入障壁が下がっていたのでメモしておく。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/12/31/emacs-lisp-package-archive/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -704,60 +753,6 @@ end</code></pre></noscript></div>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/">Run Rspec Faster for Rails 3.1</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-01-22T21:07:00+09:00" pubdate data-updated="true">Jan 22<span>nd</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>個人プロジェクトで Rails 3.1 のアプリケーションを書いていたのだが、<code>rake spec</code> の
-実行が遅くてイライラしていた。
-1回の実行に 10 秒程度が掛かっていた。
-テスト実行は 0.5 ms 以下で終了していたので、残りの 9.5 s 以上は framework の開始
-などに費やされていると想像される。</p>
-
-<p>この状態で皆が満足するはずが無いと思い、少し調べたところ
-<a href="http://spork.rubyforge.org/">spork</a> が求めるもののようだ。
-これはテスト用サーバを別プロセスで起動しておき、drb で rspec などによるテスト実行を
-キックできるもののようだ。</p>
-
-<p>また <a href="https://github.com/guard/guard-spork">guard-spork</a> を使えば、
-spork を用いたテストの実行をファイル書き換え時に行うことができるようだ。
-またテスト結果の通知を Growl で行うことも出来るようだ。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -775,6 +770,10 @@ spork を用いたテストの実行をファイル書き換え時に行うこ�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/14/random-forest-important-variables/">randomForestで重要な説明変数を見つける</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/14/scala-for/">Scala の For</a>
       </li>
     
@@ -788,10 +787,6 @@ spork を用いたテストの実行をファイル書き換え時に行うこ�
     
       <li class="post">
         <a href="/blog/2013/09/23/use-trait-to-setup-test-data/">テストデータのセットアップに Trait を使う</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/21/active-model-7-pattern/">ActiveRecord のモデルを整理する7つのパターン</a>
       </li>
     
   </ul>
