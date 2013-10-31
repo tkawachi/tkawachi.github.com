@@ -135,7 +135,7 @@ CoffeeScript もそれなりに触れたが、短く書けて式中心の記法�
 <p>本題。
 Scala でいうところの <code>scala.Option</code> に対応する型として Haxe には <code>haxe.ds.Option</code> という enum がある。
 ただし Scala の case object と違い、Haxe の enum にはメソッドが定義できない。
-最初は <code>switch case</code> 書いていた。</p>
+最初は <code>switch case</code> を使って Option の分岐を書いていた。</p>
 
 <pre><code>var opt: Option&lt;Int&gt; = ...;
 switch(opt) {

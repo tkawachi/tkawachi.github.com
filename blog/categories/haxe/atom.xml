@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Haxe | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/haxe/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-10-31T21:42:30+09:00</updated>
+  <updated>2013-10-31T21:46:10+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -50,7 +50,7 @@ CoffeeScript もそれなりに触れたが、短く書けて式中心の記法�
 <p>本題。
 Scala でいうところの <code>scala.Option</code> に対応する型として Haxe には <code>haxe.ds.Option</code> という enum がある。
 ただし Scala の case object と違い、Haxe の enum にはメソッドが定義できない。
-最初は <code>switch case</code> 書いていた。</p>
+最初は <code>switch case</code> を使って Option の分岐を書いていた。</p>
 
 <pre><code>var opt: Option&lt;Int&gt; = ...;
 switch(opt) {
