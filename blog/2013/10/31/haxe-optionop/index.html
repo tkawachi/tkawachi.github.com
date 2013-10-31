@@ -5,12 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Bootswatchのテーマをtwitter-bootstrap-railsで使う - tkawachi Blog</title>
+  <title>Haxe で Option用の関数を定義してみた話 - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
-これ自体は別に悪いことはないと思うのですが、 &hellip;">
+  <meta name="description" content="最近 JavaScript で何かを書くことになって困っている。
+JavaScript はそれなりに仕事で触れて、それなりに理解はしているが、どうにも好きになれない。
+CoffeeScript もそれなりに触れたが、短く書けて式中心の記法ができるものの、それ以外は JavaScript と同じ。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails">
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/10/31/haxe-optionop">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
@@ -79,7 +80,7 @@
   
   <header>
     
-      <h1 class="entry-title">Bootswatchのテーマをtwitter-bootstrap-railsで使う</h1>
+      <h1 class="entry-title">Haxe で Option用の関数を定義してみた話</h1>
     
     
       <p class="meta">
@@ -95,49 +96,135 @@
   
 
 
-<time datetime="2013-01-04T18:12:00+09:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
+<time datetime="2013-10-31T20:35:00+09:00" pubdate data-updated="true">Oct 31<span>st</span>, 2013</time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
-これ自体は別に悪いことはないと思うのですが、他のサイトと見分けの付かないサイトになってしまうのは良くないですよね。</p>
+<div class="entry-content"><p>最近 JavaScript で何かを書くことになって困っている。
+JavaScript はそれなりに仕事で触れて、それなりに理解はしているが、どうにも好きになれない。
+CoffeeScript もそれなりに触れたが、短く書けて式中心の記法ができるものの、それ以外は JavaScript と同じ。
+何も変わっていない。</p>
 
-<p>そこでbootstrap用のテーマを入れよう、となるわけです。
-テーマを入れることで色・フォントなどが変更されるので、bootstrap臭が軽減されます。</p>
+<p>僕の問題（苦手）意識は <a href="http://www.haskell.org/haskellwiki/The_JavaScript_Problem">The JavaScript Problem</a>
+によく表されている。</p>
 
-<p>bootstrap theme などで検索すると有償・無償を含めテーマを取り扱っているサイトが見つかると思いますが、今回は <a href="http://bootswatch.com/">Bootswatch</a> を twitter-bootstrap-rails と共に使う方法をメモします。
-bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方法があると思います。</p>
+<ol>
+<li>JavaScript sucks.</li>
+<li>We need JavaScript.</li>
+</ol>
+
+
+<p>もうちょっとマシな言語で書きたいと常々思っていた。</p>
+
+<p>AltJS のなかで TypeScript は触ったが、Haxe は触っていなかった。
+理由は「Haxe が吐き出す JavaScript はとても人間が読めるものじゃない」とどこかで聞いていたから。
+いざって時には生成された JavaScript が読める形じゃないと困る。</p>
+
+<p>今回ふとしたきっかけで Haxe を触ってみた。
+さわってみるとかなり好感触。
+出力された JavaScript はそんなに変なことになってなくて普通に読める。
+やはり自分で触ってみないとダメだな。
+代数的データ型があるなど TypeScript より型機能が強い感じ。</p>
 
 <!-- more -->
 
 
-<p>まず <a href="http://bootswatch.com/#gallery">Bootswatch の Gallery</a> から使いたいテーマを選びます。
-<code>vendor/assets/stylesheets/bootswatch/</code> ディレクトリを作り、選んだテーマの Download ボタンから <code>variables.less</code> と <code>bootswatch.less</code> をダウンロードして、このディレクトリに保存します。</p>
+<p>本題。
+Scala でいうところの <code>scala.Option</code> に対応する型として Haxe には <code>haxe.ds.Option</code> という enum がある。
+ただし Scala の case object と違い、Haxe の enum にはメソッドが定義できない。
+最初は <code>switch case</code> 書いていた。</p>
 
-<p><code>app/assets/stylesheets/</code> ではなく <code>vendor/assets/stylesheets/</code> 以下に <code>bootswatch</code> ディレクトリを作成して保存します。
-なぜなら <code>app/assets/stylesheets/application.css.scss</code> にはデフォルトで <code>*= require_tree .</code> という行があり、<code>app/assets/stylesheets/</code> 以下にある <code>.less</code> ファイルはすべて require されてしまうからです。
-<code>variables.less</code>, <code>bootswatch.less</code> は <code>@import</code> するものであって、require するとエラーになります。
-それに <code>vendor</code> というのはサードパーティ製のアレヤコレヤを置くところなので、きっとこっちが正解でしょう。</p>
+<pre><code>var opt: Option&lt;Int&gt; = ...;
+switch(opt) {
+case Some(v): trace(v);
+case None: trace('None');
+}
+</code></pre>
 
-<p>あとは <code>bootstrap_and_overrides.css.less</code> で <code>@import “twitter/bootstrap/responsive”;</code> の行のあとに以下の２行を付け足します。</p>
+<p>的な。
+これでも悪くないが Scala ぽく書きたかったので、それっぽくできないか考えてみた
+（きっと他の人がどこかでやってる気がするけど）。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@import “bootswatch/variables.less”;
-</span><span class='line'>@import “bootswatch/bootswatch.less”;</span></code></pre></td></tr></table></div></figure>
+<p>Haxe の <a href="http://haxe.org/manual/using">using mixin</a> を使えば同じようなことができそう。
+次のようなものを作って</p>
 
+<pre><code>import haxe.ds.Option;
+class OptionOp {
+  public static function map&lt;A,B&gt;(opt: Option&lt;A&gt;, f: A -&gt; B): Option&lt;B&gt; {
+    return switch (opt) {
+    case None: None;
+    case Some(v): Some(f(v));
+    };
+  }
 
-<p>これでいける(少なくとも僕は使えてる)と思うんですが、ダメだったら教えて下さい。</p>
+  public static function newOption&lt;A&gt;(arg: A): Option&lt;A&gt; {
+    return if (arg != null) Some(arg) else None;
+  }
+}
+</code></pre>
 
-<p>参考</p>
+<p>こんな感じに使う。</p>
 
-<ul>
-<li><a href="http://bobonrails.com/post/29340795516/customizing-twitter-bootstrap-on-rails-3">Customizing Twitter Bootstrap On Rails 3</a></li>
-</ul>
+<pre><code>import haxe.ds.Option;
+using OptionOp;
 
+var x = 123.newOption(); // Scala の Option(123) 的な。
+x.map(function(v) { return v * 2; }); // Scala の x.map(_ * 2) 的な。
+</code></pre>
+
+<p>他にもいろいろ追加したのが<a href="https://gist.github.com/tkawachi/7208040">こちら</a>。</p>
+
+<p>関数リテラル書くのに毎度 <code>function</code> と書くのは長いが、まあまあ快適に書ける。
+コンパイルするとこんな感じになる。</p>
+
+<pre><code>var x = OptionOp.newOption(123);
+OptionOp.map(x,function(v) {
+        return v * 2;
+});    
+</code></pre>
+
+<p>「えー。関数の呼び出しが多くて遅そう」という人は <code>inline</code> 化することもできる。
+<code>map()</code>, <code>newOption()</code> の定義を <code>public static inline function ...</code> とするとこんな感じの出力に変わる。</p>
+
+<pre><code>var x;
+x = haxe.ds.Option.Some(123);
+switch(x[1]) {
+case 1:
+        haxe.ds.Option.None;
+        break;
+case 0:
+        var v = x[2];
+        haxe.ds.Option.Some(v * 2);
+        break;
+}
+</code></pre>
+
+<p><code>Some()</code> 関数の呼び出しは残っているものの、 <code>map</code> 関数とその第二引き数で渡した関数の呼び出しは展開された。
+これくらいなら速度的にも許容出来る人が多いんじゃない？
+読みにくいから僕は inline 化しないけど。</p>
+
+<p>Haxe でどうすればいいのかなと思っているのは Scala の for に相当するもの。
+複数の Option があるとき全てが存在するときに何かをするには、 Scala の for を使えば</p>
+
+<pre><code>for (v1 &lt;- opt1; v2 &lt;- opt2) yield { v1 と v2 の計算 }
+</code></pre>
+
+<p>みたいに書けるのだが、現在の自分の Haxe 知識レベルだと次のようになる。</p>
+
+<pre><code>opt1.flatMap(function(v1) {
+    return opt2.map(function(v2) { return v1 と v2 の計算 });
+});
+</code></pre>
+
+<p>なんか上手い書き方無いかなあ。
+<a href="https://github.com/sledorze/monax">monax</a> 使えばうまくかけるんだろうか？</p>
+
+<h2>まとめ</h2>
+
+<p>JavaScript にアレルギーがあるひとは Haxe 触ると癒されるかも。</p>
 </div>
 
 
@@ -160,12 +247,12 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
   
 
 
-<time datetime="2013-01-04T18:12:00+09:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
+<time datetime="2013-10-31T20:35:00+09:00" pubdate data-updated="true">Oct 31<span>st</span>, 2013</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/bootstrap/'>Bootstrap</a>, <a class='category' href='/blog/categories/less/'>LESS</a>
+    <a class='category' href='/blog/categories/haxe/'>Haxe</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>
   
 </span>
 
@@ -174,7 +261,7 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/10/31/haxe-optionop/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/10/31/haxe-optionop/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -187,10 +274,8 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/12/31/emacs-lisp-package-archive/" title="Previous Post: Emacs Lisp Package Archive">&laquo; Emacs Lisp Package Archive</a>
+        <a class="basic-alignment left" href="/blog/2013/10/14/random-forest-important-variables/" title="Previous Post: randomForestで重要な説明変数を見つける">&laquo; randomForestで重要な説明変数を見つける</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2013/01/05/homebrew-rmagick/" title="Next Post: Homebrew RMagick">Homebrew RMagick &raquo;</a>
       
     </p>
   </footer>
@@ -267,8 +352,8 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/';
-        var disqus_url = 'http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/';
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/10/31/haxe-optionop/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2013/10/31/haxe-optionop/';
         var disqus_script = 'embed.js';
       
     (function () {

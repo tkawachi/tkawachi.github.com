@@ -9,10 +9,8 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Macでの日本語の文書を読み書きするテキストエディタを探していた。
-Facebookでつぶやいていたらいろいろおすすめをいただいたのだが、これだ！！というものがなかった。
-それで Emacs に戻ろうと思った。 ほぼ三年弱ぶりくらいに Emacs に戻ってきたのだが
-ELPA &hellip;">
+  <meta name="description" content="美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
+これ自体は別に悪いことはないと思うのですが、 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +76,54 @@ ELPA &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/01/04/use-bootswatch-with-rails/">Bootswatchのテーマをtwitter-bootstrap-railsで使う</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-01-04T18:12:00+09:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
+これ自体は別に悪いことはないと思うのですが、他のサイトと見分けの付かないサイトになってしまうのは良くないですよね。</p>
+
+<p>そこでbootstrap用のテーマを入れよう、となるわけです。
+テーマを入れることで色・フォントなどが変更されるので、bootstrap臭が軽減されます。</p>
+
+<p>bootstrap theme などで検索すると有償・無償を含めテーマを取り扱っているサイトが見つかると思いますが、今回は <a href="http://bootswatch.com/">Bootswatch</a> を twitter-bootstrap-rails と共に使う方法をメモします。
+bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方法があると思います。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/01/04/use-bootswatch-with-rails/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -679,80 +725,6 @@ end</code></pre></noscript></div>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/06/25/open-sources-used-by-spotify/">Open Sources Used by Spotify</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-06-25T00:49:00+09:00" pubdate data-updated="true">Jun 25<span>th</span>, 2012</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>US などの iTunes store からダウンロードできる <a href="http://www.spotify.com/">Spotify</a> の iOS アプリの出来がとても良い。
-アプリ内に用意されている Lisence のページを見ていたら、利用している open source ソフトウェアの一覧が並んでいたので、ちゃんと出来てるアプリに使われているものはきっとちゃんとしているだろうということでメモしておく。</p>
-
-<ul>
-<li><a href="http://www.boost.org/">Boost</a></li>
-<li><a href="http://expat.sourceforge.net/">Expat</a></li>
-<li><a href="http://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible">FastDelegate</a> C++ の member function pointer に代わる何か？</li>
-<li><a href="http://sourceforge.net/projects/giflib/">giflib</a> GIF</li>
-<li><a href="http://libjpeg.sourceforge.net/">libjpeg</a> JPEG</li>
-<li><a href="http://www.libpng.org/pub/png/libpng.html">libpng</a> PNG</li>
-<li><a href="http://xiph.org/ogg/">libogg</a> Ogg</li>
-<li><a href="http://xiph.org/vorbis/">libvorbis</a> Vorbis</li>
-<li><a href="http://wss.co.uk/pinknoise/tremolo/">Tremolo</a> Tremolo is an ARM optimised version of the Tremor lib from xiph.org. For those that don&rsquo;t know, the Tremor lib is an integer only library for doing Ogg Vorbis decompression.</li>
-<li><a href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/mt.html">Mersenne Twister</a> Mersenne Twister(以下MT)は、松本眞 ・西村拓士（アルファベット順）により1996年から1997年に渡って 開発された疑似乱数生成アルゴリズムです。</li>
-<li><a href="https://ccrma.stanford.edu/software/snd/">Snd</a> Snd is a sound editor. Spotify では resampling にコードを流量。</li>
-<li><a href="http://zlib.net/">zlib</a></li>
-<li><a href="http://nsis.sourceforge.net/Main_Page">NSIS</a> Windows のインストーラ作成システム。</li>
-<li><a href="http://sourceforge.net/projects/wtl/">Windows Template Library</a> Windows Template Library (WTL) is a C++ library for developing Windows applications and UI components. It extends ATL (Active Template Library) and provides a set of classes for controls, dialogs, frame windows, GDI objects, and more.</li>
-<li><a href="http://growl.info/">Growl</a></li>
-<li><a href="http://www.lua.org/">Lua</a></li>
-<li><a href="http://programming.nu/index">Nu</a> Nu is an interpreted object-oriented language. Its syntax comes from Lisp, but Nu is semantically closer to Ruby than Lisp. Nu is implemented in Objective-C and is designed to take full advantange of the Objective-C runtime and the many mature class libraries written in Objective-C.</li>
-<li><a href="http://stig.github.com/json-framework/">SBJSON</a></li>
-<li><a href="http://allseeing-i.com/ASIHTTPRequest/">ASIHTTPRequest</a></li>
-<li><a href="https://github.com/mikeash/MAObjCRuntime">MAObjCRuntime</a> MAObjCRuntime is an ObjC wrapper around the Objective-C runtime APIs. If that&rsquo;s confusing, it provides a nice object-oriented interface around (some of) the C functions in /usr/include/objc.</li>
-<li><a href="http://code.google.com/p/google-breakpad/">Google Breakpad</a> An open-source multi-platform crash reporting system</li>
-<li><a href="http://zendold.lojcomm.com.br/icarousel/">iCarousel</a> iCarousel is an open source (free) javascript tool for creating carousel like widgets.</li>
-<li><a href="https://github.com/jdg/MBProgressHUD">MBProgressHUD</a> MBProgressHUD is an iOS drop-in class that displays a translucent HUD with an indicator and/or labels while work is being done in a background thread</li>
-<li><a href="https://github.com/kolinkrewinkel/KKGridView">KKGridView</a> High-performance iOS grid view (MIT license). iOS6 では iOS SDK に類似の view controller を入れたので不要に。</li>
-<li><a href="https://github.com/robbiehanson/KissXML">KissXML</a> KissXML provides a drop-in replacement for Apple&rsquo;s NSXML class culster in environments without NSXML (e.g. iOS).</li>
-<li><a href="https://github.com/booyah/protobuf-objc">ProtobufObjc</a></li>
-<li><a href="https://github.com/facebook/facebook-ios-sdk">Facebook</a></li>
-<li><a href="http://www.chromium.org/">Chronium</a></li>
-<li><a href="http://code.google.com/p/chromiumembedded/">CEF</a> The Chromium Embedded Framework (CEF) is an open source project founded by Marshall Greenblatt in 2008 to develop a Web browser control based on the Google Chromium project. CEF currently supports a range of programming languages and operating systems and can be easily integrated into both new and existing applications.</li>
-</ul>
-
-
-<p>Mac 版 Spotify のブラウザっぽいものは CEF なのかな。</p>
-
-<p>Google Breakpad, Nu, MAObjCRuntime, KKGridView あたりはすぐ使うかも。要調査。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/4/">&larr; Older</a>
@@ -770,6 +742,10 @@ end</code></pre></noscript></div>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/31/haxe-optionop/">Haxe で Option用の関数を定義してみた話</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/14/random-forest-important-variables/">randomForestで重要な説明変数を見つける</a>
       </li>
     
@@ -783,10 +759,6 @@ end</code></pre></noscript></div>
     
       <li class="post">
         <a href="/blog/2013/09/28/scala-implicit/">Scalaのimplicit</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/23/use-trait-to-setup-test-data/">テストデータのセットアップに Trait を使う</a>
       </li>
     
   </ul>

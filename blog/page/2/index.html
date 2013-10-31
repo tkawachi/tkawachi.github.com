@@ -9,10 +9,9 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="この blog では google analytics を入れているが、それを今年の春に公開された
-universal analytics
-に切り替えてみた。
-なんか色々できることが増えてるみたい。 まず、既存のプロパティをそのまま universal analytics へ移行することは出来ない &hellip;">
+  <meta name="description" content="「Scala実践プログラミング」を読書したり、Scala 関連の blog を読んでいたりすると、
+「HaskellではこうやるのをScalaで実現するには云々」という話が多くて困る。
+なぜなら僕はHaskell知らないから。 と開き直ってもしかたがないので Haskell &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +77,81 @@ universal analytics
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/06/16/1/">「すごい Haskell たのしく学ぼう！」読書 (1)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-16T20:49:00+09:00" pubdate data-updated="true">Jun 16<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>「Scala実践プログラミング」を読書したり、Scala 関連の blog を読んでいたりすると、
+「HaskellではこうやるのをScalaで実現するには云々」という話が多くて困る。
+なぜなら僕はHaskell知らないから。</p>
+
+<p>と開き直ってもしかたがないので Haskell の入門書として評価が高そうな「すごい Haskell たのしく学ぼう！」
+を購入した。
+Kindle版があるのは素晴らしい。</p>
+
+<p>読書メモを残しておく。今日はイントロを読んだ。</p>
+
+<ul>
+<li>Haskell はおもしろい</li>
+<li>困ったら freenode #haskell へ (日本語だとどこなんだろう？)</li>
+<li>純粋関数型言語で宣言的 (&lt;&ndash;> 命令形言語で手続き的)</li>
+<li>副作用なし。参照透明性(同じ引数で関数が呼ばれたら同じ値を返す)。</li>
+<li>遅延評価</li>
+<li>静的型付けで型推論あり。</li>
+<li>言語仕様は TheHaskellReport。最新は2010年。</li>
+<li>GHC: コンパイラと対話プログラム(ghci)</li>
+<li>ghci のコマンド
+
+<ul>
+<li>:q &mdash; 終了</li>
+<li>:l foo &mdash; foo.hs のロード</li>
+<li>:r &mdash; 最後の :l を再実行</li>
+</ul>
+</li>
+<li>ワークフロー
+
+<ol>
+<li>foo.hs を作る</li>
+<li>:l foo</li>
+<li>foo.hs を編集</li>
+<li>:r (以下繰り返し)</li>
+</ol>
+</li>
+</ul>
+
+
+<p>語り口が柔らかで読みやすい。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -495,54 +569,6 @@ JavaScripterの皆様にとっては何を今更だとは思いますが <a href
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/01/04/use-bootswatch-with-rails/">Bootswatchのテーマをtwitter-bootstrap-railsで使う</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-01-04T18:12:00+09:00" pubdate data-updated="true">Jan 4<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>美的センスに乏しい私のようなプログラマにとってTwitter bootstrapが便利なことは言うまでもありませんが、知っている人には一見して「あ、Bootstrapだ」とわかるサイトになってしまいます。
-これ自体は別に悪いことはないと思うのですが、他のサイトと見分けの付かないサイトになってしまうのは良くないですよね。</p>
-
-<p>そこでbootstrap用のテーマを入れよう、となるわけです。
-テーマを入れることで色・フォントなどが変更されるので、bootstrap臭が軽減されます。</p>
-
-<p>bootstrap theme などで検索すると有償・無償を含めテーマを取り扱っているサイトが見つかると思いますが、今回は <a href="http://bootswatch.com/">Bootswatch</a> を twitter-bootstrap-rails と共に使う方法をメモします。
-bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方法があると思います。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/01/04/use-bootswatch-with-rails/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -560,6 +586,10 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/10/31/haxe-optionop/">Haxe で Option用の関数を定義してみた話</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/14/random-forest-important-variables/">randomForestで重要な説明変数を見つける</a>
       </li>
     
@@ -573,10 +603,6 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
     
       <li class="post">
         <a href="/blog/2013/09/28/scala-implicit/">Scalaのimplicit</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/23/use-trait-to-setup-test-data/">テストデータのセットアップに Trait を使う</a>
       </li>
     
   </ul>
