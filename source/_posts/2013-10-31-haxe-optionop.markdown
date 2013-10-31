@@ -34,7 +34,7 @@ AltJS のなかで TypeScript は触ったが、Haxe は触っていなかった
 本題。
 Scala でいうところの `scala.Option` に対応する型として Haxe には `haxe.ds.Option` という enum がある。
 ただし Scala の case object と違い、Haxe の enum にはメソッドが定義できない。
-最初は `switch case` 書いていた。
+最初は `switch case` を使って Option の分岐を書いていた。
 
     var opt: Option<Int> = ...;
     switch(opt) {
