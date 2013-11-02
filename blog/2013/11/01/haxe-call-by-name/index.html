@@ -130,7 +130,8 @@ Scala の場合、 <code>opt</code> に値が入っていた場合には <code>s
 scala.Option の <code>getOrElse()</code> はこれを利用している。
 型を確認すると <code>final def getOrElse[B &gt;: A](default: ⇒ B): B</code> となっている。
 <code>⇒ B</code> が引数の型だが <code>⇒</code> を付けることにより、関数呼び出し前には評価されず、関数内で <code>default</code> を参照したところで評価されるようになっている(call-by-name)。
-なお <code>[B &gt;: A]</code> は型の境界で、B は A の subtype であることを表している。
+なお <code>[B &gt;: A]</code> は型の境界で、B は A の supertype であることを表している。
+<code>default</code> に何かを入れると <code>A</code> と <code>default</code> の型との共通 supertyper を探して <code>B</code> を推論してくれる。
 いいなあ。Scala。</p>
 
 <h2>Using callback</h2>
