@@ -9,9 +9,7 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="最近 JavaScript で何かを書くことになって困っている。
-JavaScript はそれなりに仕事で触れて、それなりに理解はしているが、どうにも好きになれない。
-CoffeeScript もそれなりに触れたが、短く書けて式中心の記法ができるものの、それ以外は JavaScript と同じ。 &hellip;">
+  <meta name="description" content="先日 Haxe で Option 関連の関数を定義した時、 getOrElse() は次のような定義にしていた。 public static function getOrElse&lt;A&gt;(opt: Option&lt;A&gt;, els: A) { return switch (opt &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +75,67 @@ CoffeeScript もそれなりに触れたが、短く書けて式中心の記法�
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-01T19:18:00+09:00" pubdate data-updated="true">Nov 1<span>st</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>先日 Haxe で Option 関連の関数を定義した時、 <code>getOrElse()</code> は次のような定義にしていた。</p>
+
+<pre><code>public static function getOrElse&lt;A&gt;(opt: Option&lt;A&gt;, els: A) {
+  return switch (opt) {
+  case Some(v): v;
+  case None: els;
+  }
+}
+</code></pre>
+
+<p>scala.Option の <code>getOrElse()</code> ぽく使いたかったのだが、実際に使ってみるとなんか違う。</p>
+
+<pre><code>opt.getOrElse(sideEffectFunction());
+</code></pre>
+
+<p>上で <code>sideEffectFunction()</code> は何らかの副作用をもつ関数だ。
+Scala の場合、 <code>opt</code> に値が入っていた場合には <code>sideEffectFunction()</code> は評価されない。
+副作用も発生しない。
+上で定義した Haxe 用 <code>getOrElse()</code> では <code>opt</code> の内容によらず <code>sideEffectFunction()</code> が評価され、副作用が発生する。</p>
+
+<p>関数を呼び出すときには、まず引数を評価してから関数の実行に移るので、当たり前といえば当たり前だった。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/01/haxe-call-by-name/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -623,162 +682,6 @@ for (i &lt;- 0 until 10) { … }
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/08/26/mockito-scala/">ScalaTestでMockito</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-08-26T10:14:00+09:00" pubdate data-updated="true">Aug 26<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>ScalaTestでMockitoを使うためのお勉強ノート</p>
-
-<h2>Setup</h2>
-
-<p><code>build.sbt</code> に追加。</p>
-
-<pre><code>libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "1.9.1" % "test",
-  "org.mockito" % "mockito-core" % "1.9.5" % "test"
-)
-</code></pre>
-
-<p>テストで <code>MockitoSugar</code> を mixin し、以下の import 行を追加。</p>
-
-<pre><code>import org.mockito.Matchers._
-import org.mockito.Mockito._
-</code></pre>
-
-<h2>Mock作成</h2>
-
-<pre><code>// ClassToMock のモックを作成
-val m = mock[ClassToMock]
-</code></pre>
-
-<p>作ったモックはデフォルトで全メソッドコールに対して <code>null</code> を返す。
-メソッドの戻り値として<code>null</code>ではなくモックを返したい時は次のようにする。</p>
-
-<pre><code>// メソッド呼び出しでモックを返すモック
-mock[ClassToMock](RETURNS_MOCKS)
-// 返されたモックもモックを返すモック
-mock[ClassToMock](RETURNS_DEEP_STUBS)
-</code></pre>
-
-<h2>引数に応じて戻り値を変える</h2>
-
-<p><code>when(メソッド呼び出し).thenReturn(戻り値)</code> で登録する。
-メソッド呼び出し部の引き数には <code>any</code> で任意の型の任意の値に、<code>anyString</code>, <code>anyBoolean</code>, <code>anyByte</code>, <code>anyChar</code>などで基本的な型の任意の値に <code>anyVararg</code> で任意の可変引き数にマッチさせることができる。</p>
-
-<pre><code>// m.method1(何か) が呼ばれたら 10 を返す
-when(m.method1(any)).thenReturn(10)
-</code></pre>
-
-<p>引数が２つ以上あり、いずれかで <code>any</code> などのマッチャーを使った場合には、他の引き数もマッチャーにする必要がある。
-オブジェクトが等しいことを示すマッチャーは <code>eq(obj)</code> で作れる。</p>
-
-<p>後から登録したものが先にマッチするので、条件のゆるいもの（マッチ範囲が広いもの）を先に書く。</p>
-
-<h3>１回目、２回目で違う値を返す</h3>
-
-<p><code>thenReturn()</code> の可変引き数版を使う</p>
-
-<pre><code>// 最初は 10, 次は 20, それ以降はずっと 30 を返す
-when(m.method1()).thenReturn(10, 20, 30)
-</code></pre>
-
-<h2>例外を起こす</h2>
-
-<pre><code>// method1() が呼ばれたら例外を起こす
-when(m.method1()).thenThrow(new RuntimeException("Gau gau"))
-</code></pre>
-
-<p><code>thenReturn</code> と同じように１回目、２回目で違う例外を起こすことも可能。
-むしろ <code>thenReturn</code> と組み合わせることができる。</p>
-
-<pre><code>when(m.method1())
-  .thenReturn(10, 20) // １回目は10, ２回目は20を返す
-  .thenThrow(new FooException, new BarException) // ３、４回目は例外
-  .thenReturn(30) // ５回目以降は30を返す
-</code></pre>
-
-<h2>オブジェクトの一部をモックする(spy)</h2>
-
-<p><code>mock[ClassToMock]</code> はフルのモック。一部だけモックしたい場合はこっち。<code>spy</code>と呼ぶ。</p>
-
-<pre><code>// obj は普通のオブジェクト
-val s = spy(obj)
-// s.method1(何か) が呼ばれたら obj の実装を使わずに 10 を返す。
-doReturn(10).when(s).method1(any[ClassOfArg])
-</code></pre>
-
-<p><code>thenReturn</code> が <code>doReturn</code> になって順番が代わり、メソッド呼び出しも <code>when</code> の外に出す。
-<code>thenReturn</code>の書き方では実際のメソッドが呼ばれるので、呼ばれては困るときにこちらの書き方をする。</p>
-
-<p>この記法の場合は <code>any</code> を使うときに型を指定しなければならなかった
-（理由はわかってない）。</p>
-
-<h2>メソッドが呼び出されたことを確認する(verify)</h2>
-
-<p><code>when()</code>, <code>thenReturn()</code>, <code>doReturn()</code> などは関数呼び出しの前に用意する。
-用意したものがテスト中で呼び出されなくても問題ない。</p>
-
-<p>呼び出されたことを確認するには <code>verify()</code> を使う。</p>
-
-<pre><code>// テストを実行
-m.method1(123);
-// method1() が何らかの整数引き数で呼び出されたことを確認
-verify(m).method1(anyInt);
-</code></pre>
-
-<p>複数回呼び出されたことを確認するときは、<code>verify()</code>の第二引き数で回数指定をする。</p>
-
-<pre><code>// 2回呼び出されたことを確認
-verify(m, times(2)).method1(anyInt)
-// 少なくとも2回
-verify(m, atLeast(2)).method1(anyInt)
-// 多くとも3回
-verify(m, atMost(3)).method1(anyInt)
-</code></pre>
-
-<h3>呼び出されてないことを確認する</h3>
-
-<p><code>never</code> を使う。</p>
-
-<pre><code>// 一度も呼ばれてないことを確認
-verify(m, never).method1(anyInt)
-</code></pre>
-
-<h2>より進んだ使い方</h2>
-
-<p><a href="http://docs.mockito.googlecode.com/hg/latest/org/mockito/Mockito.html">Mockitoのドキュメント</a>
-に書いてある。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -794,6 +697,10 @@ verify(m, never).method1(anyInt)
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/10/31/haxe-optionop/">Haxe で Option用の関数を定義してみた話</a>
       </li>
     
@@ -807,10 +714,6 @@ verify(m, never).method1(anyInt)
     
       <li class="post">
         <a href="/blog/2013/10/09/covariant-contravariant/">Covariantとcontravariant</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/09/28/scala-implicit/">Scalaのimplicit</a>
       </li>
     
   </ul>

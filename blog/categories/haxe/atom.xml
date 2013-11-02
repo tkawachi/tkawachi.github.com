@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Haxe | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/haxe/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-10-31T21:46:48+09:00</updated>
+  <updated>2013-11-02T13:16:53+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,162 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Haxe で call-by-name したい]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/11/01/haxe-call-by-name/"/>
+    <updated>2013-11-01T19:18:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/11/01/haxe-call-by-name</id>
+    <content type="html"><![CDATA[<p>先日 Haxe で Option 関連の関数を定義した時、 <code>getOrElse()</code> は次のような定義にしていた。</p>
+
+<pre><code>public static function getOrElse&lt;A&gt;(opt: Option&lt;A&gt;, els: A) {
+  return switch (opt) {
+  case Some(v): v;
+  case None: els;
+  }
+}
+</code></pre>
+
+<p>scala.Option の <code>getOrElse()</code> ぽく使いたかったのだが、実際に使ってみるとなんか違う。</p>
+
+<pre><code>opt.getOrElse(sideEffectFunction());
+</code></pre>
+
+<p>上で <code>sideEffectFunction()</code> は何らかの副作用をもつ関数だ。
+Scala の場合、 <code>opt</code> に値が入っていた場合には <code>sideEffectFunction()</code> は評価されない。
+副作用も発生しない。
+上で定義した Haxe 用 <code>getOrElse()</code> では <code>opt</code> の内容によらず <code>sideEffectFunction()</code> が評価され、副作用が発生する。</p>
+
+<p>関数を呼び出すときには、まず引数を評価してから関数の実行に移るので、当たり前といえば当たり前だった。</p>
+
+<!-- more -->
+
+
+<p>Scala には call-by-name が言語上用意されているおり、
+scala.Option の <code>getOrElse()</code> はこれを利用している。
+型を確認すると <code>final def getOrElse[B &gt;: A](default: ⇒ B): B</code> となっている。
+<code>⇒ B</code> が引数の型だが <code>⇒</code> を付けることにより、関数呼び出し前には評価されず、関数内で <code>default</code> を参照したところで評価されるようになっている(call-by-name)。
+なお <code>[B &gt;: A]</code> は型の境界で、B は A の subtype であることを表している。
+いいなあ。Scala。</p>
+
+<h2>Using callback</h2>
+
+<p>さて Haxe には call-by-name が無い。
+JavaScript も call-by-name が無いが、彼らは callback でそれを代用する。
+Haxe でも同じようにできる。</p>
+
+<pre><code>public static function getOrElse&lt;A&gt;(opt: Option&lt;A&gt;, els: Void -&gt; A) {
+  return switch (opt) {
+  case Some(v): v;
+  case None: els();
+  }
+}
+</code></pre>
+
+<p><code>els</code> 部を関数渡すようにしておけば、実際に <code>opt</code> が <code>None</code> のときだけ <code>els</code> を評価することができる。
+このとき呼び出し元は以下のようになる。</p>
+
+<pre><code>opt.getOrElse(function() { return sideEffectFunction(); });
+// function が return ひとつだけのときは以下のように省略できるが、まだ長い。
+opt.getOrElse(function() return sideEffectFunction());
+</code></pre>
+
+<p>Haxe では関数リテラルを短く書く方法がなく、return を省略できないため長ったらしい。
+仮にこれが CoffeeScript だったとすると、</p>
+
+<pre><code>opt.getOrElse(-&gt; sideEffectFunction())
+</code></pre>
+
+<p>と書くことが出来ただろう。
+しかしないものねだりをしてもしょうがない。</p>
+
+<h2>Using macro</h2>
+
+<p>もうすこし考えてみたところ、macro 機能を使えば scala ぽいことができることに気がついた。
+Macro はコンパイル時に実行されるコードで、プログラムを変更することができる。
+Macro というと「怖い。黒魔術！」と身構えてしまうかもしれないが、ひどく怖いわけではない。</p>
+
+<p>プログラムをコンパイルするときはテキストを読み込んで抽象構文木を作る。
+C の macro はテキストの段階で置き換えを行うが、 Haxe の macro は抽象構文木の段階で変換を行う。
+C では C の文法ではないテキストを macro で処理することができる。
+Haxe では、まず抽象構文木を作る必要があるので、元々存在しない文法の文字列は macro を使ってどうこうできない。
+<a href="http://haxe.org/manual/macros">Haxe の macro 説明ページ</a>では
+「文法が崩れないので解読不能にならない。嬉しいよね！」と主張している。
+なお、Scala の macro も Haxe と同じ。
+<a href="http://goo.gl/2D99Nl">Wikipediaによると</a> それぞれ Text substitution macros と Syntactic macros という名前で呼ばれるらしい。</p>
+
+<p>Macro を使って書いたオレオレ <code>getOrElse()</code> は以下のとおり。</p>
+
+<pre><code>import haxe.macro.Expr;
+
+macro public static function getOrElse(opt: Expr, els: Expr) {
+  return macro switch ($opt) {
+  case Some(v): v;
+  case None: $els;
+  }
+}
+</code></pre>
+
+<p>関数宣言の頭に <code>macro</code> と付けることで、<code>getOrElse()</code> が macro であることを示している。
+Macro 引数の型は基本的に <code>haxe.macro.Expr</code> 型であり、これは抽象構文木上の式を表す。
+木上で式を式に変換するわけだから、戻り値も <code>Expr</code> 型だ。
+<code>return</code> の次にある <code>macro</code> は、以降の式を <code>Expr</code> に変えてくれる便利なもの。
+<code>opt</code> や <code>els</code> の参照は、<code>$</code> prefix を付けて行う。
+正直、まだ完全にわかった気はしていないが、 <code>getOrElse()</code> の定義はこれで十分。</p>
+
+<p>呼び出し方は scala と同じ</p>
+
+<pre><code>opt.getOrElse(sideEffectFunction());
+</code></pre>
+
+<p>となる。
+<code>getOrElse()</code> は macro なので、上の呼び出しはコンパイル時に以下に展開される。</p>
+
+<pre><code>// opt.getOrElse(sideEffectFunction()); が以下に置き換えられる。
+switch (opt) {
+  case Some(v): v;
+  case None: sideEffectFunction();
+};
+</code></pre>
+
+<p>展開結果を見るとわかるように <code>opt</code> が <code>Some(v)</code> の時には <code>sideEffectFunction()</code> は評価されない。やった。Scala ぽくなった。</p>
+
+<p>なお、macro 引き数の <code>els</code> は macro 定義内で何度でも参照でき、各々が <code>sideEffectFunction()</code> に展開されるため、評価回数が複数回になりうるというところは call-by-name と同じだ。</p>
+
+<h3>まって、それ type safe じゃなくない？</h3>
+
+<p>むぐぐ。
+たしかに <code>switch</code> に展開するだけなので <code>els</code> に対する型の制約はない。
+Macro でなんとか出来そうな気もするが将来の課題ということに。</p>
+
+<h2>再び callback</h2>
+
+<p>Callback での不満点は無名関数の記法が長いということだったので、macro でそれを解決すれば満足できるかもしれない。
+ただし Haxe の文法にないものは macro でどうしようもないので <code>-&gt; sideEffectFunction()</code> のような書き方はできない。</p>
+
+<p>例えばこんな感じ。</p>
+
+<pre><code>macro public static function fn(e: Expr) {
+  return macro function() { return $e; };
+}
+</code></pre>
+
+<p>を mixin すれば callback 版 <code>getOrElse()</code> は以下のように呼び出せる。</p>
+
+<pre><code>opt.getOrElse(sideEffectFunction().fn());
+</code></pre>
+
+<p>ここが妥協点かなあ。</p>
+
+<h2>まとめ</h2>
+
+<ul>
+<li>Haxe の macro を使うと抽象構文木レベルでプログラムを変更できる</li>
+<li>Haxe にも call-by-name あったらいいのに</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Haxe で Option用の関数を定義してみた話]]></title>
