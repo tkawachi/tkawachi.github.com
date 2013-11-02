@@ -32,7 +32,8 @@ Scala には call-by-name が言語上用意されているおり、
 scala.Option の `getOrElse()` はこれを利用している。
 型を確認すると `final def getOrElse[B >: A](default: ⇒ B): B` となっている。
 `⇒ B` が引数の型だが `⇒` を付けることにより、関数呼び出し前には評価されず、関数内で `default` を参照したところで評価されるようになっている(call-by-name)。
-なお `[B >: A]` は型の境界で、B は A の subtype であることを表している。
+なお `[B >: A]` は型の境界で、B は A の supertype であることを表している。
+`default` に何かを入れると `A` と `default` の型との共通 supertyper を探して `B` を推論してくれる。
 いいなあ。Scala。
 
 ## Using callback
