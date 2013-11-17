@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Play framework 2.2.1 scala でユーザ登録 - tkawachi Blog</title>
+  <meta name="author" content="KAWACHI Takashi">
+
+  
+  <meta name="description" content="Play framework 2.x を触り始めていて、まず最初にユーザ登録とログインを
+扱いたいと思った。
+Rails であれば devise で、というところだが、Play ではどうなっているのだろう？ Sample としてついてくる zentask や、
+「play scala ユーザ登録」 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/11/17/play-2-dot-2-scala-user-login">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-5']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">tkawachi Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tkawachi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Play Framework 2.2.1 Scala でユーザ登録</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-17T18:36:00+09:00" pubdate data-updated="true">Nov 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Play framework 2.x を触り始めていて、まず最初にユーザ登録とログインを
+扱いたいと思った。
+Rails であれば devise で、というところだが、Play ではどうなっているのだろう？</p>
+
+<p>Sample としてついてくる zentask や、
+「play scala ユーザ登録」でググって上の方に出てくる
+<a href="http://akiomik.hatenablog.jp/entry/2013/02/07/211054">ペ</a>
+<a href="http://how-to-use-playframework-20.readthedocs.org/en/latest/subdocs/initial_create_application.html">ー</a>
+<a href="http://d.hatena.ne.jp/sy-2010/20110517/1305650450">ジ</a>
+を見ると、いずれもパスワードを生で保存している。</p>
+
+<p>パスワードは生で保存していると何かの拍子に痛い目に合うので、真似したくない。
+きっと Rails の devise みたいに再利用できるコンポーネントがあるだろうから、
+それを使いたい。</p>
+
+<p>Google+ のコミュニティで訪ねてみたところ<a href="http://securesocial.ws/">SecureSocial</a> と
+<a href="https://github.com/t2v/play2-auth">play2-auth</a>
+を教えてもらった。
+SecureSocial を試してみる。</p>
+
+<!-- more -->
+
+
+<p>Play は 2.2.1, Scala でやる。</p>
+
+<p>プロジェクト作成。アプリ名はログインしたいだけだから <code>just-login</code> にする。</p>
+
+<pre><code>$ play new just-login
+</code></pre>
+
+<p><a href="http://securesocial.ws/guide/installation.html">http://securesocial.ws/guide/installation.html</a> に従って進めていく。</p>
+
+<p>project/Build.scala を追加。</p>
+
+<pre><code>import sbt._
+import Keys._
+
+object ApplicationBuild extends Build {
+    val appName         = "just-login"
+    val appVersion      = "1.0-SNAPSHOT"
+
+    val appDependencies = Seq(
+        "securesocial" %% "securesocial" % "2.1.2"
+    )
+    val main = play.Project(appName, appVersion, appDependencies).settings(
+        resolvers += Resolver.url("sbt-plugin-releases", new URL("http://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/"))(Resolver.ivyStylePatterns)
+    )
+}
+</code></pre>
+
+<p>重複した情報になるので、 build.sbt からは <code>name</code> と <code>version</code> を削除した。</p>
+
+<p>conf/route にルーティング追加。それっぽいエンドポイントが一式備わってて、それっぽい感じ。</p>
+
+<pre><code># Login page
+GET     /login                      securesocial.controllers.LoginPage.login
+GET     /logout                     securesocial.controllers.LoginPage.logout
+
+# User Registration and password handling 
+GET     /signup                     securesocial.controllers.Registration.startSignUp
+POST    /signup                     securesocial.controllers.Registration.handleStartSignUp
+GET     /signup/:token              securesocial.controllers.Registration.signUp(token)
+POST    /signup/:token              securesocial.controllers.Registration.handleSignUp(token)
+GET     /reset                      securesocial.controllers.Registration.startResetPassword
+POST    /reset                      securesocial.controllers.Registration.handleStartResetPassword
+GET     /reset/:token               securesocial.controllers.Registration.resetPassword(token)
+POST    /reset/:token               securesocial.controllers.Registration.handleResetPassword(token)
+GET     /password                   securesocial.controllers.PasswordChange.page
+POST    /password                   securesocial.controllers.PasswordChange.handlePasswordChange
+
+# Providers entry points
+GET     /authenticate/:provider     securesocial.controllers.ProviderController.authenticate(provider)
+POST    /authenticate/:provider     securesocial.controllers.ProviderController.authenticateByPost(provider)
+GET     /not-authorized             securesocial.controllers.ProviderController.notAuthorized
+</code></pre>
+
+<p>次に <code>conf/play.plugins</code> を作成し、以下の内容を記述。
+ユーザ名とパスワードでログインしたいだけなので、
+Twitter やら Facebook やらでログインするためのプラグインはざっくり削る。</p>
+
+<pre><code>1500:com.typesafe.plugin.CommonsMailerPlugin
+9994:securesocial.core.DefaultAuthenticatorStore
+9995:securesocial.core.DefaultIdGenerator
+9996:securesocial.core.providers.utils.DefaultPasswordValidator
+9997:securesocial.controllers.DefaultTemplatesPlugin
+9998:service.UserServiceImpl
+9999:securesocial.core.providers.utils.BCryptPasswordHasher
+10004:securesocial.core.providers.UsernamePasswordProvider
+</code></pre>
+
+<p><code>9998:service.UserServiceImpl</code> の行に書いた <code>service.UserServiceImpl</code> は
+自分の環境に合わせて実装する必要がある。</p>
+
+<p><a href="https://github.com/jaliss/securesocial/blob/master/samples/scala/demo/app/service/InMemoryUserService.scala">InMemoryUserService.scala</a>
+の内容をコピってきて、パッケージ名を <code>service</code> に、クラス名を <code>UserServiceImpl</code> に
+変えて、 <code>app/service/UserServiceImpl.scala</code> として保存する。</p>
+
+<p><a href="http://securesocial.ws/guide/configuration.html">http://securesocial.ws/guide/configuration.html</a> にのっとって
+<code>conf/application.conf</code> に <code>smtp</code> の設定と、 <code>include "securesocial.conf"</code> を書く。
+<code>conf/securesocial.conf</code> は <code>Sample configuration</code> の内容を書く。
+<code>assetsController=controllers.ReverseMyCustomAssetsController</code> は
+Asset のコントローラを自前で作っているときだけ必要ぽいので、コメントアウトする。</p>
+
+<p><a href="https://github.com/typesafehub/play-plugins/blob/master/mailer/src/main/scala/com/typesafe/plugin/MailerPlugin.scala">MailerPlugin のソース</a>
+を眺めるとわかるように <code>smtp.mock = true</code> を設定しておけば実際のメールは送信されず、
+コンソールにメールの内容が出力される。</p>
+
+<pre><code>smtp {
+    ... 他の設定
+    mock = true
+}
+</code></pre>
+
+<p>ここまでで、ユーザ登録とログイン、ログアウト、パスワード忘れが実現できた。
+パスワードが生で保存されることはなく、<code>BCryptPasswordHasher</code> によって生成された hash が格納される。</p>
+
+<p>UserService はメモリ上じゃなく、DBへ格納するように実装することになる。
+その際は
+<a href="https://github.com/jaliss/securesocial/pull/163/files">https://github.com/jaliss/securesocial/pull/163/files</a>
+のコードが参考になりそうだった。</p>
+
+<h2>まとめ</h2>
+
+<ul>
+<li><a href="http://securesocial.ws/">SecureSocial</a> を使えば Play 2.2 + scala でユーザ登録・ログイン・パスワード忘れが簡単に実現できる</li>
+<li>Rails の devise のように DB の schema は出してくれないので、比べると少し面倒かな&hellip;</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-17T18:36:00+09:00" pubdate data-updated="true">Nov 17<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/play/'>Play</a>, <a class='category' href='/blog/categories/scala/'>Scala</a>, <a class='category' href='/blog/categories/securesocial/'>SecureSocial</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/11/17/play-2-dot-2-scala-user-login/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/11/17/play-2-dot-2-scala-user-login/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/01/haxe-call-by-name/" title="Previous Post: Haxe で call-by-name したい">&laquo; Haxe で call-by-name したい</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/31/haxe-optionop/">Haxe で Option用の関数を定義してみた話</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/random-forest-important-variables/">randomForestで重要な説明変数を見つける</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/10/14/scala-for/">Scala の For</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/110309119188108264538?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<div class="fb-activity" data-site="http://tkawachi.github.com/" data-app-id="445203802205922" data-width="260" data-height="300" data-header="true" data-linktarget="_top" data-recommendations="false"></div>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - KAWACHI Takashi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tkawachiblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/11/17/play-2-dot-2-scala-user-login/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2013/11/17/play-2-dot-2-scala-user-login/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

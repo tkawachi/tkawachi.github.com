@@ -9,7 +9,10 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="先日 Haxe で Option 関連の関数を定義した時、 getOrElse() は次のような定義にしていた。 public static function getOrElse&lt;A&gt;(opt: Option&lt;A&gt;, els: A) { return switch (opt &hellip;">
+  <meta name="description" content="Play framework 2.x を触り始めていて、まず最初にユーザ登録とログインを
+扱いたいと思った。
+Rails であれば devise で、というところだが、Play ではどうなっているのだろう？ Sample としてついてくる zentask や、
+「play scala ユーザ登録」 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -75,6 +78,65 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-17T18:36:00+09:00" pubdate data-updated="true">Nov 17<span>th</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Play framework 2.x を触り始めていて、まず最初にユーザ登録とログインを
+扱いたいと思った。
+Rails であれば devise で、というところだが、Play ではどうなっているのだろう？</p>
+
+<p>Sample としてついてくる zentask や、
+「play scala ユーザ登録」でググって上の方に出てくる
+<a href="http://akiomik.hatenablog.jp/entry/2013/02/07/211054">ペ</a>
+<a href="http://how-to-use-playframework-20.readthedocs.org/en/latest/subdocs/initial_create_application.html">ー</a>
+<a href="http://d.hatena.ne.jp/sy-2010/20110517/1305650450">ジ</a>
+を見ると、いずれもパスワードを生で保存している。</p>
+
+<p>パスワードは生で保存していると何かの拍子に痛い目に合うので、真似したくない。
+きっと Rails の devise みたいに再利用できるコンポーネントがあるだろうから、
+それを使いたい。</p>
+
+<p>Google+ のコミュニティで訪ねてみたところ<a href="http://securesocial.ws/">SecureSocial</a> と
+<a href="https://github.com/t2v/play2-auth">play2-auth</a>
+を教えてもらった。
+SecureSocial を試してみる。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -640,48 +702,6 @@ for (i &lt;- 0 until 10) { … }
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/15/akka-memo/">Akka Memo</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-15T21:30:00+09:00" pubdate data-updated="true">Sep 15<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Scala 2.10 から付いてくる Akka の Actor についてのお勉強メモ。
-全然まとまっていないが晒しておく。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/09/15/akka-memo/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -697,6 +717,10 @@ for (i &lt;- 0 until 10) { … }
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
       </li>
     
@@ -710,10 +734,6 @@ for (i &lt;- 0 until 10) { … }
     
       <li class="post">
         <a href="/blog/2013/10/14/scala-for/">Scala の For</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/09/covariant-contravariant/">Covariantとcontravariant</a>
       </li>
     
   </ul>
