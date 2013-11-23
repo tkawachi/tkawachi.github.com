@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>tkawachi Blog</title>
+  <title>Play Framework 2.2 Scala 最初の1週間で困った雑多なこと - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
@@ -20,7 +20,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.io">
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/11/23/starting-play">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
@@ -75,15 +75,12 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2013/11/23/starting-play/">Play Framework 2.2 Scala 最初の1週間で困った雑多なこと</a></h1>
+      <h1 class="entry-title">Play Framework 2.2 Scala 最初の1週間で困った雑多なこと</h1>
     
     
       <p class="meta">
@@ -106,7 +103,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Play Framework 2.2.1 + Scala を触り始めて一週間くらいたった。
+<div class="entry-content"><p>Play Framework 2.2.1 + Scala を触り始めて一週間くらいたった。
 触りながら困った点（というか「疑問に思った」程度のものが多いが）をメモしていたので晒しておく。
 雑なメモで無知を晒すのは恥ずかしいが、同じことではまる人がいるかもしれないもんね。</p>
 
@@ -352,81 +349,16 @@ if (DB("default").driver == MySQLDriver) {...}
 <p><code>/*! CHARACTER SET utf8mb4 */;</code>
 をつけておくと MySQL でだけ処理され、H2では処理されない。</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
   
 
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
 
-<time datetime="2013-11-17T18:36:00+09:00" pubdate data-updated="true">Nov 17<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Play framework 2.x を触り始めていて、まず最初にユーザ登録とログインを
-扱いたいと思った。
-Rails であれば devise で、というところだが、Play ではどうなっているのだろう？</p>
-
-<p>Sample としてついてくる zentask や、
-「play scala ユーザ登録」でググって上の方に出てくる
-<a href="http://akiomik.hatenablog.jp/entry/2013/02/07/211054">ペ</a>
-<a href="http://how-to-use-playframework-20.readthedocs.org/en/latest/subdocs/initial_create_application.html">ー</a>
-<a href="http://d.hatena.ne.jp/sy-2010/20110517/1305650450">ジ</a>
-を見ると、いずれもパスワードを生で保存している。</p>
-
-<p>パスワードは生で保存していると何かの拍子に痛い目に合うので、真似したくない。
-きっと Rails の devise みたいに再利用できるコンポーネントがあるだろうから、
-それを使いたい。</p>
-
-<p>Google+ のコミュニティで訪ねてみたところ<a href="http://securesocial.ws/">SecureSocial</a> と
-<a href="https://github.com/t2v/play2-auth">play2-auth</a>
-を教えてもらった。
-SecureSocial を試してみる。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
@@ -438,495 +370,48 @@ SecureSocial を試してみる。</p>
   
 
 
-<time datetime="2013-11-01T19:18:00+09:00" pubdate data-updated="true">Nov 1<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>先日 Haxe で Option 関連の関数を定義した時、 <code>getOrElse()</code> は次のような定義にしていた。</p>
-
-<pre><code>public static function getOrElse&lt;A&gt;(opt: Option&lt;A&gt;, els: A) {
-  return switch (opt) {
-  case Some(v): v;
-  case None: els;
-  }
-}
-</code></pre>
-
-<p>scala.Option の <code>getOrElse()</code> ぽく使いたかったのだが、実際に使ってみるとなんか違う。</p>
-
-<pre><code>opt.getOrElse(sideEffectFunction());
-</code></pre>
-
-<p>上で <code>sideEffectFunction()</code> は何らかの副作用をもつ関数だ。
-Scala の場合、 <code>opt</code> に値が入っていた場合には <code>sideEffectFunction()</code> は評価されない。
-副作用も発生しない。
-上で定義した Haxe 用 <code>getOrElse()</code> では <code>opt</code> の内容によらず <code>sideEffectFunction()</code> が評価され、副作用が発生する。</p>
-
-<p>関数を呼び出すときには、まず引数を評価してから関数の実行に移るので、当たり前といえば当たり前だった。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/11/01/haxe-call-by-name/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time datetime="2013-11-23T21:40:00+09:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/31/haxe-optionop/">Haxe で Option用の関数を定義してみた話</a></h1>
-    
-    
-      <p class="meta">
-        
 
-
-
-
-
-
-
-
+<span class="categories">
   
+    <a class='category' href='/blog/categories/play/'>Play</a>, <a class='category' href='/blog/categories/scala/'>Scala</a>
+  
+</span>
 
 
-<time datetime="2013-10-31T20:35:00+09:00" pubdate data-updated="true">Oct 31<span>st</span>, 2013</time>
-        
-      </p>
+    </p>
     
-  </header>
-
-
-  <div class="entry-content"><p>最近 JavaScript で何かを書くことになって困っている。
-JavaScript はそれなりに仕事で触れて、それなりに理解はしているが、どうにも好きになれない。
-CoffeeScript もそれなりに触れたが、短く書けて式中心の記法ができるものの、それ以外は JavaScript と同じ。
-何も変わっていない。</p>
-
-<p>僕の問題（苦手）意識は <a href="http://www.haskell.org/haskellwiki/The_JavaScript_Problem">The JavaScript Problem</a>
-によく表されている。</p>
-
-<ol>
-<li>JavaScript sucks.</li>
-<li>We need JavaScript.</li>
-</ol>
-
-
-<p>もうちょっとマシな言語で書きたいと常々思っていた。</p>
-
-<p>AltJS のなかで TypeScript は触ったが、Haxe は触っていなかった。
-理由は「Haxe が吐き出す JavaScript はとても人間が読めるものじゃない」とどこかで聞いていたから。
-いざって時には生成された JavaScript が読める形じゃないと困る。</p>
-
-<p>今回ふとしたきっかけで Haxe を触ってみた。
-さわってみるとかなり好感触。
-出力された JavaScript はそんなに変なことになってなくて普通に読める。
-やはり自分で触ってみないとダメだな。
-代数的データ型があるなど TypeScript より型機能が強い感じ。</p>
-
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/11/23/starting-play/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/11/23/starting-play/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/31/haxe-optionop/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  
-    <article>
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/random-forest-important-variables/">randomForestで重要な説明変数を見つける</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-14T15:33:00+09:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Random forest といえば決定木を何本ももつアンサンブル学習で高い精度を持つ。
-けど、どの説明変数が効いているかは説明が難しいものだと思いこんでいた。
-ご近所のデータサイエンティストが R で効いている説明変数を出す方法を教えてくれたのでメモ。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/14/random-forest-important-variables/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+        <a class="basic-alignment left" href="/blog/2013/11/17/play-2-dot-2-scala-user-login/" title="Previous Post: Play framework 2.2.1 scala でユーザ登録">&laquo; Play framework 2.2.1 scala でユーザ登録</a>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/scala-for/">Scala の For</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-14T11:35:00+09:00" pubdate data-updated="true">Oct 14<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>C や Java と同じように Scala にも for がある。</p>
-
-<p>昔の Java におけるfor 文は、C と同じように <code>for (初期化; 継続条件; カウンタ更新)</code> という形しかなかった。
-Java 5.0 で導入された拡張for文（<code>for (型 変数: コレクション)</code>の形）では <code>java.lang.Iterable</code> を実装したオブジェクトならなんでも繰り返しができるようになった。
-便利になったなあと思ったのを覚えてる（2004年の話）。</p>
-
-<h2>文法</h2>
-
-<p>Scala で C の for 的なものをやろうとすると</p>
-
-<pre><code>// C では
-for (int i = 0; i &lt; 10; i++) { … }
-// Scala では
-for (i &lt;- 0 until 10) { … }
-</code></pre>
-
-<p>となるので「 <code>for (i &lt;- 初期値 until 上限)</code> という固定形なんだー」と最初は思ったのだが、そうではなく <code>for (i &lt;- 初期値.until(上限))</code> であり <code>for (i &lt;- obj)</code> が for 式のパターンである。
-ここで<code>初期値.until(上限)</code> は <code>Range</code> 型の値を返す。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/14/scala-for/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/09/covariant-contravariant/">Covariantとcontravariant</a></h1>
-    
-    
-      <p class="meta">
-        
+    </p>
+  </footer>
+</article>
 
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-10-09T23:06:00+09:00" pubdate data-updated="true">Oct 9<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>今日 <a href="https://www.coursera.org/course/progfun">Functional Programming Principles in Scala</a> で聞いた話が難しかったのでメモ。</p>
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/09/covariant-contravariant/">Read on &rarr;</a>
-    </footer>
-  
 
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/28/scala-implicit/">Scalaのimplicit</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-28T22:16:00+09:00" pubdate data-updated="true">Sep 28<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Scala の implicit のお勉強メモ。</p>
-
-<h2>なぜ implicit を使いたくなるか？</h2>
-
-<p>コード片を見ただけではわからなくなるので、暗黙的な記述はあまり使わない方がいいんじゃないかと個人的に思うのだけど。
-それでも便利な使い道があるから使われているみたい。</p>
-
-<p>今自分が知っているところで次のパターンがあるみたい。
-他の便利な使い方もきっとあるんじゃなかろうか。</p>
-
-<ul>
-<li>既存のクラスを変更せずにメソッドを追加したいとき (pimp my library pattern)。 implicit な関数, implicit なクラスを使う。</li>
-<li>型パラメータ情報を実行時に使いたいとき。implicit パラメータをつかう。</li>
-<li>共通のインタフェースを持たないクラス群に、共通のインタフェースをあとづけするとき (CONCEPT pattern)。implicit パラメータをつかう。</li>
-</ul>
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/09/28/scala-implicit/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/23/use-trait-to-setup-test-data/">テストデータのセットアップに Trait を使う</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-23T23:59:00+09:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>9月半ばから始まった
-<a href="https://www.coursera.org/course/progfun">Functional Programming Principles in Scala</a>
-を受講している。
-課題内のテストの書き方でこうやるのか、というところがあったのでメモ。</p>
-
-<p>テストケース間でデータを共有したいときがある。
-たとえば以下の例では <code>data1</code> と <code>data2</code> が共通なので共通化したくなる。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    test("test A") {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-        // tests with data1 and data2
-    }
-
-    test("test B") {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-        // another tests with data1 and data2
-    }
-}
-</code></pre>
-
-<p>普通は以下のようにメンバ変数にしたくなると思う。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    val data1 = new FooData(…)
-    val data2 = new FooData(…)
-
-    test("test A") {
-        // tests with data1 and data2
-    }
-
-    test("test B") {
-        // another tests with data1 and data2
-    }
-}
-</code></pre>
-
-<p>この方法は少し問題がある。</p>
-
-<ul>
-<li><code>new FooData(…)</code> が例外を出した場合に、<code>FooSuite</code> のインスタンス化に失敗するという問題がある</li>
-<li><code>FooData</code> が mutable な場合に、前に実行したテストの内容により結果が変わる可能性がある</li>
-</ul>
-
-
-<p>課題のテストケースでは trait を使って以下のようにしていた。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    trait TestData {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-    }
-
-    test("test A") {
-        new TestData {
-            // tests with data1 and data2
-        }
-    }
-
-    test("test B") {
-        new TestData {
-            // another tests with data1 and data2
-        }
-    }
-}
-</code></pre>
-
-<p>各テスト内で <code>TestData</code> trait を継承した無名クラスを作り、無名クラスのコンストラクタ内でテストを実行する。
-こうすることで <code>new FooData(…)</code> の実行はテスト実行時になり、各テストごとにデータが初期化されるので、上にあげた問題が解消する。</p>
-
-<p><a href="http://www.scalatest.org/user_guide/sharing_fixtures">Sharing fixtures</a> をみると他の方法もいろいろある。
-一番上にある Calling get-fixture methods が一番単純ぽい。
-この方法で例を書き換えるとこうなる。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    def fixture = new {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-    }
-
-    test("test A") {
-        val f = fixture
-        // tests with f.data1 and f.data2
-    }
-
-    test("test B") {
-        val f = fixture
-        import f._
-        // another tests with data1 and data2
-    }
-}
-</code></pre>
-
-<p>無名クラスのメンバとしてテストデータを作る。
-こっちのほうがインデント少なくていいかも。
-<code>import f._</code> すれば <code>f.</code> prefix 要らないしね。
-<code>new</code> のあとクラス名無くてもコンパイル通るんだ… 知らなかったよ。</p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/21/active-model-7-pattern/">ActiveRecord のモデルを整理する7つのパターン</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-21T21:18:00+09:00" pubdate data-updated="true">Sep 21<span>st</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://blog.codeclimate.com/blog/2012/10/17/7-ways-to-decompose-fat-activerecord-models/">7 Patterns to Refactor Fat ActiveRecord Models</a>
-という記事があり、読もう読もうと思いつつ1年くらい経ってしまった。
-ようやく読んだので理解した内容を書いておく。
-コード例は元記事のもの。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/09/21/active-model-7-pattern/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/blog/page/2/">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -974,6 +459,7 @@ for (i &lt;- 0 until 10) { … }
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -988,7 +474,10 @@ for (i &lt;- 0 until 10) { … }
       var disqus_shortname = 'tkawachiblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/11/23/starting-play/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2013/11/23/starting-play/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

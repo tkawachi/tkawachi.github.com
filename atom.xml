@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-11-17T19:13:00+09:00</updated>
+  <updated>2013-11-23T22:06:22+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,259 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Play Framework 2.2 Scala 最初の1週間で困った雑多なこと]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/11/23/starting-play/"/>
+    <updated>2013-11-23T21:40:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/11/23/starting-play</id>
+    <content type="html"><![CDATA[<p>Play Framework 2.2.1 + Scala を触り始めて一週間くらいたった。
+触りながら困った点（というか「疑問に思った」程度のものが多いが）をメモしていたので晒しておく。
+雑なメモで無知を晒すのは恥ずかしいが、同じことではまる人がいるかもしれないもんね。</p>
+
+<p>間違っているところがあったらコメントで教えてもらえると大変嬉しいです。</p>
+
+<h2>Play 関連</h2>
+
+<h3>Q: app/assets/ と public/ の違いは？</h3>
+
+<p>A: app/assets は CoffeeScript, LESS など preprocess するもの。public はしないもの。</p>
+
+<h3>Q: bindFromRequest すると Cannot find any HTTP Request here って出るよ。</h3>
+
+<p>A: Action の先頭に <code>implicit request =&gt;</code> を付ける。
+<code>Action { implicit request =&gt; ... }</code></p>
+
+<p>Action.apply() がオーバーロードされてて、引数が call by name のもの関数のものがある。</p>
+
+<pre><code>def apply(block: =&gt; Result)
+def apply(block: Request =&gt; Result)
+</code></pre>
+
+<p><code>implicit request =&gt;</code> を付けたときは引数が関数の方。
+request は implicit parameter。</p>
+
+<h3>Q: なぜ Cannot find any HTTP Request here というエラーが出るの？</h3>
+
+<p>A: <code>scala.annotation.implicitNotFound</code> で annotation されているから。</p>
+
+<h3>Q: bindFromRequest がエラーの時、どうやってエラー表示する？</h3>
+
+<p>A: <code>Form#fold</code> を使う</p>
+
+<h3>Q: view 内で import したい</h3>
+
+<p>A: <code>@import some.package.MyClass</code>
+view の先頭（かつ、パラメータの後！）でしか import 出来ないので注意。</p>
+
+<h3>Q: view 先頭にあるパラメータの型指定で、@import したクラスが使えない</h3>
+
+<p>A: どうやらそういうものらしい。パッケージ名フル修飾で書く。</p>
+
+<h3>Q: @helper.inputText() 等で出力される input tag に属性を付けたい（class とか）</h3>
+
+<p>A: Symbol &ndash;> Any のタプルをずらずらと渡す。</p>
+
+<pre><code>@helper.inputText(userForm("name"), 'id -&gt; "name", 'size -&gt; 30)
+</code></pre>
+
+<h3>Q: @helper.inputText() 等で出力される input tag に紐づく label tag の名前を変えたい。</h3>
+
+<p>A: &lsquo;_label &ndash;> &ldquo;ほげ&rdquo; を追加する。</p>
+
+<pre><code>@helper.inputText(userForm("name"), '_label -&gt; "ほげ")
+</code></pre>
+
+<p><code>_label</code> 以外の特別なキーはここ。</p>
+
+<p><a href="http://www.playframework.com/documentation/2.2.x/ScalaCustomFieldConstructors">http://www.playframework.com/documentation/2.2.x/ScalaCustomFieldConstructors</a></p>
+
+<h3>Q: submit ボタン表示はどうするんだっけ？</h3>
+
+<p>A:</p>
+
+<pre><code>@helper.form(...) {
+  ...
+  &lt;button type="submit"&gt;&lt;/button&gt; // ←ここに直接書く。
+}
+</code></pre>
+
+<h3>Q: Form の required という表示を消したい。<code>&lt;dd class="info"&gt;Required&lt;/dd&gt;</code>←これ</h3>
+
+<p>A: <code>'_showConstraints -&gt; false</code> を <code>@helper.inputFoo()</code> に渡す。</p>
+
+<h3>Q: war にできる？</h3>
+
+<p>A: war にできないぽい。
+<a href="http://stackoverflow.com/questions/14985783/deploy-play-as-a-war-file-into-a-servlet-container-even-if-it-uses-jpa-heavily">http://stackoverflow.com/questions/14985783/deploy-play-as-a-war-file-into-a-servlet-container-even-if-it-uses-jpa-heavily</a></p>
+
+<h3>Q: deploy は?</h3>
+
+<p>A: play dist で zip にして展開するのが良さそう</p>
+
+<h3>Q: Controller action の URL を得るには？</h3>
+
+<p>A: <code>routes.MyController.action(arg)</code></p>
+
+<p><a href="http://www.playframework.com/documentation/2.2.x/ScalaRouting">http://www.playframework.com/documentation/2.2.x/ScalaRouting</a></p>
+
+<h3>Q: Log の出し方は？</h3>
+
+<p>A: <code>play.api.Logger.info()</code> など。</p>
+
+<h2>SecureSocial 関連</h2>
+
+<h3>Q: ユーザ登録まわりはモジュールある？ Rails の devise みたいな。</h3>
+
+<p>A: SecureSocial か play2-auth</p>
+
+<ul>
+<li><a href="http://securesocial.ws/">http://securesocial.ws/</a></li>
+<li><a href="https://github.com/t2v/play2-auth">https://github.com/t2v/play2-auth</a></li>
+</ul>
+
+
+<h3>Q: SecureSocial で SES からメール送れる？</h3>
+
+<p>A: SES の smtp interface で送れる。</p>
+
+<h3>Q: SecureSocail のコントローラの path を view から逆引きするのはどうしたらいいのか?</h3>
+
+<p>A: <code>securesocial.core.providers.utils.RoutesHelper.login()</code> とか</p>
+
+<h3>Q: SecureSocial で提供されるページとメールは国際化できるか？</h3>
+
+<p>A: <a href="http://securesocial.ws/guide/views-customization.html">http://securesocial.ws/guide/views-customization.html</a> の手順でできそう。</p>
+
+<h3>Q: メールアドレスとパスワードで登録したユーザと、Google認証のユーザが別ユーザになる。</h3>
+
+<p>統合する方法は用意されているか？
+A: 用意されていない。</p>
+
+<ul>
+<li><a href="https://groups.google.com/forum/#!topic/securesocial/at-qCKXvsE0">https://groups.google.com/forum/#!topic/securesocial/at-qCKXvsE0</a></li>
+<li><a href="https://github.com/jaliss/securesocial/issues/14">https://github.com/jaliss/securesocial/issues/14</a></li>
+</ul>
+
+
+<h2>DB 関連</h2>
+
+<h3>Q: evolution で manual rollback するには?</h3>
+
+<p>A: できない!</p>
+
+<p><a href="http://stackoverflow.com/questions/10069217/rolling-an-evolution-back">http://stackoverflow.com/questions/10069217/rolling-an-evolution-back</a></p>
+
+<h3>Q: play-slick 使った時に migration 管理は含まれているのか？</h3>
+
+<p>A: evolutions の 1.sql を吐き出してくれる機能はある。</p>
+
+<h3>Q: slick の for で foreach メソッドが無いとか言われる</h3>
+
+<p>A: <code>import scala.slick.driver.MySQLDriver.simple._</code>
+したら通った。どういうこと..</p>
+
+<h3>Q: Slick で JodaTime の DateTime 使いたい。</h3>
+
+<p>A: <a href="https://github.com/tototoshi/slick-joda-mapper">https://github.com/tototoshi/slick-joda-mapper</a></p>
+
+<h3>Q: Slick で DateTime の大小比較はどうする？</h3>
+
+<p>A: &lt; でいいっぽい。
+<code>import com.github.tototoshi.slick.JodaSupport._</code>が必要。</p>
+
+<h3>Q: DateTime 比較時にこんなエラーが起きる</h3>
+
+<pre><code>com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ':26:48.548+09:00' at line 1
+</code></pre>
+
+<p>A: slick-joda-mapper が古かった(0.1.0だった)。0.4.0 にあげたら解消した。</p>
+
+<h3>Q: Slick で発行されている SQL を表示するには?</h3>
+
+<p>A: <a href="http://stackoverflow.com/questions/14840010/how-do-you-print-the-select-statements-for-the-following-slick-queries">http://stackoverflow.com/questions/14840010/how-do-you-print-the-select-statements-for-the-following-slick-queries</a> によるとできない。</p>
+
+<h3>Q: Slick から value filter is not a member of models.MyModel といわれる。</h3>
+
+<p>A: <code>Query()</code> でくるむといい。</p>
+
+<h3>Q: play test すると Attempting to obtain a connection from a pool that has already been shutdown. と出る。</h3>
+
+<p>A:  <a href="http://d.hatena.ne.jp/tototoshi/20130329/1364484806">http://d.hatena.ne.jp/tototoshi/20130329/1364484806</a></p>
+
+<pre><code>FakeApplication(
+  additionalConfiguration =
+    inMemoryDatabase(name = "default", options = Map("DB_CLOSE_DELAY" -&gt; "-1"))
+)
+</code></pre>
+
+<h3>Q: <code>new WithBrowser(app = dbApp)</code> （dbApp は DB_CLOSE_DELAY 指定した FakeApplication）でエラーになる</h3>
+
+<p>A: 第一引き数 webDriver も指定したらエラーでなくなった。（初期化順の問題？）</p>
+
+<pre><code>new WithBrowser(webDriver = Helpers.HTMLUNIT, app = dbApp) 
+</code></pre>
+
+<h3>Q: Play で環境によって設定を変える仕組みが用意されているか？</h3>
+
+<p>A: <code>-Dconfig.file</code> で設定ファイルを切り替える</p>
+
+<h3>Q: play-flyway で本番系 migration はどうやるの?</h3>
+
+<p>A: <code>-Ddb.default.migration.auto=true</code></p>
+
+<p>最初まちがって <code>-Ddb.default.migration.initOnMigrate=true</code> を指定して悩んでた。</p>
+
+<h3>Q: Play で gzip を有効化できるか？</h3>
+
+<p>A: GzipFilter でできるっぽい。</p>
+
+<p><a href="http://www.playframework.com/documentation/2.2.x/GzipEncoding">http://www.playframework.com/documentation/2.2.x/GzipEncoding</a></p>
+
+<p>appDependencies に filters を追加する必要あり。</p>
+
+<h3>Q: Slick で MySQL に接続したら文字化けした</h3>
+
+<p>A:  character_set_client, character_set_server が utf8mb4 になっていることを
+確認する。</p>
+
+<p>サーバとクライアントのネゴシエーションで決まる。
+Slick での character_set_client, character_set_server の確認方法。</p>
+
+<pre><code>import scala.slick.session.Database
+import Database.threadLocalSession
+import scala.slick.jdbc.{GetResult, StaticQuery =&gt; Q}
+
+val jdbcUrl = "jdbc:mysql://localhost:3306/my_db?user=myUser&amp;password=myPassword"
+Database.forURL(jdbcUrl, driver = "com.mysql.jdbc.Driver") withSession {
+  val q = "SHOW VARIABLES LIKE 'char%'"
+  Q.queryNA[(String, String)](q).foreach(println)
+}
+</code></pre>
+
+<p>サーバの設定で character_set_server を utf8mb4 に設定し、 JDBC には
+characterEncoding=utf8mb4 をつけないのが正解ぽい。
+JDBC URL に characterEncoding=utf8mb4 をつけると、例外がおきるので注意。</p>
+
+<h3>Q: Play + Slick で driver に応じて、処理を変えたい。</h3>
+
+<p>A: こんな感じ。</p>
+
+<pre><code>import play.api.db.slick.DB
+import scala.slick.driver.MySQLDriver
+if (DB("default").driver == MySQLDriver) {...}
+</code></pre>
+
+<h3>Q: MySQL 用に CREATE TABLE に CHARACTER SET 指定をしたいが、テストの H2 でエラー。</h3>
+
+<p>A: <code>/*! */</code> でくくると良い。</p>
+
+<p><a href="http://stackoverflow.com/questions/15885814/use-mysql-in-dev-prod-and-h2-in-test">http://stackoverflow.com/questions/15885814/use-mysql-in-dev-prod-and-h2-in-test</a></p>
+
+<p><code>/*! CHARACTER SET utf8mb4 */;</code>
+をつけておくと MySQL でだけ処理され、H2では処理されない。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Play framework 2.2.1 scala でユーザ登録]]></title>
@@ -2043,44 +2296,6 @@ pingdom のほうは<a href="http://status.letsfreckle.com/">こういうステ�
 
 
 <p>すでに適正価格でやってくれるサービスがある場合、それを使わないで自分で作るのは馬鹿げています。使えるものは使いましょう。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[情熱の持ち方・燃やし方？]]></title>
-    <link href="http://tkawachi.github.io/blog/2013/02/11/passion-study/"/>
-    <updated>2013-02-11T22:28:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2013/02/11/passion-study</id>
-    <content type="html"><![CDATA[<p>情熱が燃えていない。
-結婚して子どもができ幸せであるが、今ひとつのめり込めるものがない。
-好きなものはある。プログラミングが好きだ。
-しかし覚えたての学生時代ほど燃えてはいない。
-その他に趣味といえる趣味はない。</p>
-
-<!-- more -->
-
-
-<p>大学では様々なことを教えてくれる。
-教授の中には情熱的な人が多かったが、情熱の持ち方・情熱の燃やし方については教えてもらった記憶が無い。
-情熱の持ち方、燃やし方について教えてくれる人や場があってもいいんじゃないか？
-いや、きっと自分が知らないだけで、あるに違いない。</p>
-
-<p>世の中に同じような人は多いのではないだろうか？
-情熱を燃やせば人生もっと楽しくなる人が、日本中にいるのではなかろうか。</p>
-
-<p>現時点で解決したい事項を書いておく。</p>
-
-<ul>
-<li>情熱をもつにあたり必要な内部条件・外部条件はなにか？</li>
-<li>体系的な情熱の燃やし方はあるか？</li>
-<li>情熱が燃えている時と燃えていない時の判断することはできるか？</li>
-</ul>
-
-
-<p>まずは書籍を当たろうと Amazon で検索したところ、
-<a href="http://www.amazon.co.jp/gp/product/4479793577/">情熱のスイッチ</a>
-の内容が近そうである。とりあえずポチった。
-なにかヒントが得られるだろうか。</p>
 ]]></content>
   </entry>
   
