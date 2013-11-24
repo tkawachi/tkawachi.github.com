@@ -5,11 +5,14 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: R - tkawachi Blog</title>
+  <title>Try はモナドじゃない - tkawachi Blog</title>
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Category: R">
+  <meta name="description" content="Principles of Reactive Programming
+最初週の講義で言ってたこと。
+忘れそうなのでメモ。 モナドであるためにはモナド則を満たさねばならない。
+モナド則は以下の３つ。 Associativity: (m flatMap f) flatMap g == m &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +21,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://tkawachi.github.ioblog/categories/r">
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/11/24/try-is-not-monad">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
@@ -74,36 +77,142 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: R</h1>
+    
+      <h1 class="entry-title">Try はモナドじゃない</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-24T21:19:00+09:00" pubdate data-updated="true">Nov 24<span>th</span>, 2013</time>
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p><a href="https://www.coursera.org/course/reactive">Principles of Reactive Programming</a>
+最初週の講義で言ってたこと。
+忘れそうなのでメモ。</p>
 
-  
-  <h2>2013</h2>
-
-<article>
-  
-<h1><a href="/blog/2013/10/14/random-forest-important-variables/">randomForestで重要な説明変数を見つける</a></h1>
-<time datetime="2013-10-14T15:33:00+09:00" pubdate><span class='month'>Oct</span> <span class='day'>14</span> <span class='year'>2013</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/r/'>R</a></span>
-</footer>
+<!-- more -->
 
 
-</article>
+<p>モナドであるためにはモナド則を満たさねばならない。
+モナド則は以下の３つ。</p>
 
+<ul>
+<li>Associativity: <code>(m flatMap f) flatMap g == m flatMap (x =&gt; f(x) flatMap g)</code></li>
+<li>Left unit: <code>unit(x) flatMap f == f(x)</code></li>
+<li>Right unit: <code>m flatMap unit == m</code></li>
+</ul>
+
+
+<p>ちなみにすごいHaskell本でモナド則は次のように書かれている。</p>
+
+<ul>
+<li>結合法則: <code>(m &gt;&gt;= f) &gt;&gt;= g</code> と <code>m &gt;&gt;= (\x -&gt; f x &gt;&gt;= g)</code> が等価</li>
+<li>左恒等性: <code>return x &gt;&gt;= f</code> と <code>f x</code> が等価</li>
+<li>右恒等性: <code>m &gt;&gt;= return</code> と <code>m</code> が等価</li>
+</ul>
+
+
+<p><code>flatMap</code> を <code>&gt;&gt;=</code> に、 <code>unit</code> を <code>return</code> に読みかえれば同じ。
+同じモナド則の説明なので当たり前といえば、当たり前だけど。
+覚えるのが大変だから名前は揃えて欲しかったなあ、とは思う。
+<code>&gt;&gt;=</code> は bind と読むらしいので、 flatMap は bind、 return は unit。</p>
+
+<p>で、Scala の Try がモナドじゃないというのは、Left unit (左恒等性) を満たさないから。
+任意の <code>f</code> と <code>expr</code> において、<code>Try(expr) flatMap f</code> が <code>f(expr)</code> と等しければ、
+left unit が満たされていると言える。
+しかし、<code>f</code> または <code>expr</code> が例外を投げた時にこれらが等しくならない。
+<code>Try(expr) flatMap f</code> では(fatal 以外の)例外が発生することはなく <code>Failure</code> 型の
+戻り値になるのに対し、<code>f(expr)</code> は例外が発生する。
+よって Try はモナドではない。</p>
+
+<p>ああ、残念。Try はモナドでは無かったか。</p>
+
+<p>でも、 left unit を満たしてなくても <code>for</code> 式では便利に使えるからいいんだよ。
+と Odersky 先生はおっしゃっておられた。</p>
+
+<p>正直なところ、モナド則を満たしているとどれだけ嬉しいのかよくわかってない。
+for comprehension で便利に使えればそれでいいじゃん、くらいの低い認識しかない。
+実際このコースの３週目の講義を聞いているところだが、「Try は正確にはモナドじゃないけど、
+モナドみたいなもんだから、これ以降モナドって呼ぶね」ということになっている。</p>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-11-24T21:19:00+09:00" pubdate data-updated="true">Nov 24<span>th</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/scala/'>Scala</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/11/24/try-is-not-monad/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/11/24/try-is-not-monad/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/23/starting-play/" title="Previous Post: Play Framework 2.2 Scala 最初の1週間で困った雑多なこと">&laquo; Play Framework 2.2 Scala 最初の1週間で困った雑多なこと</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -169,7 +278,10 @@
       var disqus_shortname = 'tkawachiblog';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/11/24/try-is-not-monad/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2013/11/24/try-is-not-monad/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

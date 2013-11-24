@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Scala | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-11-23T22:08:26+09:00</updated>
+  <updated>2013-11-24T21:50:40+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,62 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Try はモナドじゃない]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/11/24/try-is-not-monad/"/>
+    <updated>2013-11-24T21:19:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/11/24/try-is-not-monad</id>
+    <content type="html"><![CDATA[<p><a href="https://www.coursera.org/course/reactive">Principles of Reactive Programming</a>
+最初週の講義で言ってたこと。
+忘れそうなのでメモ。</p>
+
+<!-- more -->
+
+
+<p>モナドであるためにはモナド則を満たさねばならない。
+モナド則は以下の３つ。</p>
+
+<ul>
+<li>Associativity: <code>(m flatMap f) flatMap g == m flatMap (x =&gt; f(x) flatMap g)</code></li>
+<li>Left unit: <code>unit(x) flatMap f == f(x)</code></li>
+<li>Right unit: <code>m flatMap unit == m</code></li>
+</ul>
+
+
+<p>ちなみにすごいHaskell本でモナド則は次のように書かれている。</p>
+
+<ul>
+<li>結合法則: <code>(m &gt;&gt;= f) &gt;&gt;= g</code> と <code>m &gt;&gt;= (\x -&gt; f x &gt;&gt;= g)</code> が等価</li>
+<li>左恒等性: <code>return x &gt;&gt;= f</code> と <code>f x</code> が等価</li>
+<li>右恒等性: <code>m &gt;&gt;= return</code> と <code>m</code> が等価</li>
+</ul>
+
+
+<p><code>flatMap</code> を <code>&gt;&gt;=</code> に、 <code>unit</code> を <code>return</code> に読みかえれば同じ。
+同じモナド則の説明なので当たり前といえば、当たり前だけど。
+覚えるのが大変だから名前は揃えて欲しかったなあ、とは思う。
+<code>&gt;&gt;=</code> は bind と読むらしいので、 flatMap は bind、 return は unit。</p>
+
+<p>で、Scala の Try がモナドじゃないというのは、Left unit (左恒等性) を満たさないから。
+任意の <code>f</code> と <code>expr</code> において、<code>Try(expr) flatMap f</code> が <code>f(expr)</code> と等しければ、
+left unit が満たされていると言える。
+しかし、<code>f</code> または <code>expr</code> が例外を投げた時にこれらが等しくならない。
+<code>Try(expr) flatMap f</code> では(fatal 以外の)例外が発生することはなく <code>Failure</code> 型の
+戻り値になるのに対し、<code>f(expr)</code> は例外が発生する。
+よって Try はモナドではない。</p>
+
+<p>ああ、残念。Try はモナドでは無かったか。</p>
+
+<p>でも、 left unit を満たしてなくても <code>for</code> 式では便利に使えるからいいんだよ。
+と Odersky 先生はおっしゃっておられた。</p>
+
+<p>正直なところ、モナド則を満たしているとどれだけ嬉しいのかよくわかってない。
+for comprehension で便利に使えればそれでいいじゃん、くらいの低い認識しかない。
+実際このコースの３週目の講義を聞いているところだが、「Try は正確にはモナドじゃないけど、
+モナドみたいなもんだから、これ以降モナドって呼ぶね」ということになっている。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Play Framework 2.2 Scala 最初の1週間で困った雑多なこと]]></title>
@@ -664,113 +720,6 @@ suteki("ABC") // suteki(ABC)(doubleString) 相当
 
 <p>Scala の implicit は黒魔術。
 使いたくなるパターンは多くなさそうなので用途を抑えておけば理解しやすい。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[テストデータのセットアップに trait を使う]]></title>
-    <link href="http://tkawachi.github.io/blog/2013/09/23/use-trait-to-setup-test-data/"/>
-    <updated>2013-09-23T23:59:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2013/09/23/use-trait-to-setup-test-data</id>
-    <content type="html"><![CDATA[<p>9月半ばから始まった
-<a href="https://www.coursera.org/course/progfun">Functional Programming Principles in Scala</a>
-を受講している。
-課題内のテストの書き方でこうやるのか、というところがあったのでメモ。</p>
-
-<p>テストケース間でデータを共有したいときがある。
-たとえば以下の例では <code>data1</code> と <code>data2</code> が共通なので共通化したくなる。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    test("test A") {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-        // tests with data1 and data2
-    }
-
-    test("test B") {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-        // another tests with data1 and data2
-    }
-}
-</code></pre>
-
-<p>普通は以下のようにメンバ変数にしたくなると思う。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    val data1 = new FooData(…)
-    val data2 = new FooData(…)
-
-    test("test A") {
-        // tests with data1 and data2
-    }
-
-    test("test B") {
-        // another tests with data1 and data2
-    }
-}
-</code></pre>
-
-<p>この方法は少し問題がある。</p>
-
-<ul>
-<li><code>new FooData(…)</code> が例外を出した場合に、<code>FooSuite</code> のインスタンス化に失敗するという問題がある</li>
-<li><code>FooData</code> が mutable な場合に、前に実行したテストの内容により結果が変わる可能性がある</li>
-</ul>
-
-
-<p>課題のテストケースでは trait を使って以下のようにしていた。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    trait TestData {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-    }
-
-    test("test A") {
-        new TestData {
-            // tests with data1 and data2
-        }
-    }
-
-    test("test B") {
-        new TestData {
-            // another tests with data1 and data2
-        }
-    }
-}
-</code></pre>
-
-<p>各テスト内で <code>TestData</code> trait を継承した無名クラスを作り、無名クラスのコンストラクタ内でテストを実行する。
-こうすることで <code>new FooData(…)</code> の実行はテスト実行時になり、各テストごとにデータが初期化されるので、上にあげた問題が解消する。</p>
-
-<p><a href="http://www.scalatest.org/user_guide/sharing_fixtures">Sharing fixtures</a> をみると他の方法もいろいろある。
-一番上にある Calling get-fixture methods が一番単純ぽい。
-この方法で例を書き換えるとこうなる。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    def fixture = new {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-    }
-
-    test("test A") {
-        val f = fixture
-        // tests with f.data1 and f.data2
-    }
-
-    test("test B") {
-        val f = fixture
-        import f._
-        // another tests with data1 and data2
-    }
-}
-</code></pre>
-
-<p>無名クラスのメンバとしてテストデータを作る。
-こっちのほうがインデント少なくていいかも。
-<code>import f._</code> すれば <code>f.</code> prefix 要らないしね。
-<code>new</code> のあとクラス名無くてもコンパイル通るんだ… 知らなかったよ。</p>
 ]]></content>
   </entry>
   
