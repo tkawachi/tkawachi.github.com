@@ -9,9 +9,8 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Principles of Reactive Programming
-最初週の講義で言ってたこと。
-忘れそうなのでメモ。 ">
+  <meta name="description" content=" というわけで Pythonによるデータ分析入門 の献本を頂きました。ありがとうございます。
+大学時代の友人たちが翻訳しており、発売を楽しみにしていました。 ざっと読みましたので早速レビューします。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -77,6 +76,64 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-22T10:37:00+09:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><!-- Place this tag in your head or just before your close body tag. -->
+
+
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+
+
+
+<!-- Place this tag where you want the widget to render. -->
+
+
+<div class="g-post" data-href="https://plus.google.com/110309119188108264538/posts/f9X9u8fJ4kv"></div>
+
+
+<p>というわけで <a href="http://www.amazon.co.jp/dp/4873116554">Pythonによるデータ分析入門</a> の献本を頂きました。ありがとうございます。
+大学時代の友人たちが翻訳しており、発売を楽しみにしていました。</p>
+
+<p>ざっと読みましたので早速レビューします。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/12/22/python-data-analysis/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -549,140 +606,6 @@ for (i &lt;- 0 until 10) { … }
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/09/23/use-trait-to-setup-test-data/">テストデータのセットアップに Trait を使う</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-09-23T23:59:00+09:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>9月半ばから始まった
-<a href="https://www.coursera.org/course/progfun">Functional Programming Principles in Scala</a>
-を受講している。
-課題内のテストの書き方でこうやるのか、というところがあったのでメモ。</p>
-
-<p>テストケース間でデータを共有したいときがある。
-たとえば以下の例では <code>data1</code> と <code>data2</code> が共通なので共通化したくなる。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    test("test A") {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-        // tests with data1 and data2
-    }
-
-    test("test B") {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-        // another tests with data1 and data2
-    }
-}
-</code></pre>
-
-<p>普通は以下のようにメンバ変数にしたくなると思う。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    val data1 = new FooData(…)
-    val data2 = new FooData(…)
-
-    test("test A") {
-        // tests with data1 and data2
-    }
-
-    test("test B") {
-        // another tests with data1 and data2
-    }
-}
-</code></pre>
-
-<p>この方法は少し問題がある。</p>
-
-<ul>
-<li><code>new FooData(…)</code> が例外を出した場合に、<code>FooSuite</code> のインスタンス化に失敗するという問題がある</li>
-<li><code>FooData</code> が mutable な場合に、前に実行したテストの内容により結果が変わる可能性がある</li>
-</ul>
-
-
-<p>課題のテストケースでは trait を使って以下のようにしていた。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    trait TestData {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-    }
-
-    test("test A") {
-        new TestData {
-            // tests with data1 and data2
-        }
-    }
-
-    test("test B") {
-        new TestData {
-            // another tests with data1 and data2
-        }
-    }
-}
-</code></pre>
-
-<p>各テスト内で <code>TestData</code> trait を継承した無名クラスを作り、無名クラスのコンストラクタ内でテストを実行する。
-こうすることで <code>new FooData(…)</code> の実行はテスト実行時になり、各テストごとにデータが初期化されるので、上にあげた問題が解消する。</p>
-
-<p><a href="http://www.scalatest.org/user_guide/sharing_fixtures">Sharing fixtures</a> をみると他の方法もいろいろある。
-一番上にある Calling get-fixture methods が一番単純ぽい。
-この方法で例を書き換えるとこうなる。</p>
-
-<pre><code>class FooSuite extends FunSuite {
-    def fixture = new {
-        val data1 = new FooData(…)
-        val data2 = new FooData(…)
-    }
-
-    test("test A") {
-        val f = fixture
-        // tests with f.data1 and f.data2
-    }
-
-    test("test B") {
-        val f = fixture
-        import f._
-        // another tests with data1 and data2
-    }
-}
-</code></pre>
-
-<p>無名クラスのメンバとしてテストデータを作る。
-こっちのほうがインデント少なくていいかも。
-<code>import f._</code> すれば <code>f.</code> prefix 要らないしね。
-<code>new</code> のあとクラス名無くてもコンパイル通るんだ… 知らなかったよ。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -698,6 +621,10 @@ for (i &lt;- 0 until 10) { … }
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/24/try-is-not-monad/">Try はモナドじゃない</a>
       </li>
     
@@ -711,10 +638,6 @@ for (i &lt;- 0 until 10) { … }
     
       <li class="post">
         <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/31/haxe-optionop/">Haxe で Option用の関数を定義してみた話</a>
       </li>
     
   </ul>

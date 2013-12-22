@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-11-24T22:14:43+09:00</updated>
+  <updated>2013-12-22T13:00:09+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,130 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Pythonによるデータ分析入門 レビュー]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/12/22/python-data-analysis/"/>
+    <updated>2013-12-22T10:37:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/12/22/python-data-analysis</id>
+    <content type="html"><![CDATA[<!-- Place this tag in your head or just before your close body tag. -->
+
+
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+
+
+
+<!-- Place this tag where you want the widget to render. -->
+
+
+<div class="g-post" data-href="https://plus.google.com/110309119188108264538/posts/f9X9u8fJ4kv"></div>
+
+
+<p>というわけで <a href="http://www.amazon.co.jp/dp/4873116554">Pythonによるデータ分析入門</a> の献本を頂きました。ありがとうございます。
+大学時代の友人たちが翻訳しており、発売を楽しみにしていました。</p>
+
+<p>ざっと読みましたので早速レビューします。</p>
+
+<!-- more -->
+
+
+<h2>著者 Wes McKinney さん</h2>
+
+<p>Wes McKinney さん(<a href="https://twitter.com/wesmckinn">@wesmckinn</a>)は、AQRと
+いう投資運用会社でクオンツとして働いた経歴があり、その時に自分が欲しい
+ものを作り始めたのが pandas でした。今年、
+<a href="http://www.datapad.io">DataPad</a> というデータ可視化のサービスを行う会社
+を San Francisco で立ち上げて CEO としてご活躍中です。</p>
+
+<p><a href="http://blog.wesmckinney.com/">Blog</a> では PyCon での pandas 関連の発表
+資料を見ることができます。</p>
+
+<h2>紹介されているツール・ライブラリの役割分担</h2>
+
+<p>この本で紹介されている分析方法では、Pythonの各ライブラリ・ツールが以下
+の役割を担っています。</p>
+
+<ul>
+<li>pandas &mdash; 高速なデータ分析。内部で NumPy を利用する。</li>
+<li>NumPy &mdash; 高速な行列データ構造</li>
+<li>matplotlib &mdash; 可視化（グラフ作成）</li>
+<li>IPython &mdash; インタラクティブコンソール</li>
+</ul>
+
+
+<p>これらは <a href="http://www.scipy.org/">SciPy</a> パッケージのサブセットになっています。
+Python界で分析といえば、これらがデファクトになっているのでしょう。</p>
+
+<h2>pandas のメリットとデメリット</h2>
+
+<p>オープンソースなデータ分析といえば R だと思いますが、 R と比べて
+pandas を使うメリットは、汎用言語である Python で扱えることでしょう。</p>
+
+<p>Rは統計分析処理に特化した言語および環境であり、統計分析関連のことをするには
+向いています。
+その一方で、統計分析の前処理や後処理、その他雑多なことを R でやるのは、不可
+能ではありませんがしんどいものがあります。
+Rでやるとしんどい部分は、通常、汎用言語やExcelなど他のツールでカバーします。
+私が以前翻訳させていただいた
+<a href="http://www.amazon.co.jp/dp/4873116155">RとRubyによるデータ解析入門​</a>
+では、タイトルにもあるようにRubyをRと合わせて使う方法を採用しています。</p>
+
+<p>本書で紹介されているツールセットは全て Python 製です。ひとつの言語、環
+境を覚えれば、他のものを覚えなくて良いというのは大きいです。分析者が欲
+しいのはツールではなく分析結果ですから、学習コストは低ければ低いほど良
+いのです。
+私もそうですが、普段、汎用言語（Java、Ruby、Python、Cなど）を書いている
+プログラマにとって、Rの学習コストは比較的高いと思います。それはRが言語
+として悪いということではなく、汎用言語と違いが大きいからだと思います。</p>
+
+<p>システムのコンポーネントとして利用する場合にも Python であるということ
+はメリットになります。
+Rの場合には <a href="http://www.rstudio.com/shiny/server/">Shiny Server</a> などで
+APIを公開し、HTTP経由で利用する方法が広まりつつありますが、プロセス数の制限など
+から本気で使うには有償の契約が必要な状況です。
+pandas の場合はただの Python なので Django と組み合せて web
+application を構成したり、他の Python 製フレームワークとの組み合せも自
+由自在でしょう。</p>
+
+<p>魅力的に思える pandas ですが、Rの豊富なライブラリ群を どこまで置き換え
+ることができるのか、私にはわかりません。
+あらかじめ分析したい内容が決まっている場合は、pandasと周辺ライブラリで
+実現できそうか確認してから取りかかったほうが良いでしょう。</p>
+
+<h2>この本が教えてくれること/くれないこと</h2>
+
+<p>教えてくれること</p>
+
+<ul>
+<li>Python の標準的な分析ツール群である NumPy, pandas, Matplotlib, IPython の使い方</li>
+</ul>
+
+
+<p>教えてくれないこと</p>
+
+<ul>
+<li>何を分析するべきか</li>
+<li>仮説の立て方</li>
+<li>どの分析手法を選ぶといいか</li>
+</ul>
+
+
+<h2>読むべきか？</h2>
+
+<p>以下に該当している人は読むといいと思います。</p>
+
+<ul>
+<li><a href="http://president.jp/articles/-/8818">データサイエンティストは「食える仕事」</a>なので使えるツールを増やしたい人</li>
+<li>分析をしたい、けどツールの学習にあまり時間をかけたくないプログラマ</li>
+<li>Rに挫折したけど分析はしたいPythonista</li>
+</ul>
+
+
+<p>私もまだざっとしか読んでないので、これから時間をみてじっくり読みたいと思います。
+この手の本は手を動かさないと半分も身につかないですからね。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Try はモナドじゃない]]></title>
@@ -2277,35 +2401,6 @@ R の upper bound に trait や class を指定すると継承関係がある型
 <hr />
 
 <p>2013/6/12: parameterized type R の指定には upper bound で structural type を指定するのではなく、 view bound (<code>R &lt;% {def close()}</code>) で structural type を指定する方が汎用性が高い。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RailsでTypeScript、再び]]></title>
-    <link href="http://tkawachi.github.io/blog/2013/04/25/typescript-and-rails-again/"/>
-    <updated>2013-04-25T23:22:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2013/04/25/typescript-and-rails-again</id>
-    <content type="html"><![CDATA[<p>Google で typescript rails と検索すると去年12月に書いた「<a href="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a>」というエントリが2番目に出てくる日々が続いている。
-「TypeScriptをRailsで使いたい」と思った人たちは、検索結果を見て、ああ動かないのかと思うのだろう。</p>
-
-<p>あれから状況は少しだけ改善した。
-typescript-rails gem で <code>/// &lt;reference&gt;</code> が一部使えるようになった。
-というか使えるようにする <a href="https://github.com/klaustopher/typescript-rails/pull/6">patch</a> を出した。</p>
-
-<p>この patch により、<code>node</code> コマンドをインストールしてあることが前提になったので注意されたし。</p>
-
-<p>サンプルを作ろうと思い
-<a href="https://github.com/tkawachi/typescript-rails-sample/blob/051838b7/app/assets/javascripts/test.js.ts.erb">test.js.ts.erb</a>
-を書いてみた。
-<code>.js.ts</code> ファイルや <code>.d.ts</code> ファイルを参照できるようになっていることがわかると思う。
-サンプル内でやっているように <code>jquery.d.ts</code> を参照して、 jQuery も使えるようになった。</p>
-
-<p>一方で以下の問題が残っている。
-TypeScript compiler に渡る際に違うディレクトリにコピーされるため、参照先を絶対パスで指定している。そのため <code>.erb</code> suffix を付ける必要がある。
-また参照先の拡張子が <code>.js.ts</code>, <code>.d.ts</code> ならば大丈夫だが <code>.js.ts.erb</code> の場合、compiler が参照してくれない。</p>
-
-<p>これらの問題を解消しないとちょっと本格利用はできないかなあ。
-また時間がとれたらなんとかしたい。</p>
 ]]></content>
   </entry>
   

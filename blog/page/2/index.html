@@ -9,10 +9,11 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="7 Patterns to Refactor Fat ActiveRecord Models
-という記事があり、読もう読もうと思いつつ1年くらい経ってしまった。
-ようやく読んだので理解した内容を書いておく。
-コード例は元記事のもの。 ">
+  <meta name="description" content="9月半ばから始まった
+Functional Programming Principles in Scala
+を受講している。
+課題内のテストの書き方でこうやるのか、というところがあったのでメモ。 テストケース間でデータを共有したいときがある。
+たとえば以下の例では data1 と data2 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +79,140 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/09/23/use-trait-to-setup-test-data/">テストデータのセットアップに Trait を使う</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-09-23T23:59:00+09:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>9月半ばから始まった
+<a href="https://www.coursera.org/course/progfun">Functional Programming Principles in Scala</a>
+を受講している。
+課題内のテストの書き方でこうやるのか、というところがあったのでメモ。</p>
+
+<p>テストケース間でデータを共有したいときがある。
+たとえば以下の例では <code>data1</code> と <code>data2</code> が共通なので共通化したくなる。</p>
+
+<pre><code>class FooSuite extends FunSuite {
+    test("test A") {
+        val data1 = new FooData(…)
+        val data2 = new FooData(…)
+        // tests with data1 and data2
+    }
+
+    test("test B") {
+        val data1 = new FooData(…)
+        val data2 = new FooData(…)
+        // another tests with data1 and data2
+    }
+}
+</code></pre>
+
+<p>普通は以下のようにメンバ変数にしたくなると思う。</p>
+
+<pre><code>class FooSuite extends FunSuite {
+    val data1 = new FooData(…)
+    val data2 = new FooData(…)
+
+    test("test A") {
+        // tests with data1 and data2
+    }
+
+    test("test B") {
+        // another tests with data1 and data2
+    }
+}
+</code></pre>
+
+<p>この方法は少し問題がある。</p>
+
+<ul>
+<li><code>new FooData(…)</code> が例外を出した場合に、<code>FooSuite</code> のインスタンス化に失敗するという問題がある</li>
+<li><code>FooData</code> が mutable な場合に、前に実行したテストの内容により結果が変わる可能性がある</li>
+</ul>
+
+
+<p>課題のテストケースでは trait を使って以下のようにしていた。</p>
+
+<pre><code>class FooSuite extends FunSuite {
+    trait TestData {
+        val data1 = new FooData(…)
+        val data2 = new FooData(…)
+    }
+
+    test("test A") {
+        new TestData {
+            // tests with data1 and data2
+        }
+    }
+
+    test("test B") {
+        new TestData {
+            // another tests with data1 and data2
+        }
+    }
+}
+</code></pre>
+
+<p>各テスト内で <code>TestData</code> trait を継承した無名クラスを作り、無名クラスのコンストラクタ内でテストを実行する。
+こうすることで <code>new FooData(…)</code> の実行はテスト実行時になり、各テストごとにデータが初期化されるので、上にあげた問題が解消する。</p>
+
+<p><a href="http://www.scalatest.org/user_guide/sharing_fixtures">Sharing fixtures</a> をみると他の方法もいろいろある。
+一番上にある Calling get-fixture methods が一番単純ぽい。
+この方法で例を書き換えるとこうなる。</p>
+
+<pre><code>class FooSuite extends FunSuite {
+    def fixture = new {
+        val data1 = new FooData(…)
+        val data2 = new FooData(…)
+    }
+
+    test("test A") {
+        val f = fixture
+        // tests with f.data1 and f.data2
+    }
+
+    test("test B") {
+        val f = fixture
+        import f._
+        // another tests with data1 and data2
+    }
+}
+</code></pre>
+
+<p>無名クラスのメンバとしてテストデータを作る。
+こっちのほうがインデント少なくていいかも。
+<code>import f._</code> すれば <code>f.</code> prefix 要らないしね。
+<code>new</code> のあとクラス名無くてもコンパイル通るんだ… 知らなかったよ。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -644,62 +779,6 @@ C++ では RAII, golang では defer を使う場面で使うやつ。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/04/25/typescript-and-rails-again/">RailsでTypeScript、再び</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-04-25T23:22:00+09:00" pubdate data-updated="true">Apr 25<span>th</span>, 2013</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Google で typescript rails と検索すると去年12月に書いた「<a href="http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/">Rails で TypeScript を動かそうとして失敗した記録</a>」というエントリが2番目に出てくる日々が続いている。
-「TypeScriptをRailsで使いたい」と思った人たちは、検索結果を見て、ああ動かないのかと思うのだろう。</p>
-
-<p>あれから状況は少しだけ改善した。
-typescript-rails gem で <code>/// &lt;reference&gt;</code> が一部使えるようになった。
-というか使えるようにする <a href="https://github.com/klaustopher/typescript-rails/pull/6">patch</a> を出した。</p>
-
-<p>この patch により、<code>node</code> コマンドをインストールしてあることが前提になったので注意されたし。</p>
-
-<p>サンプルを作ろうと思い
-<a href="https://github.com/tkawachi/typescript-rails-sample/blob/051838b7/app/assets/javascripts/test.js.ts.erb">test.js.ts.erb</a>
-を書いてみた。
-<code>.js.ts</code> ファイルや <code>.d.ts</code> ファイルを参照できるようになっていることがわかると思う。
-サンプル内でやっているように <code>jquery.d.ts</code> を参照して、 jQuery も使えるようになった。</p>
-
-<p>一方で以下の問題が残っている。
-TypeScript compiler に渡る際に違うディレクトリにコピーされるため、参照先を絶対パスで指定している。そのため <code>.erb</code> suffix を付ける必要がある。
-また参照先の拡張子が <code>.js.ts</code>, <code>.d.ts</code> ならば大丈夫だが <code>.js.ts.erb</code> の場合、compiler が参照してくれない。</p>
-
-<p>これらの問題を解消しないとちょっと本格利用はできないかなあ。
-また時間がとれたらなんとかしたい。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -717,6 +796,10 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/24/try-is-not-monad/">Try はモナドじゃない</a>
       </li>
     
@@ -730,10 +813,6 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
     
       <li class="post">
         <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/31/haxe-optionop/">Haxe で Option用の関数を定義してみた話</a>
       </li>
     
   </ul>

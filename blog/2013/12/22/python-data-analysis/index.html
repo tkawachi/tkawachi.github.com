@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Pythonによるデータ分析入門 レビュー - tkawachi Blog</title>
+  <meta name="author" content="KAWACHI Takashi">
+
+  
+  <meta name="description" content="というわけで Pythonによるデータ分析入門 の献本を頂きました。ありがとうございます。
+大学時代の友人たちが翻訳しており、発売を楽しみにしていました。 ざっと読みましたので早速レビューします。 著者 Wes McKinney さん Wes McKinney さん(@wesmckinn)は、 &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2013/12/22/python-data-analysis">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-5']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">tkawachi Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tkawachi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Pythonによるデータ分析入門 レビュー</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-22T10:37:00+09:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><!-- Place this tag in your head or just before your close body tag. -->
+
+
+<script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+
+
+
+
+<!-- Place this tag where you want the widget to render. -->
+
+
+<div class="g-post" data-href="https://plus.google.com/110309119188108264538/posts/f9X9u8fJ4kv"></div>
+
+
+<p>というわけで <a href="http://www.amazon.co.jp/dp/4873116554">Pythonによるデータ分析入門</a> の献本を頂きました。ありがとうございます。
+大学時代の友人たちが翻訳しており、発売を楽しみにしていました。</p>
+
+<p>ざっと読みましたので早速レビューします。</p>
+
+<!-- more -->
+
+
+<h2>著者 Wes McKinney さん</h2>
+
+<p>Wes McKinney さん(<a href="https://twitter.com/wesmckinn">@wesmckinn</a>)は、AQRと
+いう投資運用会社でクオンツとして働いた経歴があり、その時に自分が欲しい
+ものを作り始めたのが pandas でした。今年、
+<a href="http://www.datapad.io">DataPad</a> というデータ可視化のサービスを行う会社
+を San Francisco で立ち上げて CEO としてご活躍中です。</p>
+
+<p><a href="http://blog.wesmckinney.com/">Blog</a> では PyCon での pandas 関連の発表
+資料を見ることができます。</p>
+
+<h2>紹介されているツール・ライブラリの役割分担</h2>
+
+<p>この本で紹介されている分析方法では、Pythonの各ライブラリ・ツールが以下
+の役割を担っています。</p>
+
+<ul>
+<li>pandas &mdash; 高速なデータ分析。内部で NumPy を利用する。</li>
+<li>NumPy &mdash; 高速な行列データ構造</li>
+<li>matplotlib &mdash; 可視化（グラフ作成）</li>
+<li>IPython &mdash; インタラクティブコンソール</li>
+</ul>
+
+
+<p>これらは <a href="http://www.scipy.org/">SciPy</a> パッケージのサブセットになっています。
+Python界で分析といえば、これらがデファクトになっているのでしょう。</p>
+
+<h2>pandas のメリットとデメリット</h2>
+
+<p>オープンソースなデータ分析といえば R だと思いますが、 R と比べて
+pandas を使うメリットは、汎用言語である Python で扱えることでしょう。</p>
+
+<p>Rは統計分析処理に特化した言語および環境であり、統計分析関連のことをするには
+向いています。
+その一方で、統計分析の前処理や後処理、その他雑多なことを R でやるのは、不可
+能ではありませんがしんどいものがあります。
+Rでやるとしんどい部分は、通常、汎用言語やExcelなど他のツールでカバーします。
+私が以前翻訳させていただいた
+<a href="http://www.amazon.co.jp/dp/4873116155">RとRubyによるデータ解析入門​</a>
+では、タイトルにもあるようにRubyをRと合わせて使う方法を採用しています。</p>
+
+<p>本書で紹介されているツールセットは全て Python 製です。ひとつの言語、環
+境を覚えれば、他のものを覚えなくて良いというのは大きいです。分析者が欲
+しいのはツールではなく分析結果ですから、学習コストは低ければ低いほど良
+いのです。
+私もそうですが、普段、汎用言語（Java、Ruby、Python、Cなど）を書いている
+プログラマにとって、Rの学習コストは比較的高いと思います。それはRが言語
+として悪いということではなく、汎用言語と違いが大きいからだと思います。</p>
+
+<p>システムのコンポーネントとして利用する場合にも Python であるということ
+はメリットになります。
+Rの場合には <a href="http://www.rstudio.com/shiny/server/">Shiny Server</a> などで
+APIを公開し、HTTP経由で利用する方法が広まりつつありますが、プロセス数の制限など
+から本気で使うには有償の契約が必要な状況です。
+pandas の場合はただの Python なので Django と組み合せて web
+application を構成したり、他の Python 製フレームワークとの組み合せも自
+由自在でしょう。</p>
+
+<p>魅力的に思える pandas ですが、Rの豊富なライブラリ群を どこまで置き換え
+ることができるのか、私にはわかりません。
+あらかじめ分析したい内容が決まっている場合は、pandasと周辺ライブラリで
+実現できそうか確認してから取りかかったほうが良いでしょう。</p>
+
+<h2>この本が教えてくれること/くれないこと</h2>
+
+<p>教えてくれること</p>
+
+<ul>
+<li>Python の標準的な分析ツール群である NumPy, pandas, Matplotlib, IPython の使い方</li>
+</ul>
+
+
+<p>教えてくれないこと</p>
+
+<ul>
+<li>何を分析するべきか</li>
+<li>仮説の立て方</li>
+<li>どの分析手法を選ぶといいか</li>
+</ul>
+
+
+<h2>読むべきか？</h2>
+
+<p>以下に該当している人は読むといいと思います。</p>
+
+<ul>
+<li><a href="http://president.jp/articles/-/8818">データサイエンティストは「食える仕事」</a>なので使えるツールを増やしたい人</li>
+<li>分析をしたい、けどツールの学習にあまり時間をかけたくないプログラマ</li>
+<li>Rに挫折したけど分析はしたいPythonista</li>
+</ul>
+
+
+<p>私もまだざっとしか読んでないので、これから時間をみてじっくり読みたいと思います。
+この手の本は手を動かさないと半分も身につかないですからね。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-12-22T10:37:00+09:00" pubdate data-updated="true">Dec 22<span>nd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/python/'>Python</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2013/12/22/python-data-analysis/" data-via="" data-counturl="http://tkawachi.github.io/blog/2013/12/22/python-data-analysis/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+  <div class="fb-like" data-href="http://tkawachi.github.io/blog/2013/12/22/python-data-analysis/" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/11/24/try-is-not-monad/" title="Previous Post: Try はモナドじゃない">&laquo; Try はモナドじゃない</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/24/try-is-not-monad/">Try はモナドじゃない</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/23/starting-play/">Play Framework 2.2 Scala 最初の1週間で困った雑多なこと</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/110309119188108264538?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<div class="fb-activity" data-site="http://tkawachi.github.io" data-app-id="445203802205922" data-width="260" data-height="300" data-header="true" data-linktarget="_top" data-recommendations="false"></div>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2013 - KAWACHI Takashi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tkawachiblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2013/12/22/python-data-analysis/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2013/12/22/python-data-analysis/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -9,10 +9,10 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Facebook で投稿したときに右下に表示される「宣伝する」を試してみました。
-大学時代の仲間内で作ったアプリをリリースしたのでそのお知らせということで。 「宣伝する」ボタンを押すとこんな画面が表示されます。 674円とのことです。
-うーん。高いのか安いのか？
-よくわかりませんが、 &hellip;">
+  <meta name="description" content="この blog は
+Octopress を使って github pages で書いています。 Facebook recommendations bar を追加してみました。
+Facebook の Recommendations Bar
+のページから blog 用の Facebook &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,56 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/12/02/facebook-recommendations-bar-for-octopress/">Octopress に Facebook Recommendations Bar を設置</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-12-02T10:18:00+09:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>この blog は
+<a href="http://octopress.org/">Octopress</a> を使って github pages で書いています。</p>
+
+<p>Facebook recommendations bar を追加してみました。
+Facebook の <a href="https://developers.facebook.com/docs/reference/plugins/recommendationsbar/">Recommendations Bar</a>
+のページから blog 用の Facebook application をひとつ作って、code snippet を吐き出します。</p>
+
+<p>あとは
+<a href="https://github.com/tkawachi/tkawachi.github.com/blob/31482db539e901af1f7f5af28d071e4a4a0c01e0/source/_layouts/post.html#L45-L53">このように</a>
+<code>source/_layouts/post.html</code> を書き換えます。
+Github pages だと何を変更したかも github で見られるのが嬉しいですね。</p>
+
+<p>Blog の like 数が少なすぎるのでしょう。まだおすすめがちゃんと出ないようですが、 like 数が増えると出るようになるのでしょうか。</p>
+
+<p><a href="http://sessan.hatenablog.com/entry/2012/09/27/172013">sessanの日記 &ndash; はてなブログにFacebookのRecommendations Barを設置する</a> を参考にしました。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -703,58 +753,6 @@ rvm の version は 1.10.0。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/12/25/underscore-dot-js-in-node-repl/">underscore.js in Node REPL</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-12-25T01:04:00+09:00" pubdate data-updated="true">Dec 25<span>th</span>, 2011</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>underscore.js の挙動を試そうと node をインタラクティブに起動して以下のように試したところ <code>_</code> が配列で置き換えられてしまう。</p>
-
-<pre><code>$ node
-&gt; var _ = require('underscore');
-&gt; _([1,2,3,2,1]).uniq();
-[ 1, 2, 3 ]
-&gt; _
-[ 1, 2, 3 ]
-</code></pre>
-
-<p>なぜ？どうして？
-しばらく悩んじゃいました。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/12/25/underscore-dot-js-in-node-repl/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/5/">&larr; Older</a>
@@ -772,6 +770,10 @@ rvm の version は 1.10.0。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/11/24/try-is-not-monad/">Try はモナドじゃない</a>
       </li>
     
@@ -785,10 +787,6 @@ rvm の version は 1.10.0。</p>
     
       <li class="post">
         <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/10/31/haxe-optionop/">Haxe で Option用の関数を定義してみた話</a>
       </li>
     
   </ul>
