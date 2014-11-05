@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Play | tkawachi Blog]]></title>
+  <title><![CDATA[Category: play | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/play/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -66,14 +66,14 @@ view の先頭（かつ、パラメータの後！）でしか import 出来な�
 
 <h3>Q: @helper.inputText() 等で出力される input tag に属性を付けたい（class とか）</h3>
 
-<p>A: Symbol &ndash;> Any のタプルをずらずらと渡す。</p>
+<p>A: Symbol -> Any のタプルをずらずらと渡す。</p>
 
 <pre><code>@helper.inputText(userForm("name"), 'id -&gt; "name", 'size -&gt; 30)
 </code></pre>
 
 <h3>Q: @helper.inputText() 等で出力される input tag に紐づく label tag の名前を変えたい。</h3>
 
-<p>A: &lsquo;_label &ndash;> &ldquo;ほげ&rdquo; を追加する。</p>
+<p>A: &lsquo;_label -> &ldquo;ほげ&rdquo; を追加する。</p>
 
 <pre><code>@helper.inputText(userForm("name"), '_label -&gt; "ほげ")
 </code></pre>

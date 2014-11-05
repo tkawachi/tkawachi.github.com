@@ -60,7 +60,7 @@
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
     <input type="hidden" name="q" value="site:tkawachi.github.io" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
@@ -96,7 +96,7 @@
   
 
 
-<time datetime="2013-11-23T21:40:00+09:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
+<time datetime="2013-11-23T21:40:00+09:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -151,14 +151,14 @@ view の先頭（かつ、パラメータの後！）でしか import 出来な�
 
 <h3>Q: @helper.inputText() 等で出力される input tag に属性を付けたい（class とか）</h3>
 
-<p>A: Symbol &ndash;> Any のタプルをずらずらと渡す。</p>
+<p>A: Symbol -> Any のタプルをずらずらと渡す。</p>
 
 <pre><code>@helper.inputText(userForm("name"), 'id -&gt; "name", 'size -&gt; 30)
 </code></pre>
 
 <h3>Q: @helper.inputText() 等で出力される input tag に紐づく label tag の名前を変えたい。</h3>
 
-<p>A: &lsquo;_label &ndash;> &ldquo;ほげ&rdquo; を追加する。</p>
+<p>A: &lsquo;_label -> &ldquo;ほげ&rdquo; を追加する。</p>
 
 <pre><code>@helper.inputText(userForm("name"), '_label -&gt; "ほげ")
 </code></pre>
@@ -373,12 +373,12 @@ if (DB("default").driver == MySQLDriver) {...}
   
 
 
-<time datetime="2013-11-23T21:40:00+09:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2013</time>
+<time datetime="2013-11-23T21:40:00+09:00" pubdate data-updated="true"></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/play/'>Play</a>, <a class='category' href='/blog/categories/scala/'>Scala</a>
+    <a class='category' href='/blog/categories/play/'>play</a>, <a class='category' href='/blog/categories/scala/'>scala</a>
   
 </span>
 
@@ -424,6 +424,10 @@ if (DB("default").driver == MySQLDriver) {...}
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/11/06/1/">DDD読書メモ 1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a>
       </li>
     
@@ -437,10 +441,6 @@ if (DB("default").driver == MySQLDriver) {...}
     
       <li class="post">
         <a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
       </li>
     
   </ul>
@@ -468,7 +468,7 @@ if (DB("default").driver == MySQLDriver) {...}
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - KAWACHI Takashi -
+  Copyright &copy; 2014 - KAWACHI Takashi -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

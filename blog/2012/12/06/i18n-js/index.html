@@ -59,7 +59,7 @@
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
     <input type="hidden" name="q" value="site:tkawachi.github.io" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
@@ -95,7 +95,7 @@
   
 
 
-<time datetime="2012-12-06T23:37:00+09:00" pubdate data-updated="true">Dec 6<span>th</span>, 2012</time>
+<time datetime="2012-12-06T23:37:00+09:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -107,24 +107,24 @@
 
 <p>まずは Gemfile に追加して <code>bundle install</code> 。</p>
 
-<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;i18n-js&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>続いて application.js に以下の行を追加。</p>
 
-<figure class='code'><figcaption><span>app/assets/javascripts/application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/assets/javascripts/application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//= require i18n</span>
 </span><span class='line'><span class="c1">//= require i18n/translations</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>app/views/layouts/application.html.erb に以下の行を追加。
 指定した言語で訳が存在しない時にデフォルト言語の訳を参照したいので <code>I18n.fallbacks = true;</code> を指定しています。</p>
 
-<figure class='code'><figcaption><span>app/views/layouts/application.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/layouts/application.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -134,7 +134,7 @@
 </span><span class='line'><span class="x">    I18n.locale = &quot;</span><span class="cp">&lt;%=</span> <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="cp">%&gt;</span><span class="x">&quot;;</span>
 </span><span class='line'><span class="x">    I18n.fallbacks = true;</span>
 </span><span class='line'><span class="x">&lt;/script&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>最後に <code>rake i18n:js:setup</code> を実行すると <code>config/i18n-js.yml</code> が生成されます。</p>
@@ -143,16 +143,16 @@
 
 <p>ローカライゼーションは <code>I18n.t()</code> 関数で実行します。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">I18n</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>デフォルト値を指定したい場合はこんな感じ。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">I18n</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">defaultValue</span><span class="o">:</span> <span class="s2">&quot;こんちは&quot;</span><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>便利に使わせていただきます。</p>
@@ -178,12 +178,12 @@
   
 
 
-<time datetime="2012-12-06T23:37:00+09:00" pubdate data-updated="true">Dec 6<span>th</span>, 2012</time>
+<time datetime="2012-12-06T23:37:00+09:00" pubdate data-updated="true"></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/i18n/'>I18N</a>, <a class='category' href='/blog/categories/javascript/'>JavaScript</a>, <a class='category' href='/blog/categories/rails/'>Rails</a>
+    <a class='category' href='/blog/categories/i18n/'>i18n</a>, <a class='category' href='/blog/categories/javascript/'>javascript</a>, <a class='category' href='/blog/categories/rails/'>rails</a>
   
 </span>
 
@@ -229,6 +229,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/11/06/1/">DDD読書メモ 1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a>
       </li>
     
@@ -242,10 +246,6 @@
     
       <li class="post">
         <a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
       </li>
     
   </ul>
@@ -273,7 +273,7 @@
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - KAWACHI Takashi -
+  Copyright &copy; 2014 - KAWACHI Takashi -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

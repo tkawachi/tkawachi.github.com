@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Scala | tkawachi Blog]]></title>
+  <title><![CDATA[Category: scala | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -122,14 +122,14 @@ view の先頭（かつ、パラメータの後！）でしか import 出来な�
 
 <h3>Q: @helper.inputText() 等で出力される input tag に属性を付けたい（class とか）</h3>
 
-<p>A: Symbol &ndash;> Any のタプルをずらずらと渡す。</p>
+<p>A: Symbol -> Any のタプルをずらずらと渡す。</p>
 
 <pre><code>@helper.inputText(userForm("name"), 'id -&gt; "name", 'size -&gt; 30)
 </code></pre>
 
 <h3>Q: @helper.inputText() 等で出力される input tag に紐づく label tag の名前を変えたい。</h3>
 
-<p>A: &lsquo;_label &ndash;> &ldquo;ほげ&rdquo; を追加する。</p>
+<p>A: &lsquo;_label -> &ldquo;ほげ&rdquo; を追加する。</p>
 
 <pre><code>@helper.inputText(userForm("name"), '_label -&gt; "ほげ")
 </code></pre>
@@ -575,151 +575,210 @@ val f3: Future[Int] = for (v1 &lt;- f1; v2 &lt;- f2) yield v1 + v2
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Scalaのimplicit]]></title>
-    <link href="http://tkawachi.github.io/blog/2013/09/28/scala-implicit/"/>
-    <updated>2013-09-28T22:16:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2013/09/28/scala-implicit</id>
-    <content type="html"><![CDATA[<p>Scala の implicit のお勉強メモ。</p>
-
-<h2>なぜ implicit を使いたくなるか？</h2>
-
-<p>コード片を見ただけではわからなくなるので、暗黙的な記述はあまり使わない方がいいんじゃないかと個人的に思うのだけど。
-それでも便利な使い道があるから使われているみたい。</p>
-
-<p>今自分が知っているところで次のパターンがあるみたい。
-他の便利な使い方もきっとあるんじゃなかろうか。</p>
-
-<ul>
-<li>既存のクラスを変更せずにメソッドを追加したいとき (pimp my library pattern)。 implicit な関数, implicit なクラスを使う。</li>
-<li>型パラメータ情報を実行時に使いたいとき。implicit パラメータをつかう。</li>
-<li>共通のインタフェースを持たないクラス群に、共通のインタフェースをあとづけするとき (CONCEPT pattern)。implicit パラメータをつかう。</li>
-</ul>
-
+    <title type="html"><![CDATA[Covariantとcontravariant]]></title>
+    <link href="http://tkawachi.github.io/blog/2013/10/09/covariant-contravariant/"/>
+    <updated>2013-10-09T23:06:00+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2013/10/09/covariant-contravariant</id>
+    <content type="html"><![CDATA[<p>今日 <a href="https://www.coursera.org/course/progfun">Functional Programming Principles in Scala</a> で聞いた話が難しかったのでメモ。</p>
 
 <!-- more -->
 
 
-<h3>pimp my library pattern</h3>
+<h2>Subtype</h2>
 
-<p>既存クラスに対してメソッドをあと付けしたいときに使う。
-既存クラスが自分のメンテナンスできる範囲で書き換えてOKならこのパターン使わなくていいと思う。
-既存クラスがサードパーティライブラリから提供されている場合など、書き換えられない、書き換えるのが面倒ときに使う。</p>
+<p>書き方として A &lt;: B と書けば A は B の subtype であることを示す。
+A >: B と書けば A は B の supertype、言い換えれば B は A の subtype であることを示す。</p>
 
-<p>やり方は 2.9 以前の場合は</p>
+<p>Subtype とは何か？というのは Liskov substitution principle というので定義されている。
+「A &lt;: B であれば、B型の値に対して出来ることならなんでもA型の値に対して出来る」ということらしい。</p>
 
-<ol>
-<li>既存クラスをクラスのラッパークラスを定義する</li>
-<li>既存クラスからラッパークラスへの暗黙的変換関数を定義する(implicit 関数)</li>
-</ol>
+<p>クラス階層で言えば、 A &lt;: B というのは A が B の subclass または A == B ってこと。</p>
+
+<p>Subtype の概念はクラス階層にとどまらない。
+こんな型が定義されていたら、</p>
+
+<pre><code>class Base
+class Derived extends Base
+type A = Base =&gt; Derived
+type B = Derived =&gt; Base
+</code></pre>
+
+<p>A と B の間にクラス階層はないが、B がおける場所には A もおける。
+つまり A &lt;: B。
+なぜなら</p>
+
+<ul>
+<li>B の引き数は Derived で A の引数は Base なので、B の引き数ならなんでも A の引き数として使える</li>
+<li>B の戻り値は Base で A の戻り値は Derived なので、A の戻り値ならなんでも B の戻り値として使える</li>
+</ul>
 
 
-<p>(pimp my library pattern)で、2.10 以降の場合は <a href="http://docs.scala-lang.org/overviews/core/implicit-classes.html">implicit class</a> が導入されたのでこれを使うんだと思う。</p>
+<p>から。</p>
 
-<p>ここでは <code>Int</code> 型に関数 <code>f1</code> をあと付けしたいとする。</p>
+<p>関数の場合は一般に A2 &lt;: A1 かつ B1 &lt;: B2 のときに (A1 => B1) &lt;: (A2 => B2) が成り立つ。
+理由は上と同じ。</p>
 
-<h4>pimp my libarary pattern</h4>
+<h2>Variant</h2>
 
-<p>pimp my library pattern ではまずラッパークラスを定義して、</p>
+<p>C[T]がパラメータ化された型で A, B が A &lt;: B であるとき、C[A] と C[B] の関係は3パターン。</p>
 
-<pre><code>class MyRichInt(x: Int) {
-    def f1 = …
+<ul>
+<li>C[A] &lt;: C[B] &ndash; このとき C は covariant（共変）</li>
+<li>C[A] >: C[B] &ndash; このとき C は contravarinat（反変）</li>
+<li>C[A] と C[B] の間に subtype の関係なし &ndash; このとき C は invariant（不変）。nonvariant とも言うらしい。</li>
+</ul>
+
+
+<p>Scala ではタイプパラメタの前に <code>+</code> とか <code>-</code> とかつけて covariant や contravariant を表現する。何も付けなかったら invariant ね。</p>
+
+<pre><code>class C[+A] // C は covariant
+class C[-A] // C は contravariant
+class C[A]  // C は invariant
+</code></pre>
+
+<p>Function object は covariant, contravariant を使ってる。</p>
+
+<pre><code>trait Function1[-T, +U] {
+    def apply(x: T): U
 }
 </code></pre>
 
-<p>暗黙的変換関数を定義する。</p>
+<p><code>A =&gt; B</code> は <code>Function[A, B]</code> と同じ。
+で、<code>Function1</code> の T は contravariant, U は invariant ということなので、</p>
 
-<pre><code>object MyRichInt {
-    implicit def intToMyRichInt(x: Int) = new MyRichInt(x)
+<pre><code>class A1
+class A2 extends A1
+class A3 extends A2
+</code></pre>
+
+<p>とあったときに <code>A2 =&gt; A2</code> 型の値は <code>A3 =&gt; A1</code> 型が求められるところならどこでも使える。</p>
+
+<h3>Java の配列</h3>
+
+<p>Java の配列は covariant。</p>
+
+<pre><code>class Base {…}
+class Derived1 extends Base {…}
+class Derived2 extends Base {…}
+</code></pre>
+
+<p>が定義されていてると以下の様なことができる。</p>
+
+<pre><code>Derived1[] a = new Derived1[]{ new Derived1() }
+Base[] b = a
+b[0] = new Derived2()
+Derived1 s = a[0]
+</code></pre>
+
+<p>1行目は普通。</p>
+
+<p>2行目は super class である <code>Base</code> の配列に代入しようとしている。
+<code>a</code> には <code>Base[]</code> 型がきて欲しいが、Java の配列は covariant なので <code>Base[]</code> が来れる場所には <code>Derived1[]</code> が来ても良い。
+なので2行目も通る。</p>
+
+<p>3行目では <code>b[0]</code> に値を代入している。
+<code>b[0]</code> の型は <code>Base</code>。
+<code>Derived2</code> は <code>Base</code> の subclass なので問題ない。</p>
+
+<p>4行目では <code>Derived1</code> 型の <code>a[0]</code> を別の <code>Derived1</code> 型の変数に代入している。
+これも問題無さそう。</p>
+
+<p>という訳でコンパイルは通る。
+でも <code>a</code> と <code>b</code> は同じ配列を指していて、3行目で <code>Derived2</code> 型の値に入れ替えてる。
+だから <code>a[0]</code> （と<code>b[0]</code>）には <code>Derived2</code> 型の値が入っているはず。
+4行目ではそれを <code>Derived1</code> 型の値に代入している。
+なにかおかしい。</p>
+
+<p>Javaではコンパイルエラーにはならず、3行目実行時に ArrayStoreException が投げられる。
+残念。</p>
+
+<h2>Scala の variance check</h2>
+
+<p>Java の（問題含みの）配列を scala 的に表現すると</p>
+
+<pre><code>class Array[+T] {
+    def update(x: T)
 }
 </code></pre>
 
-<p>使う時は暗黙的変換関数を import すれば、メソッドが増えたように感じる。</p>
+<p>となる。
+問題は covariant な型パラメータ T がメソッドの引数になっていること。</p>
 
-<pre><code>import MyRichInt._
-123.f1 // new MyRichInt(123).f1 相当
-</code></pre>
+<p>Scala のコンパイラはこの問題を防ぐために variant check というものを行う。
+いろいろ細かいルールはあるそうだが、大まかには以下のとおり。</p>
 
-<h4>Implicit class</h4>
+<ul>
+<li>covariant な型パラメータはメソッドの戻り値にしか使っちゃダメ</li>
+<li>contravariant な型パラメータはメソッドのパラメタにしか使っちゃダメ</li>
+<li>invariant な型パラメータはどこに使ってもいい</li>
+</ul>
 
-<p>Implict class 2.10 から導入された機能。
-pimy my library pattern が簡単に書けるようになった感じ。
-こんな感じで定義。</p>
 
-<pre><code>object Helpers {
-    implicit class IntWithF(x: Int) {
-        def f1 = …
-    }
+<p>Function1 を見なおしてみるとルールに合致していることが確認できる。</p>
+
+<pre><code>trait Function1[-T, +U] {
+    def apply(x: T): U
 }
 </code></pre>
 
-<p>使う時は import する。
-既存クラスに存在しないメンバを呼び出した場合に、暗黙的に変換できるクラスにメンバがあれば、コンパイラさんが変換→呼び出しという風にしてくれる。</p>
+<p>contravariant な T はパラメタにきており、covariant な U は戻り値にきている。
+問題なし。</p>
 
-<pre><code>import Helpers._
-123.f1 // new IntWithF(123).f1 相当
+<p>Scala では immutable な collection は covariant, mutable な collection は invariant になっているらしい。
+きっと Java の例にあるような実行時エラーをコンパイル時に捕まえるにはそうするしか無いんだろうな。</p>
+
+<h2>List を covariant にする話</h2>
+
+<pre><code>trait List[+T] {…}
+object Nil extends List[Nothing] {…}
+class Cons[T] extends List[T] {…}
 </code></pre>
 
-<p>これでプログラマ的には既存の Int 型には無かったメンバ <code>f1</code> が増えたかのように扱える。</p>
+<p>みたいな感じ。</p>
 
-<p>関連する項目として
-<a href="http://docs.scala-lang.org/ja/overviews/core/value-classes.html">value class</a>
-がある。
-これを一緒に使えば暗黙変換するとき <code>new</code> されなくなる（メモリ割り当てされなくなる）ので
-使えるときは使うのがいい。
-頻繁に使われるものの場合は速くなりそう。</p>
+<p><code>Nil</code> のときの <code>T</code> は <code>Nothing</code>。
+<code>Nothing</code> は全ての型の subtype（<code>Nothing</code> &lt;: なんでも）。
+List は covariant なので <code>List[Nothing]</code> &lt;: <code>List[なんでも]</code> となる。
+どの <code>T</code> の <code>List[T]</code> に対しても <code>Nil</code> を使えるので便利。</p>
 
-<h3>型パラメータ情報を実行時に使いたいとき</h3>
+<p>リストの先頭に要素を追加する <code>prepend</code> メソッドを定義したい。</p>
 
-<p>JVMは型パラメータをコンパイル時に消しちゃうので実行時には型パラメータの情報は使えない。
-<code>def f[A] = new A // 間違い</code> とかしたいときに困る。</p>
-
-<p>そんなときは最後の引き数リストに implicit な <code>ClassTag</code> を受け取るようにすればいいみたい。</p>
-
-<pre><code>def f[A](implicit c: ClassTag[A]) = c.runtimeClass.newInstance().asInstanceOf[A]
+<pre><code>trait List[+T] {
+    def prepend(elem: T): List[T] = new Cons(elem, this)
+}
 </code></pre>
 
-<p><code>c</code> 経由でインスタンスを作ったり出来る。
-呼び出し時は <code>c</code> を渡す必要はない。
-<code>f[Int]</code> などとして呼び出せる。</p>
+<p>一見これで良さそうだが、
+<code>error: covariant type T occurs in contravariant position in type T of value elem</code>
+というコンパイルエラーになる。
+Variance check が活躍してる。
+たしかに covariant な型パラメータは戻り値にしか使っちゃいけなかったんだ。</p>
 
-<h3>CONCEPT pattern</h3>
+<p>正しい定義はこうなる。</p>
 
-<p>既存のクラス群が共通インタフェースを持ってたらひとつの関数で同じように処理できるのに、、ってときに使うパターン。
-既存のクラスが書き換えられるなら、インタフェースを新規に作って実装しちゃってもいいんじゃないかと思わなくもないけど、アルゴリズムに関連する部分は分けておきたいなんてこともあるのかもしれない。</p>
-
-<p>この共通インタフェースのことを concept っていうらしい。</p>
-
-<p><code>Int</code> と <code>String</code> が両方共 <code>double</code> っていう関数を持っていたら、ステキなアルゴリズム（関数）がかけるのになあ、とする。</p>
-
-<pre><code>trait DoubleConcept[A] {
-    // 共通インタフェース
-    def double(v: A): A
+<pre><code>trait List[+T] {
+    def prepend[U &gt;: T](elem: U): List[U] = new Cons(elem, this)
 }
-implicit val doubleInt = new DoubleCondept[Int] {
-    // Int の double 定義
-    def double(v: Int) = v * 2
-}
-implicit val doubleString = new DoubleConcept[String] {
-    // String の double 定義
-    def double(v: String) = v + v
-}
-
-def suteki[A](v: A)(implicit c: DoubleCondept[A]) = … // c.double(v) を使ったステキアルゴリズム
-
-suteki(123) // suteki(123)(doubleInt) 相当
-suteki("ABC") // suteki(ABC)(doubleString) 相当
 </code></pre>
 
-<p>型ごとの共通インタフェース実装を implicit val として定義しておいて、 implicit なパラメータリストでそれを暗黙的に渡す。
-暗黙的過ぎて難しい。</p>
+<p>これは variance check を通る。U は contravariant で引き数のところに使われているから。
+戻り値型は <code>List[U]</code> だが U そのものじゃないので contravariant 扱いじゃないんだろう。</p>
 
-<p>ともあれ <code>suteki</code> 関数のなかでは <code>Int</code> と <code>String</code> が両方共 <code>double</code> という共通操作を持っているという前提で関数がかける。
-<code>suteki</code>関数呼び出し時の <code>v</code> 引き数の型により、<code>c</code> が <code>doubleInt</code> なのか <code>doubleString</code> なのかはコンパイラが選択してくれる。</p>
+<pre><code>class Base
+class Derived1 extends Base
+class Derived2 extends Base
+def f(xs: List[Derived1], x: Derived2) = xs.prepend(x)
+</code></pre>
 
-<h2>雑感</h2>
+<p>さてこのとき <code>f()</code> の戻り値型はなんだろうか？
+<code>prepend()</code> の戻り値なので <code>List[U]</code> 型になるはず。
+<code>xs</code> が <code>List[Derived1]</code> 型なので <code>T</code> は <code>Derived1</code> で決まり。</p>
 
-<p>Scala の implicit は黒魔術。
-使いたくなるパターンは多くなさそうなので用途を抑えておけば理解しやすい。</p>
+<p><code>U</code>を決めるのに型推論が活躍する。
+<code>U</code> は <code>x</code> の型なので <code>Derived2</code> だろうか？
+しかし  <code>Derived2</code> だとすると <code>U &gt;: T</code> が満たせない（<code>Derived2</code> は <code>Derived1</code> の supertype ではない）。
+というわけで型推論さんは、<code>Derived2</code> と <code>Derived1</code> の共通の親である <code>Base</code> が <code>U</code> だと結論付ける。
+したがって <code>f()</code> の戻り値型は <code>List[Base]</code> ということになる。</p>
 ]]></content>
   </entry>
   

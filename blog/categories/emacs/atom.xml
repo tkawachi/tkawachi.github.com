@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Emacs | tkawachi Blog]]></title>
+  <title><![CDATA[Category: emacs | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/emacs/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -47,14 +47,10 @@ Facebookでつぶやいていたらいろいろおすすめをいただいたの
 
 <p>いくつか公開レポジトリがあるらしく以下のように設定しておけば複数のレポジトリからパッケージがインストールできる。</p>
 
-<p>```
-  (setq package-archives &lsquo;((&ldquo;gnu&rdquo; . &ldquo;<a href="http://elpa.gnu.org/packages/">http://elpa.gnu.org/packages/</a>&rdquo;)</p>
-
-<pre><code>                       ("marmalade" . "http://marmalade-repo.org/packages/")
-                       ("melpa" . "http://melpa.milkbox.net/packages/")))
+<pre><code>  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                           ("marmalade" . "http://marmalade-repo.org/packages/")
+                           ("melpa" . "http://melpa.milkbox.net/packages/")))
 </code></pre>
-
-<p>```</p>
 
 <p>上の３つを入れた状態で <code>list-packages</code> すると現時点で 1000 程度のパッケージがリストされる。
 これからもっと増えていくだろう。</p>

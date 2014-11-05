@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: LESS | tkawachi Blog]]></title>
+  <title><![CDATA[Category: less | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/less/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -40,10 +40,9 @@ bootstrap-sass, sass-twitter-bootstrap, less-rails-bootstrap の人は別の方�
 
 <p>あとは <code>bootstrap_and_overrides.css.less</code> で <code>@import “twitter/bootstrap/responsive”;</code> の行のあとに以下の２行を付け足します。</p>
 
-<p><code>
-@import “bootswatch/variables.less”;
+<pre><code>@import “bootswatch/variables.less”;
 @import “bootswatch/bootswatch.less”;
-</code></p>
+</code></pre>
 
 <p>これでいける(少なくとも僕は使えてる)と思うんですが、ダメだったら教えて下さい。</p>
 

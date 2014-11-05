@@ -59,7 +59,7 @@ typescript-rails という gem があったので、動くのか試してみま�
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
     <input type="hidden" name="q" value="site:tkawachi.github.io" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
@@ -95,7 +95,7 @@ typescript-rails という gem があったので、動くのか試してみま�
   
 
 
-<time datetime="2012-12-09T11:27:00+09:00" pubdate data-updated="true">Dec 9<span>th</span>, 2012</time>
+<time datetime="2012-12-09T11:27:00+09:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -112,7 +112,7 @@ typescript-rails という gem があったので、動くのか試してみま�
 
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -150,7 +150,7 @@ typescript-rails という gem があったので、動くのか試してみま�
 </span><span class='line'><span class="nv">$ </span>rm app/assets/javascripts/test.js.coffee
 </span><span class='line'><span class="nv">$ </span><span class="nb">echo</span> <span class="s1">&#39;alert(&quot;Hello TypeScript&quot;)&#39;</span> &gt; app/assets/javascripts/test.js.ts
 </span><span class='line'><span class="nv">$ </span>bundle <span class="nb">exec </span>rails s
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>これで <a href="http://localhost:3000/test/index">http://localhost:3000/test/index</a> にアクセスすると、正しく alert が表示される。
@@ -158,22 +158,22 @@ typescript-rails という gem があったので、動くのか試してみま�
 
 <p>次に JQuery が使ってみたい。</p>
 
-<figure class='code'><figcaption><span>app/assets/javascripts/test.js.ts</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/assets/javascripts/test.js.ts</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 </span><span class='line'>  <span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;document ready&quot;</span><span class="p">)</span>
 </span><span class='line'><span class="p">})</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>うーむ。エラーがおきた。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='text'><span class='line'>SyntaxError: (4,1): The name &#39;$&#39; does not exist in the current scope
 </span><span class='line'>  (in /Users/kawachi/gitworks/typescript-rails-test/app/assets/javascripts/test.js.ts)
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p><a href="https://github.com/klaustopher/typescript-rails/issues/5">Issue #5</a>
@@ -188,7 +188,7 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
 よく見ると module, exports, require, console が undefined にされていることがわかる。(<code>result = program();</code> のところで引数に何も渡されていない)
 隠されている CommonJS の機能とはきっとこのことを言っているのだろう。</p>
 
-<figure class='code'><figcaption><span>execjs/support/node_runner.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>execjs/support/node_runner.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -228,7 +228,7 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
 </span><span class='line'>    <span class="nx">print</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">([</span><span class="s1">&#39;err&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span> <span class="o">+</span> <span class="nx">err</span><span class="p">]));</span>
 </span><span class='line'>  <span class="p">}</span>
 </span><span class='line'><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p><a href="https://github.com/sstephenson/execjs/issues/91">このへん</a>
@@ -263,12 +263,12 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
   
 
 
-<time datetime="2012-12-09T11:27:00+09:00" pubdate data-updated="true">Dec 9<span>th</span>, 2012</time>
+<time datetime="2012-12-09T11:27:00+09:00" pubdate data-updated="true"></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/rails/'>Rails</a>, <a class='category' href='/blog/categories/typescript/'>TypeScript</a>
+    <a class='category' href='/blog/categories/rails/'>rails</a>, <a class='category' href='/blog/categories/typescript/'>typescript</a>
   
 </span>
 
@@ -314,6 +314,10 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/11/06/1/">DDD読書メモ 1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a>
       </li>
     
@@ -327,10 +331,6 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
     
       <li class="post">
         <a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
       </li>
     
   </ul>
@@ -358,7 +358,7 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - KAWACHI Takashi -
+  Copyright &copy; 2014 - KAWACHI Takashi -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

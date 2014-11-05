@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Facebook | tkawachi Blog]]></title>
+  <title><![CDATA[Category: facebook | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/facebook/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -32,7 +32,7 @@ Github pages だと何を変更したかも github で見られるのが嬉し�
 
 <p>Blog の like 数が少なすぎるのでしょう。まだおすすめがちゃんと出ないようですが、 like 数が増えると出るようになるのでしょうか。</p>
 
-<p><a href="http://sessan.hatenablog.com/entry/2012/09/27/172013">sessanの日記 &ndash; はてなブログにFacebookのRecommendations Barを設置する</a> を参考にしました。</p>
+<p><a href="http://sessan.hatenablog.com/entry/2012/09/27/172013">sessanの日記 - はてなブログにFacebookのRecommendations Barを設置する</a> を参考にしました。</p>
 ]]></content>
   </entry>
   

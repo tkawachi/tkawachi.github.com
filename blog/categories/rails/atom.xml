@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Rails | tkawachi Blog]]></title>
+  <title><![CDATA[Category: rails | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/rails/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -337,30 +337,26 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
 <!-- more -->
 
 
-<p>``` sh
-$ rails new typescript-rails-test -T
-$ echo &lsquo;gem &ldquo;typescript-rails&rdquo;&rsquo; >> Gemfile
+<pre><code class="sh">$ rails new typescript-rails-test -T
+$ echo 'gem "typescript-rails"' &gt;&gt; Gemfile
 $ bundle
-$ bundle exec rails g controller test index</p>
-
-<pre><code>  create  app/controllers/test_controller.rb
-   route  get "test/index"
-  invoke  erb
-  create    app/views/test
-  create    app/views/test/index.html.erb
-  invoke  helper
-  create    app/helpers/test_helper.rb
-  invoke  assets
-  invoke    coffee
-  create      app/assets/javascripts/test.js.coffee
-  invoke    scss
-  create      app/assets/stylesheets/test.css.scss
-</code></pre>
-
-<p>$ rm app/assets/javascripts/test.js.coffee
-$ echo &lsquo;alert(&ldquo;Hello TypeScript&rdquo;)&rsquo; > app/assets/javascripts/test.js.ts
+$ bundle exec rails g controller test index
+      create  app/controllers/test_controller.rb
+       route  get "test/index"
+      invoke  erb
+      create    app/views/test
+      create    app/views/test/index.html.erb
+      invoke  helper
+      create    app/helpers/test_helper.rb
+      invoke  assets
+      invoke    coffee
+      create      app/assets/javascripts/test.js.coffee
+      invoke    scss
+      create      app/assets/stylesheets/test.css.scss
+$ rm app/assets/javascripts/test.js.coffee
+$ echo 'alert("Hello TypeScript")' &gt; app/assets/javascripts/test.js.ts
 $ bundle exec rails s
-```</p>
+</code></pre>
 
 <p>これで <a href="http://localhost:3000/test/index">http://localhost:3000/test/index</a> にアクセスすると、正しく alert が表示される。
 いいぞ。</p>
@@ -374,10 +370,9 @@ $(function() {
 
 <p>うーむ。エラーがおきた。</p>
 
-<p><code>text
-SyntaxError: (4,1): The name '$' does not exist in the current scope
+<pre><code class="text">SyntaxError: (4,1): The name '$' does not exist in the current scope
   (in /Users/kawachi/gitworks/typescript-rails-test/app/assets/javascripts/test.js.ts)
-</code></p>
+</code></pre>
 
 <p><a href="https://github.com/klaustopher/typescript-rails/issues/5">Issue #5</a>
 に報告されている問題と同一。
@@ -391,37 +386,27 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
 よく見ると module, exports, require, console が undefined にされていることがわかる。(<code>result = program();</code> のところで引数に何も渡されていない)
 隠されている CommonJS の機能とはきっとこのことを言っているのだろう。</p>
 
-<p>``` javascript execjs/support/node_runner.js
-(function(program, execJS) { execJS(program) })(function(module, exports, require, console) { #{source}
+<pre><code class="javascript execjs/support/node_runner.js">(function(program, execJS) { execJS(program) })(function(module, exports, require, console) { #{source}
 }, function(program) {
-  var output, print = function(string) {</p>
-
-<pre><code>process.stdout.write('' + string);
-</code></pre>
-
-<p>  };
-  try {</p>
-
-<pre><code>result = program();
-if (typeof result == 'undefined' &amp;&amp; result !== null) {
-  print('["ok"]');
-} else {
+  var output, print = function(string) {
+    process.stdout.write('' + string);
+  };
   try {
-    print(JSON.stringify(['ok', result]));
+    result = program();
+    if (typeof result == 'undefined' &amp;&amp; result !== null) {
+      print('["ok"]');
+    } else {
+      try {
+        print(JSON.stringify(['ok', result]));
+      } catch (err) {
+        print('["err"]');
+      }
+    }
   } catch (err) {
-    print('["err"]');
+    print(JSON.stringify(['err', '' + err]));
   }
-}
-</code></pre>
-
-<p>  } catch (err) {</p>
-
-<pre><code>print(JSON.stringify(['err', '' + err]));
-</code></pre>
-
-<p>  }
 });
-```</p>
+</code></pre>
 
 <p><a href="https://github.com/sstephenson/execjs/issues/91">このへん</a>
 をみると ExecJS の作者は、副作用を与えるこれらの機能を ExecJS に取り込むつもりは毛頭ないようだ。</p>
@@ -447,17 +432,16 @@ if (typeof result == 'undefined' &amp;&amp; result !== null) {
 
 <p>下のコードを見てください。</p>
 
-<p>``` ruby
-t1 = Time.new(2012, 12, 1)</p>
+<pre><code class="ruby">t1 = Time.new(2012, 12, 1)
 
-<p>t2 = t1 + 1.day
-t2 &ndash; t1 == 1.day # => true</p>
+t2 = t1 + 1.day
+t2 - t1 == 1.day # =&gt; true
 
-<p>t3 = t1 + 1.month
-t3 &ndash; t1 == 1.month # => false
-```</p>
+t3 = t1 + 1.month
+t3 - t1 == 1.month # =&gt; false
+</code></pre>
 
-<p>a = b + c だったら普通 a &ndash; b = c だろうと思うのですが、最後の式は false を返します。
+<p>a = b + c だったら普通 a - b = c だろうと思うのですが、最後の式は false を返します。
 なぜだかわかりますか？</p>
 
 <!-- more -->
@@ -492,21 +476,19 @@ year に関してはうるう年の時に同じ症状が発生します。</p>
 
 <p>まずは Gemfile に追加して <code>bundle install</code> 。</p>
 
-<p><code>ruby Gemfile
-gem "i18n-js"
-</code></p>
+<pre><code class="ruby Gemfile">gem "i18n-js"
+</code></pre>
 
 <p>続いて application.js に以下の行を追加。</p>
 
-<p><code>javascript app/assets/javascripts/application.js
-//= require i18n
+<pre><code class="javascript app/assets/javascripts/application.js">//= require i18n
 //= require i18n/translations
-</code></p>
+</code></pre>
 
 <p>app/views/layouts/application.html.erb に以下の行を追加。
 指定した言語で訳が存在しない時にデフォルト言語の訳を参照したいので <code>I18n.fallbacks = true;</code> を指定しています。</p>
 
-<p>``` erb app/views/layouts/application.html.erb</p>
+<p>&#8220;` erb app/views/layouts/application.html.erb</p>
 
 <script type="text/javascript">
     I18n.defaultLocale = "<%= I18n.default_locale %>";
@@ -515,23 +497,21 @@ gem "i18n-js"
 </script>
 
 
-<p>```</p>
+<pre><code>
+最後に `rake i18n:js:setup` を実行すると `config/i18n-js.yml` が生成されます。
 
-<p>最後に <code>rake i18n:js:setup</code> を実行すると <code>config/i18n-js.yml</code> が生成されます。</p>
+これで `config/locales/*.yml` に書いてある Rails (Ruby) 側で利用できる情報と同じものが利用できるようになります。
 
-<p>これで <code>config/locales/*.yml</code> に書いてある Rails (Ruby) 側で利用できる情報と同じものが利用できるようになります。</p>
+ローカライゼーションは `I18n.t()` 関数で実行します。
+</code></pre>
 
-<p>ローカライゼーションは <code>I18n.t()</code> 関数で実行します。</p>
-
-<p><code>javascript
-I18n.t("hello");
-</code></p>
+<p>I18n.t(&ldquo;hello&rdquo;);
+&#8220;`</p>
 
 <p>デフォルト値を指定したい場合はこんな感じ。</p>
 
-<p><code>javascript
-I18n.t("hello", {defaultValue: "こんちは"});
-</code></p>
+<pre><code class="javascript">I18n.t("hello", {defaultValue: "こんちは"});
+</code></pre>
 
 <p>便利に使わせていただきます。</p>
 ]]></content>

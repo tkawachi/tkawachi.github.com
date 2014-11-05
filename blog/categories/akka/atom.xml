@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Akka | tkawachi Blog]]></title>
+  <title><![CDATA[Category: akka | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/akka/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -144,7 +144,7 @@ Immutable なので複数の actor をインスタンス化する際に使いま
 <h3>ストラテジー</h3>
 
 <ul>
-<li>one-for-one strategy &mdash; default
+<li>one-for-one strategy &ndash; default
 
 <ul>
 <li>Restart (defaultDecider)</li>

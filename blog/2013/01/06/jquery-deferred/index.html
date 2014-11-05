@@ -59,7 +59,7 @@ JavaScripterの皆様にとっては何を今更だとは思いますが jQuery.
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
     <input type="hidden" name="q" value="site:tkawachi.github.io" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
@@ -95,7 +95,7 @@ JavaScripterの皆様にとっては何を今更だとは思いますが jQuery.
   
 
 
-<time datetime="2013-01-06T00:44:00+09:00" pubdate data-updated="true">Jan 6<span>th</span>, 2013</time>
+<time datetime="2013-01-06T00:44:00+09:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -180,7 +180,7 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
 <p>ともあれ、Promise はその時点では結果が出ていないので、すぐに結果を利用することができません。
 代わりに callback を登録しておくことができます。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -192,7 +192,7 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
 </span><span class='line'><span class="nx">promise</span><span class="p">.</span><span class="nx">fail</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="err">エラー処理</span> <span class="p">});</span>
 </span><span class='line'><span class="c1">// 解決済みもしくは拒否済みになったら呼ばれる callback を登録</span>
 </span><span class='line'><span class="nx">promise</span><span class="p">.</span><span class="nx">always</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="err">処理</span> <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>callback 複数登録する事ができ、登録した順に呼ばれます。例えば <code>done()</code> を複数回呼び出して解決済みになったときの callback を複数個登録することができます。</p>
@@ -208,16 +208,16 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
 <p>組み合わせた場合、 callback の引数に渡される結果も増えます。
 以下のコードで d1, d2 にはそれぞれ promise1, promise2 の結果が渡されます。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="nx">promise1</span><span class="p">,</span> <span class="nx">promise2</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d1</span><span class="p">,</span> <span class="nx">d2</span><span class="p">)</span> <span class="p">{</span> <span class="err">…</span> <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p><code>$.when()</code> に Defered でも Promise でもない値を渡した場合、解決済みの値として扱われます。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">$</span><span class="p">.</span><span class="nx">when</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="nx">promise</span><span class="p">).</span><span class="nx">done</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">d1</span><span class="p">,</span> <span class="nx">d2</span><span class="p">)</span> <span class="p">{</span> <span class="err">…</span> <span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>などとした場合、10は解決済みと見なされ、<code>promise</code>が解決済みになり次第、<code>d1</code> に 10 が渡されて callback が実行されます。</p>
@@ -264,12 +264,12 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
   
 
 
-<time datetime="2013-01-06T00:44:00+09:00" pubdate data-updated="true">Jan 6<span>th</span>, 2013</time>
+<time datetime="2013-01-06T00:44:00+09:00" pubdate data-updated="true"></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/jquery/'>jQuery</a>
+    <a class='category' href='/blog/categories/jquery/'>jquery</a>
   
 </span>
 
@@ -315,6 +315,10 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/11/06/1/">DDD読書メモ 1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a>
       </li>
     
@@ -328,10 +332,6 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
     
       <li class="post">
         <a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
       </li>
     
   </ul>
@@ -359,7 +359,7 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - KAWACHI Takashi -
+  Copyright &copy; 2014 - KAWACHI Takashi -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

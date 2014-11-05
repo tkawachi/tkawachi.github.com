@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: CloudFoundry | tkawachi Blog]]></title>
+  <title><![CDATA[Category: cloudfoundry | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/cloudfoundry/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -62,7 +62,7 @@
 </span><span class='line'>Successfully targeted to [&lt;a href="http://api.kawachi.cloudfoundry.me">http://api.kawachi.cloudfoundry.me&lt;/a>]&lt;/p>
 </span><span class='line'>
 </span><span class='line'>&lt;p>$ vmc register
-</span><span class='line'>Email: &lt;a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#58;&#x68;&#111;&#x68;&#x6f;&#64;&#102;&#x75;&#102;&#117;&#x2e;&#99;&#111;&#109;">&#x68;&#111;&#x68;&#111;&#64;&#x66;&#x75;&#x66;&#117;&#46;&#x63;&#111;&#109;&lt;/a>
+</span><span class='line'>Email: &lt;a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#104;&#111;&#104;&#111;&#x40;&#102;&#117;&#102;&#117;&#46;&#x63;&#111;&#x6d;">&#x68;&#111;&#104;&#x6f;&#64;&#x66;&#x75;&#x66;&#117;&#46;&#99;&#x6f;&#109;&lt;/a>
 </span><span class='line'>Password: &lt;strong>&lt;strong>&lt;strong>
 </span><span class='line'>Verify Password: &lt;/strong>&lt;/strong>&lt;/strong>
 </span><span class='line'>Creating New User: OK</span></code></pre></td></tr></table></div></figure></notextile></div></p>

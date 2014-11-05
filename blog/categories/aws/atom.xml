@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: AWS | tkawachi Blog]]></title>
+  <title><![CDATA[Category: aws | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -66,13 +66,12 @@ Bucket レベルの指定は arn:aws:s3:::bucket_name に対して行い、 obje
 <p>Object レベルの指定で path 以下にアクセスを制限したいときは * が使えます。
 my_bucket bucket の shared/ 以下に s3:PutObject を許可するには、以下のような statement を追加します。</p>
 
-<p><code>
-{
+<pre><code>{
   "Effect":"Allow",
   "Action":"s3:PutObject",
   "Resource":"arn:aws:s3:::my_bucket/shared/*"
 }
-</code></p>
+</code></pre>
 
 <p>上記は object レベルでの指定になります。
 S3を利用するアプリケーションによっては object レベルの API だけではなく bucket レベルでの API も使うものがあります。</p>
@@ -80,20 +79,16 @@ S3を利用するアプリケーションによっては object レベルの API
 <p>Bucket レベルの指定で path 以下にアクセスを制限したいときは Condition, StringLike を使います。
 s3:ListBucket, s3:GetBucketLocation を許可するには、以下の様な statement を追加します。</p>
 
-<p>```
-{
-  &ldquo;Effect&rdquo;: &ldquo;Allow&rdquo;,
-  &ldquo;Action&rdquo;: [&ldquo;s3:ListBucket&rdquo;, &ldquo;s3:GetBucketLocation&rdquo;],
-  &ldquo;Resource&rdquo;: &ldquo;arn:aws:s3:::my_bucket&rdquo;,
-  &ldquo;Condition&rdquo;: {</p>
-
-<pre><code>"StringLike": {
-"s3:prefix": "shared/*"
-</code></pre>
-
-<p>  }
+<pre><code>{
+  "Effect": "Allow",
+  "Action": ["s3:ListBucket", "s3:GetBucketLocation"],
+  "Resource": "arn:aws:s3:::my_bucket",
+  "Condition": {
+    "StringLike": {
+    "s3:prefix": "shared/*"
+  }
 }
-```</p>
+</code></pre>
 
 <p>上記の方法でアプリケーションが利用する API に応じて object レベル, bucket レベルの action を許可すれば、今回の目的が達成できます。</p>
 

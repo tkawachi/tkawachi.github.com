@@ -4,7 +4,7 @@
   <title><![CDATA[Category: invariant | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/invariant/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -62,9 +62,9 @@ type B = Derived =&gt; Base
 <p>C[T]がパラメータ化された型で A, B が A &lt;: B であるとき、C[A] と C[B] の関係は3パターン。</p>
 
 <ul>
-<li>C[A] &lt;: C[B] &mdash; このとき C は covariant（共変）</li>
-<li>C[A] >: C[B] &mdash; このとき C は contravarinat（反変）</li>
-<li>C[A] と C[B] の間に subtype の関係なし &mdash; このとき C は invariant（不変）。nonvariant とも言うらしい。</li>
+<li>C[A] &lt;: C[B] &ndash; このとき C は covariant（共変）</li>
+<li>C[A] >: C[B] &ndash; このとき C は contravarinat（反変）</li>
+<li>C[A] と C[B] の間に subtype の関係なし &ndash; このとき C は invariant（不変）。nonvariant とも言うらしい。</li>
 </ul>
 
 

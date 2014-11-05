@@ -1,195 +1,285 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2011/12/22/inside-play-continuation-javaflow/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2011/12/24/dotinstall/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2011/12/25/underscore-dot-js-in-node-repl/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://tkawachi.github.io/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/
-        </loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/
-        </loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2012/06/25/open-sources-used-by-spotify/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://tkawachi.github.io/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/
-        </loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2012/11/18/how-to-restrict-s3-for-folder-access/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2012/11/19/generating-html-from-docbook/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2012/12/02/facebook-promoted-posts/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>
-            http://tkawachi.github.io/blog/2012/12/02/facebook-recommendations-bar-for-octopress/
-        </loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2012/12/06/i18n-js/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2012/12/08/a-trap-of-active-support-time/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2012/12/31/emacs-lisp-package-archive/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/01/05/homebrew-rmagick/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/01/06/jquery-deferred/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/02/11/passion-study/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/02/17/backend-services/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/04/25/typescript-and-rails-again/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/06/11/1/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/06/12/1/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/06/13/1/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/06/15/1/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/06/16/1/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/08/26/mockito-scala/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/09/15/akka-memo/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/09/16/sbt-build-definition/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/09/21/active-model-7-pattern/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/09/23/use-trait-to-setup-test-data/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/09/28/scala-implicit/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/10/09/covariant-contravariant/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/10/14/scala-for/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/10/14/random-forest-important-variables/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/10/31/haxe-optionop/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/11/01/haxe-call-by-name/</loc>
-        <lastmod>2013-11-17T18:35:11+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/11/17/play-2-dot-2-scala-user-login/</loc>
-        <lastmod>2013-11-17T19:12:45+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/11/23/starting-play/</loc>
-        <lastmod>2013-11-23T22:07:20+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/11/24/try-is-not-monad/</loc>
-        <lastmod>2013-11-24T21:52:01+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/2013/12/22/python-data-analysis/</loc>
-        <lastmod>2013-12-22T13:16:30+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/blog/archives/</loc>
-        <lastmod>2013-12-22T13:16:30+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/</loc>
-        <lastmod>2013-12-22T13:16:30+09:00</lastmod>
-    </url>
-    <url>
-        <loc>http://tkawachi.github.io/robots.txt</loc>
-        <lastmod>2013-11-17T18:35:12+09:00</lastmod>
-    </url>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2014/11/06/1/</loc>
+    <lastmod>2014-11-06T00:35:25+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/12/22/python-data-analysis/</loc>
+    <lastmod>2013-12-22T10:37:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/11/24/try-is-not-monad/</loc>
+    <lastmod>2013-11-24T21:19:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/11/23/starting-play/</loc>
+    <lastmod>2013-11-23T21:40:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/11/17/play-2-dot-2-scala-user-login/</loc>
+    <lastmod>2013-11-17T18:36:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/11/01/haxe-call-by-name/</loc>
+    <lastmod>2013-11-01T19:18:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/10/31/haxe-optionop/</loc>
+    <lastmod>2013-10-31T20:35:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/10/14/random-forest-important-variables/</loc>
+    <lastmod>2013-10-14T15:33:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/10/14/scala-for/</loc>
+    <lastmod>2013-10-14T11:35:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/10/09/covariant-contravariant/</loc>
+    <lastmod>2013-10-09T23:06:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/09/28/scala-implicit/</loc>
+    <lastmod>2013-09-28T22:16:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/09/23/use-trait-to-setup-test-data/</loc>
+    <lastmod>2013-09-23T23:59:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/09/21/active-model-7-pattern/</loc>
+    <lastmod>2013-09-21T21:18:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/09/16/sbt-build-definition/</loc>
+    <lastmod>2013-09-16T22:17:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/09/15/akka-memo/</loc>
+    <lastmod>2013-09-15T21:30:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/08/26/mockito-scala/</loc>
+    <lastmod>2013-08-26T10:14:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/06/16/1/</loc>
+    <lastmod>2013-06-16T20:49:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/06/15/1/</loc>
+    <lastmod>2013-06-15T21:35:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/06/13/1/</loc>
+    <lastmod>2013-06-13T16:44:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/06/12/1/</loc>
+    <lastmod>2013-06-12T21:36:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/06/11/1/</loc>
+    <lastmod>2013-06-11T22:07:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/04/25/typescript-and-rails-again/</loc>
+    <lastmod>2013-04-25T23:22:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/02/17/backend-services/</loc>
+    <lastmod>2013-02-17T18:47:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/02/11/passion-study/</loc>
+    <lastmod>2013-02-11T22:28:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/01/06/jquery-deferred/</loc>
+    <lastmod>2013-01-06T00:44:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/01/05/homebrew-rmagick/</loc>
+    <lastmod>2013-01-05T14:38:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2013/01/04/use-bootswatch-with-rails/</loc>
+    <lastmod>2013-01-04T18:12:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/12/31/emacs-lisp-package-archive/</loc>
+    <lastmod>2012-12-31T23:16:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/12/09/trying-typescript-rails-out/</loc>
+    <lastmod>2012-12-09T11:27:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/12/08/a-trap-of-active-support-time/</loc>
+    <lastmod>2012-12-08T11:03:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/12/06/i18n-js/</loc>
+    <lastmod>2012-12-06T23:37:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/12/02/facebook-recommendations-bar-for-octopress/</loc>
+    <lastmod>2012-12-02T10:18:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/12/02/facebook-promoted-posts/</loc>
+    <lastmod>2012-12-02T01:54:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/11/19/generating-html-from-docbook/</loc>
+    <lastmod>2012-11-19T00:28:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/11/18/how-to-restrict-s3-for-folder-access/</loc>
+    <lastmod>2012-11-18T19:29:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/09/13/sending-git-revision-to-exceptional-dot-io/</loc>
+    <lastmod>2012-09-13T20:44:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/06/25/open-sources-used-by-spotify/</loc>
+    <lastmod>2012-06-25T00:49:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/01/22/run-rspec-faster-for-rails-3-dot-1/</loc>
+    <lastmod>2012-01-22T21:07:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0-2/</loc>
+    <lastmod>2012-01-03T19:31:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2012/01/03/trying-micro-cloud-foundry-1-dot-1-0/</loc>
+    <lastmod>2012-01-03T14:19:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2011/12/27/compile-ruby-1-dot-9-3-on-mac-os-x-lion/</loc>
+    <lastmod>2011-12-27T23:52:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2011/12/25/underscore-dot-js-in-node-repl/</loc>
+    <lastmod>2011-12-25T01:04:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2011/12/24/dotinstall/</loc>
+    <lastmod>2011-12-24T15:48:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/2011/12/22/inside-play-continuation-javaflow/</loc>
+    <lastmod>2011-12-22T21:47:00+09:00</lastmod>
+    <priority>0.8</priority>
+  </url>
+  
+  
+  <url>
+    <loc>http://tkawachi.github.io/blog/archives/</loc>
+    <lastmod>2014-11-06T01:31:00+09:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>http://tkawachi.github.io/</loc>
+    <lastmod>2014-11-06T01:31:00+09:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  
+  
 </urlset>

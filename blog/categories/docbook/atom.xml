@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: DocBook | tkawachi Blog]]></title>
+  <title><![CDATA[Category: docbook | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/docbook/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -24,12 +24,11 @@ DocBook project で用意されている xslt を xlstproc コマンドであて
 <p>今作業している MacOS X (Mountain Lion) には xsltproc が /usr/bin/ にインストールされているようです。
 DocBook 用の xslt をインストールするのに Homebrew を使います。</p>
 
-<p><code>sh
-$ brew install docbook
+<pre><code class="sh">$ brew install docbook
 $ xsltproc -o book.html \
   /usr/local/Cellar/docbook/5.0/docbook/xsl-ns/1.77.1/xhtml5/docbook.xsl \
   book.xml
-</code></p>
+</code></pre>
 
 <p>こんなかんじで無事に book.xml から book.html を生成することができました。
 DocBook って難しくて怖いイメージがあったんですが意外に簡単にでした。</p>

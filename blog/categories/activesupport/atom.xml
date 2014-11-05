@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: ActiveSupport | tkawachi Blog]]></title>
+  <title><![CDATA[Category: activesupport | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/activesupport/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -24,17 +24,16 @@
 
 <p>下のコードを見てください。</p>
 
-<p>``` ruby
-t1 = Time.new(2012, 12, 1)</p>
+<pre><code class="ruby">t1 = Time.new(2012, 12, 1)
 
-<p>t2 = t1 + 1.day
-t2 &ndash; t1 == 1.day # => true</p>
+t2 = t1 + 1.day
+t2 - t1 == 1.day # =&gt; true
 
-<p>t3 = t1 + 1.month
-t3 &ndash; t1 == 1.month # => false
-```</p>
+t3 = t1 + 1.month
+t3 - t1 == 1.month # =&gt; false
+</code></pre>
 
-<p>a = b + c だったら普通 a &ndash; b = c だろうと思うのですが、最後の式は false を返します。
+<p>a = b + c だったら普通 a - b = c だろうと思うのですが、最後の式は false を返します。
 なぜだかわかりますか？</p>
 
 <!-- more -->

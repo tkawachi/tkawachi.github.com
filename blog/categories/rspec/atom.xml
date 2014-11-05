@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Rspec | tkawachi Blog]]></title>
+  <title><![CDATA[Category: rspec | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -52,54 +52,50 @@ spork を用いたテストの実行をファイル書き換え時に行うこ�
 
 <p>Gemfile の :development, :test 周りを以下のように変更する。</p>
 
-<p>``` ruby Gemfile
-group :development do
-  gem &lsquo;spork&rsquo;
-  gem &lsquo;guard&rsquo;
-  gem &lsquo;rb-fsevent&rsquo;, :require => false
-  gem &lsquo;ruby_gntp&rsquo;
-  gem &lsquo;guard-rspec&rsquo;
-  gem &lsquo;guard-spork&rsquo;
-end</p>
-
-<p>group :development, :test do
-  gem &lsquo;rspec-rails&rsquo;, &lsquo;~> 2.6&rsquo;
-  gem &lsquo;webrat&rsquo;
+<pre><code class="ruby Gemfile">group :development do
+  gem 'spork'
+  gem 'guard'
+  gem 'rb-fsevent', :require =&gt; false
+  gem 'ruby_gntp'
+  gem 'guard-rspec'
+  gem 'guard-spork'
 end
-```</p>
+
+group :development, :test do
+  gem 'rspec-rails', '~&gt; 2.6'
+  gem 'webrat'
+end
+</code></pre>
 
 <p>以下を実行。</p>
 
-<p><code>sh
-$ bundle install
+<pre><code class="sh">$ bundle install
 $ spork --bootstrap
-</code></p>
+</code></pre>
 
 <p><code>spec/spec_helper.rb</code> が spork によって書き換えられているので編集する。
 今までのコードを <code>Spork.prefork do … end</code> の中に入れてあげれば OK。
 <code>.rspec</code> を編集し、<code>--drb</code> という行を追加する。</p>
 
 <p>ここまでで spork が動作する。
-``` sh
+&#8220;` sh
 $ spork</p>
 
 <h1>別のターミナルで</h1>
 
 <p>$ rspec .
-```</p>
+&#8220;`</p>
 
 <p>続いて guard の設定。</p>
 
-<p><code>sh
-$ bundle exec guard init spork
+<pre><code class="sh">$ bundle exec guard init spork
 $ bundle exec guard init rspec
-</code></p>
+</code></pre>
 
 <p>これで guard + spork が動作する。</p>
 
-<p><code>sh
-$ bundle exec guard start
-</code></p>
+<pre><code class="sh">$ bundle exec guard start
+</code></pre>
 
 <p>あとはソースコードを書き換えたら自動でテストが実行され、結果が Growl で通知される。</p>
 

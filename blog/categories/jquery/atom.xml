@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: jQuery | tkawachi Blog]]></title>
+  <title><![CDATA[Category: jquery | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/jquery/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -96,14 +96,13 @@ Promise は Deferred の <code>.promise()</code> メソッドで得られます�
 <p>ともあれ、Promise はその時点では結果が出ていないので、すぐに結果を利用することができません。
 代わりに callback を登録しておくことができます。</p>
 
-<p><code>javascript
-// 解決済みになったら呼ばれる callback を登録
+<pre><code class="javascript">// 解決済みになったら呼ばれる callback を登録
 promise.done(function(data) { dataは処理結果 });
 // 拒否済みになったら呼ばれる callback を登録
 promise.fail(function() { エラー処理 });
 // 解決済みもしくは拒否済みになったら呼ばれる callback を登録
 promise.always(function() { 処理 });
-</code></p>
+</code></pre>
 
 <p>callback 複数登録する事ができ、登録した順に呼ばれます。例えば <code>done()</code> を複数回呼び出して解決済みになったときの callback を複数個登録することができます。</p>
 
@@ -118,15 +117,13 @@ promise.always(function() { 処理 });
 <p>組み合わせた場合、 callback の引数に渡される結果も増えます。
 以下のコードで d1, d2 にはそれぞれ promise1, promise2 の結果が渡されます。</p>
 
-<p><code>javascript
-$.when(promise1, promise2).done(function(d1, d2) { … });
-</code></p>
+<pre><code class="javascript">$.when(promise1, promise2).done(function(d1, d2) { … });
+</code></pre>
 
 <p><code>$.when()</code> に Defered でも Promise でもない値を渡した場合、解決済みの値として扱われます。</p>
 
-<p><code>javascript
-$.when(10, promise).done(function(d1, d2) { … });
-</code></p>
+<pre><code class="javascript">$.when(10, promise).done(function(d1, d2) { … });
+</code></pre>
 
 <p>などとした場合、10は解決済みと見なされ、<code>promise</code>が解決済みになり次第、<code>d1</code> に 10 が渡されて callback が実行されます。</p>
 

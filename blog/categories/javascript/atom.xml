@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: JavaScript | tkawachi Blog]]></title>
+  <title><![CDATA[Category: javascript | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/javascript/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -153,21 +153,19 @@ case 0:
 
 <p>まずは Gemfile に追加して <code>bundle install</code> 。</p>
 
-<p><code>ruby Gemfile
-gem "i18n-js"
-</code></p>
+<pre><code class="ruby Gemfile">gem "i18n-js"
+</code></pre>
 
 <p>続いて application.js に以下の行を追加。</p>
 
-<p><code>javascript app/assets/javascripts/application.js
-//= require i18n
+<pre><code class="javascript app/assets/javascripts/application.js">//= require i18n
 //= require i18n/translations
-</code></p>
+</code></pre>
 
 <p>app/views/layouts/application.html.erb に以下の行を追加。
 指定した言語で訳が存在しない時にデフォルト言語の訳を参照したいので <code>I18n.fallbacks = true;</code> を指定しています。</p>
 
-<p>``` erb app/views/layouts/application.html.erb</p>
+<p>&#8220;` erb app/views/layouts/application.html.erb</p>
 
 <script type="text/javascript">
     I18n.defaultLocale = "<%= I18n.default_locale %>";
@@ -176,23 +174,21 @@ gem "i18n-js"
 </script>
 
 
-<p>```</p>
+<pre><code>
+最後に `rake i18n:js:setup` を実行すると `config/i18n-js.yml` が生成されます。
 
-<p>最後に <code>rake i18n:js:setup</code> を実行すると <code>config/i18n-js.yml</code> が生成されます。</p>
+これで `config/locales/*.yml` に書いてある Rails (Ruby) 側で利用できる情報と同じものが利用できるようになります。
 
-<p>これで <code>config/locales/*.yml</code> に書いてある Rails (Ruby) 側で利用できる情報と同じものが利用できるようになります。</p>
+ローカライゼーションは `I18n.t()` 関数で実行します。
+</code></pre>
 
-<p>ローカライゼーションは <code>I18n.t()</code> 関数で実行します。</p>
-
-<p><code>javascript
-I18n.t("hello");
-</code></p>
+<p>I18n.t(&ldquo;hello&rdquo;);
+&#8220;`</p>
 
 <p>デフォルト値を指定したい場合はこんな感じ。</p>
 
-<p><code>javascript
-I18n.t("hello", {defaultValue: "こんちは"});
-</code></p>
+<pre><code class="javascript">I18n.t("hello", {defaultValue: "こんちは"});
+</code></pre>
 
 <p>便利に使わせていただきます。</p>
 ]]></content>

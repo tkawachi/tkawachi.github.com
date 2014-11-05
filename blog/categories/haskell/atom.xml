@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Haskell | tkawachi Blog]]></title>
+  <title><![CDATA[Category: haskell | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/haskell/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -31,7 +31,7 @@ Kindle版があるのは素晴らしい。</p>
 <ul>
 <li>Haskell はおもしろい</li>
 <li>困ったら freenode #haskell へ (日本語だとどこなんだろう？)</li>
-<li>純粋関数型言語で宣言的 (&lt;&ndash;> 命令形言語で手続き的)</li>
+<li>純粋関数型言語で宣言的 (<-> 命令形言語で手続き的)</li>
 <li>副作用なし。参照透明性(同じ引数で関数が呼ばれたら同じ値を返す)。</li>
 <li>遅延評価</li>
 <li>静的型付けで型推論あり。</li>
@@ -40,9 +40,9 @@ Kindle版があるのは素晴らしい。</p>
 <li>ghci のコマンド
 
 <ul>
-<li>:q &mdash; 終了</li>
-<li>:l foo &mdash; foo.hs のロード</li>
-<li>:r &mdash; 最後の :l を再実行</li>
+<li>:q &ndash; 終了</li>
+<li>:l foo &ndash; foo.hs のロード</li>
+<li>:r &ndash; 最後の :l を再実行</li>
 </ul>
 </li>
 <li>ワークフロー

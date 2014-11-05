@@ -74,7 +74,7 @@ Installing &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
     <input type="hidden" name="q" value="site:tkawachi.github.io" />
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
@@ -110,7 +110,7 @@ Installing &hellip;">
   
 
 
-<time datetime="2011-12-27T23:52:00+09:00" pubdate data-updated="true">Dec 27<span>th</span>, 2011</time>
+<time datetime="2011-12-27T23:52:00+09:00" pubdate data-updated="true"></time>
         
       </p>
     
@@ -121,7 +121,7 @@ Installing &hellip;">
 しとこうと思ったらエラーになる。
 rvm の version は 1.10.0。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -146,12 +146,12 @@ rvm の version は 1.10.0。</p>
 </span><span class='line'>Installing yaml to /Users/kawachi/.rvm/usr
 </span><span class='line'>ruby-1.9.3-p0 - #configuring
 </span><span class='line'>ERROR: Error running ' ./configure --prefix=/Users/kawachi/.rvm/rubies/ruby-1.9.3-p0 --enable-shared --disable-install-doc --with-libyaml-dir=/Users/kawachi/.rvm/usr ', please read /Users/kawachi/.rvm/log/ruby-1.9.3-p0/configure.log
-</span><span class='line'>ERROR: There has been an error while running configure. Halting the installation.</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>ERROR: There has been an error while running configure. Halting the installation.</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p><code>~/.rvm/log/ruby-1.9.3-p0/configure.log</code> はこんな感じ。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -166,7 +166,7 @@ rvm の version は 1.10.0。</p>
 </span><span class='line'>checking target system type... x86_64-apple-darwin11.2.0
 </span><span class='line'>checking whether the C compiler works... no
 </span><span class='line'>configure: error: in `/Users/kawachi/.rvm/src/ruby-1.9.3-p0':
-</span><span class='line'>configure: error: C compiler cannot create executablesSee `config.log' for more details</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>configure: error: C compiler cannot create executablesSee `config.log' for more details</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p><code>CC=gcc</code> を指定すると少し変わる。</p>
@@ -176,15 +176,15 @@ rvm の version は 1.10.0。</p>
 
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>$ CC=gcc rvm install 1.9.3
-</span><span class='line'>ERROR: The provided CC(gcc) is LLVM based, it is not yet fully supported by ruby and gems, please read `rvm requirements`.</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>ERROR: The provided CC(gcc) is LLVM based, it is not yet fully supported by ruby and gems, please read `rvm requirements`.</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p><code>rvm requirements</code> を読むといろいろ書いてある。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -221,7 +221,7 @@ rvm の version は 1.10.0。</p>
 </span><span class='line'>    For MacRuby: Install LLVM first.
 </span><span class='line'>    For JRuby:  Install the JDK. See http://developer.apple.com/java/download/  # Current Java version 1.6.0_26
 </span><span class='line'>    For IronRuby: Install Mono &gt;= 2.6
-</span><span class='line'>      For Ruby 1.9.3: Install libksba # If using Homebrew, 'brew install libksba'</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>      For Ruby 1.9.3: Install libksba # If using Homebrew, 'brew install libksba'</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>なんかいろいろ書いてある。
@@ -241,7 +241,7 @@ RVM で止められてる気がする。。。</p>
 <p><code>~/.rvm/scripts/functions/build</code> を参照すると、
 <code>CC</code> 環境変数が存在するときは <code>--version</code> 付きで実行して LLVM だったら <code>exit 1</code> してる。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -262,7 +262,7 @@ RVM で止められてる気がする。。。</p>
 </span><span class='line'>+      #exit 1
 </span><span class='line'>     fi
 </span><span class='line'> 
-</span><span class='line'>   fi</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>   fi</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 
 <p>とりあえず上記のとおりコメントアウトしてみたら
@@ -291,12 +291,12 @@ RVM で止められてる気がする。。。</p>
   
 
 
-<time datetime="2011-12-27T23:52:00+09:00" pubdate data-updated="true">Dec 27<span>th</span>, 2011</time>
+<time datetime="2011-12-27T23:52:00+09:00" pubdate data-updated="true"></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/lion/'>Lion</a>, <a class='category' href='/blog/categories/ruby/'>Ruby</a>
+    <a class='category' href='/blog/categories/lion/'>lion</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>
   
 </span>
 
@@ -342,6 +342,10 @@ RVM で止められてる気がする。。。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/11/06/1/">DDD読書メモ 1</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a>
       </li>
     
@@ -355,10 +359,6 @@ RVM で止められてる気がする。。。</p>
     
       <li class="post">
         <a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/01/haxe-call-by-name/">Haxe で Call-by-name したい</a>
       </li>
     
   </ul>
@@ -386,7 +386,7 @@ RVM で止められてる気がする。。。</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - KAWACHI Takashi -
+  Copyright &copy; 2014 - KAWACHI Takashi -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

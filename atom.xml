@@ -4,7 +4,7 @@
   <title><![CDATA[tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,51 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[DDD読書メモ 1]]></title>
+    <link href="http://tkawachi.github.io/blog/2014/11/06/1/"/>
+    <updated>2014-11-06T00:35:25+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2014/11/06/1</id>
+    <content type="html"><![CDATA[<p>エリック・エヴァンスのドメイン駆動設計（通称:DDD本）を読み始めたのでメモを残しておこう。</p>
+
+<p>ドメインモデルとは？ドメインエキスパートの知識を厳密に構成、厳選して抽象化したものだ。</p>
+
+<blockquote><p>モデルと設計の核心が相互に形成しあう。</p></blockquote>
+
+<p>モデルと実装が剥離しては効果が薄い。実装とモデルを緊密に保つべしとのこと。
+モデルの形状として何を想定しているのだろう？プログラムコードかな？
+プログラムコードをドメインエキスパートに読ませるのはしんどいのではないだろうか。
+かといって記述用の擬似言語を設計するのもつらい。</p>
+
+<blockquote><p>モデルは、チームメンバ全員が使用する言語の基板である。</p></blockquote>
+
+<p>ドメインエキスパートも開発者もモデルの言葉を使ってコミュニケーションしよう、という話。
+同じ言葉を使うことで不要な摩擦を除くことができる。</p>
+
+<p>わかりやすい話ではあるが、日本においては日本語と英語の選択をしなければならない。
+モデル言語として英語を使う場合、大半の日本人について、英語ネイティブスピーカーと同程度に英単語を自然に扱う能力は無いことは明白だ。
+議論を重ねる上でモデル言語は洗練されていくが、その前提には高い言語能力が仮定されている。
+英語を選択した場合、洗練がうまくいかない可能性があるのではないか。
+一方で日本語を選択した場合、開発者が同じ単語を使うためには日本語でコードを書くことになるのではないか。
+日本語でのプログラミングはプラットフォームによっては許容されるかもしれないが、一般に避けたいものである。</p>
+
+<p>「モデルの構築と表現言語の選択」というのは日本人特有の課題だなあ。</p>
+
+<h3>第1章</h3>
+
+<p>ドメインエキスパートと議論を重ねることで知識を噛み砕きモデルを構築する話。
+ドメインエキスパートと開発者が共同作業することが重要。
+ほらほら、新しい言語とかフレームワークとかばっかりみてないで、対象業務がどうなっているか興味を持とうよ、てなことが書いてある。</p>
+
+<p>だれも最初から完璧人間ではないのでモデルの構築は発見的に行われる。
+変化を許容する必要がある。</p>
+
+<p>コミュニケーション方法に言及するあたりが本書のスタンスをよく表している。</p>
+
+<p>今日はここまで</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Pythonによるデータ分析入門 レビュー]]></title>
@@ -57,10 +102,10 @@
 の役割を担っています。</p>
 
 <ul>
-<li>pandas &mdash; 高速なデータ分析。内部で NumPy を利用する。</li>
-<li>NumPy &mdash; 高速な行列データ構造</li>
-<li>matplotlib &mdash; 可視化（グラフ作成）</li>
-<li>IPython &mdash; インタラクティブコンソール</li>
+<li>pandas &ndash; 高速なデータ分析。内部で NumPy を利用する。</li>
+<li>NumPy &ndash; 高速な行列データ構造</li>
+<li>matplotlib &ndash; 可視化（グラフ作成）</li>
+<li>IPython &ndash; インタラクティブコンソール</li>
 </ul>
 
 
@@ -250,14 +295,14 @@ view の先頭（かつ、パラメータの後！）でしか import 出来な�
 
 <h3>Q: @helper.inputText() 等で出力される input tag に属性を付けたい（class とか）</h3>
 
-<p>A: Symbol &ndash;> Any のタプルをずらずらと渡す。</p>
+<p>A: Symbol -> Any のタプルをずらずらと渡す。</p>
 
 <pre><code>@helper.inputText(userForm("name"), 'id -&gt; "name", 'size -&gt; 30)
 </code></pre>
 
 <h3>Q: @helper.inputText() 等で出力される input tag に紐づく label tag の名前を変えたい。</h3>
 
-<p>A: &lsquo;_label &ndash;> &ldquo;ほげ&rdquo; を追加する。</p>
+<p>A: &lsquo;_label -> &ldquo;ほげ&rdquo; を追加する。</p>
 
 <pre><code>@helper.inputText(userForm("name"), '_label -&gt; "ほげ")
 </code></pre>
@@ -1130,9 +1175,9 @@ type B = Derived =&gt; Base
 <p>C[T]がパラメータ化された型で A, B が A &lt;: B であるとき、C[A] と C[B] の関係は3パターン。</p>
 
 <ul>
-<li>C[A] &lt;: C[B] &mdash; このとき C は covariant（共変）</li>
-<li>C[A] >: C[B] &mdash; このとき C は contravarinat（反変）</li>
-<li>C[A] と C[B] の間に subtype の関係なし &mdash; このとき C は invariant（不変）。nonvariant とも言うらしい。</li>
+<li>C[A] &lt;: C[B] &ndash; このとき C は covariant（共変）</li>
+<li>C[A] >: C[B] &ndash; このとき C は contravarinat（反変）</li>
+<li>C[A] と C[B] の間に subtype の関係なし &ndash; このとき C は invariant（不変）。nonvariant とも言うらしい。</li>
 </ul>
 
 
@@ -2053,7 +2098,7 @@ Immutable なので複数の actor をインスタンス化する際に使いま
 <h3>ストラテジー</h3>
 
 <ul>
-<li>one-for-one strategy &mdash; default
+<li>one-for-one strategy &ndash; default
 
 <ul>
 <li>Restart (defaultDecider)</li>
@@ -2232,7 +2277,7 @@ Kindle版があるのは素晴らしい。</p>
 <ul>
 <li>Haskell はおもしろい</li>
 <li>困ったら freenode #haskell へ (日本語だとどこなんだろう？)</li>
-<li>純粋関数型言語で宣言的 (&lt;&ndash;> 命令形言語で手続き的)</li>
+<li>純粋関数型言語で宣言的 (<-> 命令形言語で手続き的)</li>
 <li>副作用なし。参照透明性(同じ引数で関数が呼ばれたら同じ値を返す)。</li>
 <li>遅延評価</li>
 <li>静的型付けで型推論あり。</li>
@@ -2241,9 +2286,9 @@ Kindle版があるのは素晴らしい。</p>
 <li>ghci のコマンド
 
 <ul>
-<li>:q &mdash; 終了</li>
-<li>:l foo &mdash; foo.hs のロード</li>
-<li>:r &mdash; 最後の :l を再実行</li>
+<li>:q &ndash; 終了</li>
+<li>:l foo &ndash; foo.hs のロード</li>
+<li>:r &ndash; 最後の :l を再実行</li>
 </ul>
 </li>
 <li>ワークフロー
@@ -2335,76 +2380,6 @@ Ruby の AWS SDK で
 
 
 <p>両方指定する(<code>A &gt;: L &lt;: U</code>)ことも可能。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[loan pattern]]></title>
-    <link href="http://tkawachi.github.io/blog/2013/06/11/1/"/>
-    <updated>2013-06-11T22:07:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2013/06/11/1</id>
-    <content type="html"><![CDATA[<p>最近仕事で scala を書いてまして、
-Java 延長線上として使う分には全く問題ないのだが、
-scala ぽいこととなるとかなり怪しい。
-なので初歩から少しずつ勉強して、その様子を晒しておくことにする。</p>
-
-<p>今日は loan pattern。
-リソース解放を忘れずに行うためのパターン。
-C++ では RAII, golang では defer を使う場面で使うやつ。</p>
-
-<!-- more -->
-
-
-<p>以下、基本形。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'>  <span class="k">def</span> <span class="n">using</span><span class="o">[</span><span class="kt">A</span>, <span class="kt">R</span> <span class="k">&lt;:</span> <span class="o">{</span><span class="kt">def</span> <span class="kt">close</span><span class="o">()}](</span><span class="n">r</span><span class="k">:</span> <span class="kt">R</span><span class="o">)(</span><span class="n">f</span><span class="k">:</span> <span class="kt">R</span> <span class="o">=&gt;</span> <span class="n">A</span><span class="o">)</span><span class="k">:</span> <span class="kt">A</span> <span class="o">=</span>
-</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">f</span><span class="o">(</span><span class="n">r</span><span class="o">)</span>
-</span><span class='line'>    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">r</span><span class="o">.</span><span class="n">close</span><span class="o">()</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="c1">// 使いかた</span>
-</span><span class='line'>  <span class="n">using</span><span class="o">(</span><span class="k">new</span> <span class="nc">FileWriter</span><span class="o">(</span><span class="s">&quot;xyz&quot;</span><span class="o">))</span> <span class="o">{</span>
-</span><span class='line'>    <span class="o">(</span><span class="n">f</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="c1">// f に対する操作</span>
-</span><span class='line'>  <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>ポイント</p>
-
-<ul>
-<li>parameterized type の R には structural type で upper bound を指定する(<code>R &lt;: {def close()}</code>)。
-これにより R には <code>close()</code> メソッドを持つ任意の型を受け付けられる。
-Structural typing は scala で duck typing できる機能。便利。
-R の upper bound に trait や class を指定すると継承関係がある型しか使えないので
-汎用性が下がり残念な気持ちになる。注意。</li>
-</ul>
-
-
-<p>それにしても名前が覚えづらい。</p>
-
-<p>参考</p>
-
-<ul>
-<li><a href="http://www.ne.jp/asahi/hishidama/home/tech/scala/sample/using.html">Scala using（ローンパターン）</a></li>
-</ul>
-
-
-<hr />
-
-<p>2013/6/12: parameterized type R の指定には upper bound で structural type を指定するのではなく、 view bound (<code>R &lt;% {def close()}</code>) で structural type を指定する方が汎用性が高い。</p>
 ]]></content>
   </entry>
   

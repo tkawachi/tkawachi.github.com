@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: TypeScript | tkawachi Blog]]></title>
+  <title><![CDATA[Category: typescript | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/typescript/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2013-12-22T13:16:45+09:00</updated>
+  <updated>2014-11-06T01:31:00+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -55,30 +55,26 @@ TypeScript compiler に渡る際に違うディレクトリにコピーされる
 <!-- more -->
 
 
-<p>``` sh
-$ rails new typescript-rails-test -T
-$ echo &lsquo;gem &ldquo;typescript-rails&rdquo;&rsquo; >> Gemfile
+<pre><code class="sh">$ rails new typescript-rails-test -T
+$ echo 'gem "typescript-rails"' &gt;&gt; Gemfile
 $ bundle
-$ bundle exec rails g controller test index</p>
-
-<pre><code>  create  app/controllers/test_controller.rb
-   route  get "test/index"
-  invoke  erb
-  create    app/views/test
-  create    app/views/test/index.html.erb
-  invoke  helper
-  create    app/helpers/test_helper.rb
-  invoke  assets
-  invoke    coffee
-  create      app/assets/javascripts/test.js.coffee
-  invoke    scss
-  create      app/assets/stylesheets/test.css.scss
-</code></pre>
-
-<p>$ rm app/assets/javascripts/test.js.coffee
-$ echo &lsquo;alert(&ldquo;Hello TypeScript&rdquo;)&rsquo; > app/assets/javascripts/test.js.ts
+$ bundle exec rails g controller test index
+      create  app/controllers/test_controller.rb
+       route  get "test/index"
+      invoke  erb
+      create    app/views/test
+      create    app/views/test/index.html.erb
+      invoke  helper
+      create    app/helpers/test_helper.rb
+      invoke  assets
+      invoke    coffee
+      create      app/assets/javascripts/test.js.coffee
+      invoke    scss
+      create      app/assets/stylesheets/test.css.scss
+$ rm app/assets/javascripts/test.js.coffee
+$ echo 'alert("Hello TypeScript")' &gt; app/assets/javascripts/test.js.ts
 $ bundle exec rails s
-```</p>
+</code></pre>
 
 <p>これで <a href="http://localhost:3000/test/index">http://localhost:3000/test/index</a> にアクセスすると、正しく alert が表示される。
 いいぞ。</p>
@@ -92,10 +88,9 @@ $(function() {
 
 <p>うーむ。エラーがおきた。</p>
 
-<p><code>text
-SyntaxError: (4,1): The name '$' does not exist in the current scope
+<pre><code class="text">SyntaxError: (4,1): The name '$' does not exist in the current scope
   (in /Users/kawachi/gitworks/typescript-rails-test/app/assets/javascripts/test.js.ts)
-</code></p>
+</code></pre>
 
 <p><a href="https://github.com/klaustopher/typescript-rails/issues/5">Issue #5</a>
 に報告されている問題と同一。
@@ -109,37 +104,27 @@ ExecJS を経由せずに直接 Node.js を叩けばいいのでは、と。</p>
 よく見ると module, exports, require, console が undefined にされていることがわかる。(<code>result = program();</code> のところで引数に何も渡されていない)
 隠されている CommonJS の機能とはきっとこのことを言っているのだろう。</p>
 
-<p>``` javascript execjs/support/node_runner.js
-(function(program, execJS) { execJS(program) })(function(module, exports, require, console) { #{source}
+<pre><code class="javascript execjs/support/node_runner.js">(function(program, execJS) { execJS(program) })(function(module, exports, require, console) { #{source}
 }, function(program) {
-  var output, print = function(string) {</p>
-
-<pre><code>process.stdout.write('' + string);
-</code></pre>
-
-<p>  };
-  try {</p>
-
-<pre><code>result = program();
-if (typeof result == 'undefined' &amp;&amp; result !== null) {
-  print('["ok"]');
-} else {
+  var output, print = function(string) {
+    process.stdout.write('' + string);
+  };
   try {
-    print(JSON.stringify(['ok', result]));
+    result = program();
+    if (typeof result == 'undefined' &amp;&amp; result !== null) {
+      print('["ok"]');
+    } else {
+      try {
+        print(JSON.stringify(['ok', result]));
+      } catch (err) {
+        print('["err"]');
+      }
+    }
   } catch (err) {
-    print('["err"]');
+    print(JSON.stringify(['err', '' + err]));
   }
-}
-</code></pre>
-
-<p>  } catch (err) {</p>
-
-<pre><code>print(JSON.stringify(['err', '' + err]));
-</code></pre>
-
-<p>  }
 });
-```</p>
+</code></pre>
 
 <p><a href="https://github.com/sstephenson/execjs/issues/91">このへん</a>
 をみると ExecJS の作者は、副作用を与えるこれらの機能を ExecJS に取り込むつもりは毛頭ないようだ。</p>
