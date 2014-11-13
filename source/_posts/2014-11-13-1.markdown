@@ -61,7 +61,7 @@ JSON として `Description` が書けるようになっているが、自由な
 解決策のひとつは DSL を書いて JSON を生成する方法だ。
 [cloudformation-ruby-dsl](https://github.com/bazaarvoice/cloudformation-ruby-dsl) や
 [troposphere](https://github.com/cloudtools/troposphere) や他にもいろいろ探せば出てくる。
-DSLが問題を解決するか否かは、、まあDSL次第なのだ。
+DSLが問題を解決するか否かは、、まあDSL次第だ。
 内部DSLの場合にはベースとなるプログラミング言語そのものの機能で問題を解消できる。
 ざっと見たところ内部DSLを採用している例ばかりだった。
 
@@ -70,7 +70,7 @@ CloudFormation には日々新たな機能が追加されており、DSLが機�
 機能追加の速度が遅い場合にはこれは問題にはならないが、AWSはすごい速度で機能を追加してくる。
 使いたいものが使いたいときに使えないようでは残念な気持ちになることが想像できる。
 
-もちろんDSLに自分でpatchを当てればいいのだが、自分が特定のDSLにそこまで思い入れがあるわけではない。
+もちろんDSLに自分でpatchを当てればいいのだが、特定のDSLにそこまで思い入れがあるわけではない。
 自分が求めているのは JSON を便利に書く方法であって、DSLではないということに気づいた。
 
 ### 解決策2. HOCON (Human Optimized Config Object Notation)
