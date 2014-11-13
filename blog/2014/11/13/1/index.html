@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>CloudFormation の JSON を書くときの自分的ベスト - tkawachi Blog</title>
+  <meta name="author" content="KAWACHI Takashi">
+
+  
+  <meta name="description" content="数ヶ月前に CloudFormation の JSON を書くにはどうしたらいいか考えた。
+そのときはどこにも書かなかったが、今日思い出す機会があったのでメモしておこう。 背景: CloudFormation の JSON を書くのはつらい AWS の CloudFormation &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2014/11/13/1">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-5']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">tkawachi Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tkawachi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">CloudFormation の JSON を書くときの自分的ベスト</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-11-13T23:32:38+09:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:32 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>数ヶ月前に CloudFormation の JSON を書くにはどうしたらいいか考えた。
+そのときはどこにも書かなかったが、今日思い出す機会があったのでメモしておこう。</p>
+
+<h3>背景: CloudFormation の JSON を書くのはつらい</h3>
+
+<p>AWS の CloudFormation を使おうと思ったら JSON を書かなければならない。
+<a href="https://s3-us-west-2.amazonaws.com/cloudformation-templates-us-west-2/ElasticBeanstalk_in_VPC.template">サンプルで提供されているJSONのひとつ</a>
+を見てみて、自分にはとても書く気にはなれなかった。
+理由は２つ。</p>
+
+<p>1つめはコメントが書けないこと。
+JSON として <code>Description</code> が書けるようになっているが、自由な行にコメントを書きたい。
+コメントがないと後日見た時に意図が伝わらないことがあり、メンテナンスが困難になる。</p>
+
+<p>2つめはJSONであるがゆえにDRYに書けないこと。
+たとえばサンプル中に出てくる次の部分をみてみよう。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>"InboundHTTPPublicNetworkAclEntry" : {
+</span><span class='line'>  "Type" : "AWS::EC2::NetworkAclEntry",
+</span><span class='line'>  "Properties" : {
+</span><span class='line'>    "NetworkAclId" : { "Ref" : "PublicNetworkAcl" },
+</span><span class='line'>    "RuleNumber" : "100",
+</span><span class='line'>    "Protocol" : "6",
+</span><span class='line'>    "RuleAction" : "allow",
+</span><span class='line'>    "Egress" : "false",
+</span><span class='line'>    "CidrBlock" : "0.0.0.0/0",
+</span><span class='line'>    "PortRange" : { "From" : "80", "To" : "80" }
+</span><span class='line'>  }
+</span><span class='line'>},
+</span><span class='line'>
+</span><span class='line'>"InboundHTTPSPublicNetworkAclEntry" : {
+</span><span class='line'>  "Type" : "AWS::EC2::NetworkAclEntry",
+</span><span class='line'>  "Properties" : {
+</span><span class='line'>    "NetworkAclId" : { "Ref" : "PublicNetworkAcl" },
+</span><span class='line'>    "RuleNumber" : "101",
+</span><span class='line'>    "Protocol" : "6",
+</span><span class='line'>    "RuleAction" : "allow",
+</span><span class='line'>    "Egress" : "false",
+</span><span class='line'>    "CidrBlock" : "0.0.0.0/0",
+</span><span class='line'>    "PortRange" : { "From" : "443", "To" : "443" }
+</span><span class='line'>  }
+</span><span class='line'>},</span></code></pre></td></tr></table></div></figure>
+
+
+<p>げぇー。ほとんど同じ内容が書かれている。
+違う部分を探すのが難しい。
+プログラマがこれを見たら共通部をくくりだしたくなるのは自然だし、くくりだせないということがわかったら発狂するか無気力になるだろう。
+大きな例になればなるほど、このような繰り返しが多数出現する。つらい。</p>
+
+<h3>解決策1. DSL</h3>
+
+<p>解決策のひとつは DSL を書いて JSON を生成する方法だ。
+<a href="https://github.com/bazaarvoice/cloudformation-ruby-dsl">cloudformation-ruby-dsl</a> や
+<a href="https://github.com/cloudtools/troposphere">troposphere</a> や他にもいろいろ探せば出てくる。
+DSLが問題を解決するか否かは、、まあDSL次第なのだ。
+内部DSLの場合にはベースとなるプログラミング言語そのものの機能で問題を解消できる。
+ざっと見たところ内部DSLを採用している例ばかりだった。</p>
+
+<p>しかし、DSLを使うことで新たな問題が発生する。
+CloudFormation には日々新たな機能が追加されており、DSLが機能をサポートするまでに時間がかかるのだ。
+機能追加の速度が遅い場合にはこれは問題にはならないが、AWSはすごい速度で機能を追加してくる。
+使いたいものが使いたいときに使えないようでは残念な気持ちになることが想像できる。</p>
+
+<p>もちろんDSLに自分でpatchを当てればいいのだが、自分が特定のDSLにそこまで思い入れがあるわけではない。
+自分が求めているのは JSON を便利に書く方法であって、DSLではないということに気づいた。</p>
+
+<h3>解決策2. HOCON (Human Optimized Config Object Notation)</h3>
+
+<p>私は普段 <a href="http://www.playframework.com/">Play framework</a> を使って開発をしている。
+Play で設定を書くときには <a href="https://github.com/typesafehub/config/blob/master/HOCON.md">HOCON</a> というフォーマットを使う。
+HOCON は JSON の superset であり、人間が読み書きするのに最適化されている(Human Optimized) 。
+JSONを便利に書きたいのだから、HOCONこそ自分が求めるものだ（とその時は思った）。</p>
+
+<p>HOCON を JSON に変換する方法が欲しかったので、コマンドラインツール <a href="https://github.com/tkawachi/hocon2json">hocon2json</a> を作った。</p>
+
+<p>問題は解決された（やった）。</p>
+
+<p>敢えてこの方法の問題を挙げるとしたら、同僚に HOCON の書き方を教えなければならない点、コマンドラインツールをインストールしなければならない点だ。</p>
+
+<h3>解決策3. JavaScript/CoffeeScript</h3>
+
+<p>HOCONで問題は解決したものの、やっぱ HOCON マイナーだし、説明するのちょっとつらいな、という思いがしばらくくすぶっていた。
+あるとき、JSONてそもそも JavaScript Object Notation の略だし、JavaScript で書けばいいんじゃないか、と思い立った。
+JavaScript であれば知名度抜群でだれでも知っているし、コメントも簡単にかけるし、共通化も簡単だ。</p>
+
+<p>実現方法は、JavaScript 内で JSON として使う Object を作って、 <code>console.log(JSON.stringify(obj))</code> とするだけだ。
+Pretty print したけば <code>console.log(JSON.stringify(obj, null, 2))</code> とすれば良い。</p>
+
+<p>今どきどこにいっても Node.js は入っている気がするし、もし無いときにも手元には必ずブラウザがあるので、ツールが無くて変換できないということは無いだろう。</p>
+
+<p>CoffeeScript の実行環境も普及していると仮定すれば JavaScript の代わりに CoffeeScript で書いてもいいだろう。
+その辺は普及の仮定と好みによる。</p>
+
+<h3>結論</h3>
+
+<p>CloudFormation の JSON を書くには JavaScript/CoffeeScript が自分的ベスト（今のところ）。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-11-13T23:32:38+09:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>11:32 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aws/'>aws</a>, <a class='category' href='/blog/categories/cloudformation/'>cloudformation</a>, <a class='category' href='/blog/categories/coffeescript/'>coffeescript</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2014/11/13/1/" data-via="" data-counturl="http://tkawachi.github.io/blog/2014/11/13/1/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/11/06/1/" title="Previous Post: DDD読書メモ 1">&laquo; DDD読書メモ 1</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/13/1/">CloudFormation の JSON を書くときの自分的ベスト</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/06/1/">DDD読書メモ 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/24/try-is-not-monad/">Try はモナドじゃない</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/23/starting-play/">Play Framework 2.2 Scala 最初の1週間で困った雑多なこと</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/110309119188108264538?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<div class="fb-activity" data-site="http://tkawachi.github.io" data-app-id="445203802205922" data-width="260" data-height="300" data-header="true" data-linktarget="_top" data-recommendations="false"></div>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - KAWACHI Takashi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tkawachiblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2014/11/13/1/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2014/11/13/1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

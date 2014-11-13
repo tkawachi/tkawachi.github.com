@@ -4,7 +4,7 @@
   <title><![CDATA[Category: rspec | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/rspec/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2014-11-06T01:31:00+09:00</updated>
+  <updated>2014-11-14T00:34:36+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -78,13 +78,17 @@ $ spork --bootstrap
 <code>.rspec</code> を編集し、<code>--drb</code> という行を追加する。</p>
 
 <p>ここまでで spork が動作する。
-&#8220;` sh
-$ spork</p>
-
-<h1>別のターミナルで</h1>
-
-<p>$ rspec .
-&#8220;`</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nv">$ </span>spork&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;別のターミナルで&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;<span class="nv">$ </span>rspec .
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>続いて guard の設定。</p>
 

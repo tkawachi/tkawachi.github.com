@@ -4,7 +4,7 @@
   <title><![CDATA[Category: aws | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/aws/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2014-11-06T01:31:00+09:00</updated>
+  <updated>2014-11-14T00:34:36+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,110 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[CloudFormation の JSON を書くときの自分的ベスト]]></title>
+    <link href="http://tkawachi.github.io/blog/2014/11/13/1/"/>
+    <updated>2014-11-13T23:32:38+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2014/11/13/1</id>
+    <content type="html"><![CDATA[<p>数ヶ月前に CloudFormation の JSON を書くにはどうしたらいいか考えた。
+そのときはどこにも書かなかったが、今日思い出す機会があったのでメモしておこう。</p>
+
+<h3>背景: CloudFormation の JSON を書くのはつらい</h3>
+
+<p>AWS の CloudFormation を使おうと思ったら JSON を書かなければならない。
+<a href="https://s3-us-west-2.amazonaws.com/cloudformation-templates-us-west-2/ElasticBeanstalk_in_VPC.template">サンプルで提供されているJSONのひとつ</a>
+を見てみて、自分にはとても書く気にはなれなかった。
+理由は２つ。</p>
+
+<p>1つめはコメントが書けないこと。
+JSON として <code>Description</code> が書けるようになっているが、自由な行にコメントを書きたい。
+コメントがないと後日見た時に意図が伝わらないことがあり、メンテナンスが困難になる。</p>
+
+<p>2つめはJSONであるがゆえにDRYに書けないこと。
+たとえばサンプル中に出てくる次の部分をみてみよう。</p>
+
+<pre><code>    "InboundHTTPPublicNetworkAclEntry" : {
+      "Type" : "AWS::EC2::NetworkAclEntry",
+      "Properties" : {
+        "NetworkAclId" : { "Ref" : "PublicNetworkAcl" },
+        "RuleNumber" : "100",
+        "Protocol" : "6",
+        "RuleAction" : "allow",
+        "Egress" : "false",
+        "CidrBlock" : "0.0.0.0/0",
+        "PortRange" : { "From" : "80", "To" : "80" }
+      }
+    },
+
+    "InboundHTTPSPublicNetworkAclEntry" : {
+      "Type" : "AWS::EC2::NetworkAclEntry",
+      "Properties" : {
+        "NetworkAclId" : { "Ref" : "PublicNetworkAcl" },
+        "RuleNumber" : "101",
+        "Protocol" : "6",
+        "RuleAction" : "allow",
+        "Egress" : "false",
+        "CidrBlock" : "0.0.0.0/0",
+        "PortRange" : { "From" : "443", "To" : "443" }
+      }
+    },
+</code></pre>
+
+<p>げぇー。ほとんど同じ内容が書かれている。
+違う部分を探すのが難しい。
+プログラマがこれを見たら共通部をくくりだしたくなるのは自然だし、くくりだせないということがわかったら発狂するか無気力になるだろう。
+大きな例になればなるほど、このような繰り返しが多数出現する。つらい。</p>
+
+<h3>解決策1. DSL</h3>
+
+<p>解決策のひとつは DSL を書いて JSON を生成する方法だ。
+<a href="https://github.com/bazaarvoice/cloudformation-ruby-dsl">cloudformation-ruby-dsl</a> や
+<a href="https://github.com/cloudtools/troposphere">troposphere</a> や他にもいろいろ探せば出てくる。
+DSLが問題を解決するか否かは、、まあDSL次第なのだ。
+内部DSLの場合にはベースとなるプログラミング言語そのものの機能で問題を解消できる。
+ざっと見たところ内部DSLを採用している例ばかりだった。</p>
+
+<p>しかし、DSLを使うことで新たな問題が発生する。
+CloudFormation には日々新たな機能が追加されており、DSLが機能をサポートするまでに時間がかかるのだ。
+機能追加の速度が遅い場合にはこれは問題にはならないが、AWSはすごい速度で機能を追加してくる。
+使いたいものが使いたいときに使えないようでは残念な気持ちになることが想像できる。</p>
+
+<p>もちろんDSLに自分でpatchを当てればいいのだが、自分が特定のDSLにそこまで思い入れがあるわけではない。
+自分が求めているのは JSON を便利に書く方法であって、DSLではないということに気づいた。</p>
+
+<h3>解決策2. HOCON (Human Optimized Config Object Notation)</h3>
+
+<p>私は普段 <a href="http://www.playframework.com/">Play framework</a> を使って開発をしている。
+Play で設定を書くときには <a href="https://github.com/typesafehub/config/blob/master/HOCON.md">HOCON</a> というフォーマットを使う。
+HOCON は JSON の superset であり、人間が読み書きするのに最適化されている(Human Optimized) 。
+JSONを便利に書きたいのだから、HOCONこそ自分が求めるものだ（とその時は思った）。</p>
+
+<p>HOCON を JSON に変換する方法が欲しかったので、コマンドラインツール <a href="https://github.com/tkawachi/hocon2json">hocon2json</a> を作った。</p>
+
+<p>問題は解決された（やった）。</p>
+
+<p>敢えてこの方法の問題を挙げるとしたら、同僚に HOCON の書き方を教えなければならない点、コマンドラインツールをインストールしなければならない点だ。</p>
+
+<h3>解決策3. JavaScript/CoffeeScript</h3>
+
+<p>HOCONで問題は解決したものの、やっぱ HOCON マイナーだし、説明するのちょっとつらいな、という思いがしばらくくすぶっていた。
+あるとき、JSONてそもそも JavaScript Object Notation の略だし、JavaScript で書けばいいんじゃないか、と思い立った。
+JavaScript であれば知名度抜群でだれでも知っているし、コメントも簡単にかけるし、共通化も簡単だ。</p>
+
+<p>実現方法は、JavaScript 内で JSON として使う Object を作って、 <code>console.log(JSON.stringify(obj))</code> とするだけだ。
+Pretty print したけば <code>console.log(JSON.stringify(obj, null, 2))</code> とすれば良い。</p>
+
+<p>今どきどこにいっても Node.js は入っている気がするし、もし無いときにも手元には必ずブラウザがあるので、ツールが無くて変換できないということは無いだろう。</p>
+
+<p>CoffeeScript の実行環境も普及していると仮定すれば JavaScript の代わりに CoffeeScript で書いてもいいだろう。
+その辺は普及の仮定と好みによる。</p>
+
+<h3>結論</h3>
+
+<p>CloudFormation の JSON を書くには JavaScript/CoffeeScript が自分的ベスト（今のところ）。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[s3:ListBucketVersions]]></title>

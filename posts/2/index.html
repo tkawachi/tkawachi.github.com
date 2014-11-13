@@ -9,8 +9,7 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="Scala の implicit のお勉強メモ。 なぜ implicit を使いたくなるか？ コード片を見ただけではわからなくなるので、暗黙的な記述はあまり使わない方がいいんじゃないかと個人的に思うのだけど。
-それでも便利な使い道があるから使われているみたい。 &hellip;">
+  <meta name="description" content="今日 Functional Programming Principles in Scala で聞いた話が難しかったのでメモ。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +24,7 @@
   <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -82,6 +81,40 @@
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2013/10/09/covariant-contravariant/">Covariantとcontravariant</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-10-09T23:06:00+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>11:06 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>今日 <a href="https://www.coursera.org/course/progfun">Functional Programming Principles in Scala</a> で聞いた話が難しかったのでメモ。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/09/covariant-contravariant/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2013/09/28/scala-implicit/">Scalaのimplicit</a></h1>
     
     
@@ -91,14 +124,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-09-28T22:16:00+09:00" pubdate data-updated="true"></time>
+<time class='entry-date' datetime='2013-09-28T22:16:00+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:16 pm</span></time>
         
       </p>
     
@@ -147,14 +173,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-09-23T23:59:00+09:00" pubdate data-updated="true"></time>
+<time class='entry-date' datetime='2013-09-23T23:59:00+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2013</span></span> <span class='time'>11:59 pm</span></time>
         
       </p>
     
@@ -281,14 +300,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-09-21T21:18:00+09:00" pubdate data-updated="true"></time>
+<time class='entry-date' datetime='2013-09-21T21:18:00+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2013</span></span> <span class='time'>9:18 pm</span></time>
         
       </p>
     
@@ -325,14 +337,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-09-16T22:17:00+09:00" pubdate data-updated="true"></time>
+<time class='entry-date' datetime='2013-09-16T22:17:00+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:17 pm</span></time>
         
       </p>
     
@@ -387,14 +392,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-09-15T21:30:00+09:00" pubdate data-updated="true"></time>
+<time class='entry-date' datetime='2013-09-15T21:30:00+09:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:30 pm</span></time>
         
       </p>
     
@@ -429,14 +427,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-08-26T10:14:00+09:00" pubdate data-updated="true"></time>
+<time class='entry-date' datetime='2013-08-26T10:14:00+09:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>10:14 am</span></time>
         
       </p>
     
@@ -585,14 +576,7 @@ verify(m, never).method1(anyInt)
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-06-16T20:49:00+09:00" pubdate data-updated="true"></time>
+<time class='entry-date' datetime='2013-06-16T20:49:00+09:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>8:49 pm</span></time>
         
       </p>
     
@@ -660,14 +644,7 @@ Kindle版があるのは素晴らしい。</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-06-15T21:35:00+09:00" pubdate data-updated="true"></time>
+<time class='entry-date' datetime='2013-06-15T21:35:00+09:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>9:35 pm</span></time>
         
       </p>
     
@@ -707,14 +684,7 @@ Google Analytics のプロパティを新しく作る必要があった。</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2013-06-13T16:44:00+09:00" pubdate data-updated="true"></time>
+<time class='entry-date' datetime='2013-06-13T16:44:00+09:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>4:44 pm</span></time>
         
       </p>
     
@@ -740,57 +710,13 @@ Ruby の AWS SDK で
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/12/1/">型境界</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2013-06-12T21:36:00+09:00" pubdate data-updated="true"></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Type parameter の境界指定方法。</p>
-
-<ul>
-<li>upper bound (<code>A &lt;: U</code>): A は U またはその子クラス</li>
-<li>lower bound (<code>A &gt;: L</code>): A は L またはその親クラス</li>
-</ul>
-
-
-<p>両方指定する(<code>A &gt;: L &lt;: U</code>)ことも可能。</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
-      <a class="prev" href="3">&larr; Older</a>
+      <a class="prev" href="/posts/3">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
-    <a class="next" href="1">Newer &rarr;</a>
+    <a class="next" href="/index.html">Newer &rarr;</a>
     
   </div>
 </div>
@@ -799,6 +725,10 @@ Ruby の AWS SDK で
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/13/1/">CloudFormation の JSON を書くときの自分的ベスト</a>
+      </li>
     
       <li class="post">
         <a href="/blog/2014/11/06/1/">DDD読書メモ 1</a>
@@ -814,10 +744,6 @@ Ruby の AWS SDK で
     
       <li class="post">
         <a href="/blog/2013/11/23/starting-play/">Play Framework 2.2 Scala 最初の1週間で困った雑多なこと</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a>
       </li>
     
   </ul>

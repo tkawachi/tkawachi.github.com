@@ -25,7 +25,7 @@
   <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/lib/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -88,14 +88,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2012-12-06T23:37:00+09:00" pubdate data-updated="true"></time>
+<time class='entry-date' datetime='2012-12-06T23:37:00+09:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>11:37 pm</span></time>
         
       </p>
     
@@ -107,24 +100,24 @@
 
 <p>まずは Gemfile に追加して <code>bundle install</code> 。</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>Gemfile</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">gem</span> <span class="s2">&quot;i18n-js&quot;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>続いて application.js に以下の行を追加。</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/assets/javascripts/application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>app/assets/javascripts/application.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="c1">//= require i18n</span>
 </span><span class='line'><span class="c1">//= require i18n/translations</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>app/views/layouts/application.html.erb に以下の行を追加。
 指定した言語で訳が存在しない時にデフォルト言語の訳を参照したいので <code>I18n.fallbacks = true;</code> を指定しています。</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>app/views/layouts/application.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>app/views/layouts/application.html.erb</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -134,7 +127,7 @@
 </span><span class='line'><span class="x">    I18n.locale = &quot;</span><span class="cp">&lt;%=</span> <span class="no">I18n</span><span class="o">.</span><span class="n">locale</span> <span class="cp">%&gt;</span><span class="x">&quot;;</span>
 </span><span class='line'><span class="x">    I18n.fallbacks = true;</span>
 </span><span class='line'><span class="x">&lt;/script&gt;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>最後に <code>rake i18n:js:setup</code> を実行すると <code>config/i18n-js.yml</code> が生成されます。</p>
@@ -143,16 +136,16 @@
 
 <p>ローカライゼーションは <code>I18n.t()</code> 関数で実行します。</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">I18n</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>デフォルト値を指定したい場合はこんな感じ。</p>
 
-<div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">I18n</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="p">{</span><span class="nx">defaultValue</span><span class="o">:</span> <span class="s2">&quot;こんちは&quot;</span><span class="p">});</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>便利に使わせていただきます。</p>
@@ -171,14 +164,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2012-12-06T23:37:00+09:00" pubdate data-updated="true"></time>
+<time class='entry-date' datetime='2012-12-06T23:37:00+09:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>11:37 pm</span></time>
       
 
 <span class="categories">
@@ -198,7 +184,7 @@
   <div class="g-plusone" data-size="medium"></div>
   
   
-  <div class="fb-like" data-href="http://tkawachi.github.io/blog/2012/12/06/i18n-js/" data-send="true" data-width="450" data-show-faces="false"></div>
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
 </div>
 
@@ -229,6 +215,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/11/13/1/">CloudFormation の JSON を書くときの自分的ベスト</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/11/06/1/">DDD読書メモ 1</a>
       </li>
     
@@ -242,10 +232,6 @@
     
       <li class="post">
         <a href="/blog/2013/11/23/starting-play/">Play Framework 2.2 Scala 最初の1週間で困った雑多なこと</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/17/play-2-dot-2-scala-user-login/">Play Framework 2.2.1 Scala でユーザ登録</a>
       </li>
     
   </ul>
