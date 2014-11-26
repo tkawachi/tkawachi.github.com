@@ -9,8 +9,9 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="数ヶ月前に CloudFormation の JSON を書くにはどうしたらいいか考えた。
-そのときはどこにも書かなかったが、今日思い出す機会があったのでメモしておこう。 背景: CloudFormation の JSON を書くのはつらい AWS の CloudFormation &hellip;">
+  <meta name="description" content="Scala での関数を自分なりに整理する。
+ここでいう関数（以下、広義の関数）は 名前(引数) の形で適用できるものを指す。 途中で出てくるコードは Scala 2.11.4 の REPL で確認した。
+間違いを見つけたら教えてほしい。 メソッドか、apply()をもつオブジェクトか &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -76,6 +77,81 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2014/11/26/1/">Scala の関数</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-11-26T20:09:14+09:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:09 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Scala での関数を自分なりに整理する。
+ここでいう関数（以下、広義の関数）は <code>名前(引数)</code> の形で適用できるものを指す。</p>
+
+<p>途中で出てくるコードは Scala 2.11.4 の REPL で確認した。
+間違いを見つけたら教えてほしい。</p>
+
+<h2>メソッドか、apply()をもつオブジェクトか</h2>
+
+<p>広義の関数には次の2つに大別される。</p>
+
+<ul>
+<li>メソッド</li>
+<li><code>apply()</code> メソッドをもつオブジェクト</li>
+</ul>
+
+
+<p>メソッドは <code>def</code> を使って定義される。
+例えばこんな感じ。</p>
+
+<pre><code>scala&gt; def f(i: Int): Int = i + 1
+scala&gt; f(10)
+res0: Int = 11
+</code></pre>
+
+<p>一方で <code>apply()</code> メソッドをもつオブジェクトはこんな感じ。</p>
+
+<pre><code>scala&gt; object f { def apply(i: Int): Int = i + 1 }
+scala&gt; f(10)
+res1: Int = 11
+</code></pre>
+
+<p><code>apply()</code> メソッドをもてば良いので <code>class</code> のインスタンスでも良い。</p>
+
+<pre><code>scala&gt; class C { def apply(i: Int): Int = i + 1 }
+scala&gt; val f = new C
+scala&gt; f(10)
+res3: Int = 11
+</code></pre>
+
+<h3>違い</h3>
+
+<p>メソッドと <code>apply()</code> メソッドをもつオブジェクトで実用上の違いはあるだろうか？</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2014/11/26/1/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -616,57 +692,6 @@ CoffeeScript もそれなりに触れたが、短く書けて式中心の記法�
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/10/14/scala-for/">Scala の For</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-10-14T11:35:00+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>11:35 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>C や Java と同じように Scala にも for がある。</p>
-
-<p>昔の Java におけるfor 文は、C と同じように <code>for (初期化; 継続条件; カウンタ更新)</code> という形しかなかった。
-Java 5.0 で導入された拡張for文（<code>for (型 変数: コレクション)</code>の形）では <code>java.lang.Iterable</code> を実装したオブジェクトならなんでも繰り返しができるようになった。
-便利になったなあと思ったのを覚えてる（2004年の話）。</p>
-
-<h2>文法</h2>
-
-<p>Scala で C の for 的なものをやろうとすると</p>
-
-<pre><code>// C では
-for (int i = 0; i &lt; 10; i++) { … }
-// Scala では
-for (i &lt;- 0 until 10) { … }
-</code></pre>
-
-<p>となるので「 <code>for (i &lt;- 初期値 until 上限)</code> という固定形なんだー」と最初は思ったのだが、そうではなく <code>for (i &lt;- 初期値.until(上限))</code> であり <code>for (i &lt;- obj)</code> が for 式のパターンである。
-ここで<code>初期値.until(上限)</code> は <code>Range</code> 型の値を返す。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/10/14/scala-for/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -682,6 +707,10 @@ for (i &lt;- 0 until 10) { … }
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/11/26/1/">Scala の関数</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/11/13/1/">CloudFormation の JSON を書くときの自分的ベスト</a>
       </li>
     
@@ -695,10 +724,6 @@ for (i &lt;- 0 until 10) { … }
     
       <li class="post">
         <a href="/blog/2013/11/24/try-is-not-monad/">Try はモナドじゃない</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/23/starting-play/">Play Framework 2.2 Scala 最初の1週間で困った雑多なこと</a>
       </li>
     
   </ul>

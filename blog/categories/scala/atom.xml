@@ -4,7 +4,7 @@
   <title><![CDATA[Category: scala | tkawachi Blog]]></title>
   <link href="http://tkawachi.github.io/blog/categories/scala/atom.xml" rel="self"/>
   <link href="http://tkawachi.github.io/"/>
-  <updated>2014-11-14T00:52:27+09:00</updated>
+  <updated>2014-11-26T23:06:38+09:00</updated>
   <id>http://tkawachi.github.io/</id>
   <author>
     <name><![CDATA[KAWACHI Takashi]]></name>
@@ -12,6 +12,309 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Scala の関数]]></title>
+    <link href="http://tkawachi.github.io/blog/2014/11/26/1/"/>
+    <updated>2014-11-26T20:09:14+09:00</updated>
+    <id>http://tkawachi.github.io/blog/2014/11/26/1</id>
+    <content type="html"><![CDATA[<p>Scala での関数を自分なりに整理する。
+ここでいう関数（以下、広義の関数）は <code>名前(引数)</code> の形で適用できるものを指す。</p>
+
+<p>途中で出てくるコードは Scala 2.11.4 の REPL で確認した。
+間違いを見つけたら教えてほしい。</p>
+
+<h2>メソッドか、apply()をもつオブジェクトか</h2>
+
+<p>広義の関数には次の2つに大別される。</p>
+
+<ul>
+<li>メソッド</li>
+<li><code>apply()</code> メソッドをもつオブジェクト</li>
+</ul>
+
+
+<p>メソッドは <code>def</code> を使って定義される。
+例えばこんな感じ。</p>
+
+<pre><code>scala&gt; def f(i: Int): Int = i + 1
+scala&gt; f(10)
+res0: Int = 11
+</code></pre>
+
+<p>一方で <code>apply()</code> メソッドをもつオブジェクトはこんな感じ。</p>
+
+<pre><code>scala&gt; object f { def apply(i: Int): Int = i + 1 }
+scala&gt; f(10)
+res1: Int = 11
+</code></pre>
+
+<p><code>apply()</code> メソッドをもてば良いので <code>class</code> のインスタンスでも良い。</p>
+
+<pre><code>scala&gt; class C { def apply(i: Int): Int = i + 1 }
+scala&gt; val f = new C
+scala&gt; f(10)
+res3: Int = 11
+</code></pre>
+
+<h3>違い</h3>
+
+<p>メソッドと <code>apply()</code> メソッドをもつオブジェクトで実用上の違いはあるだろうか？</p>
+
+<!-- more -->
+
+
+<p>関数型言語の性質として「関数が第一級である」ことがあげられる。
+次の特徴を持つものを第一級と呼ぶ（関数プログラミング実践入門より引用）。</p>
+
+<blockquote><ul>
+<li>リテラルがある</li>
+<li>実行時に生成できる</li>
+<li>変数に入れて使える</li>
+<li>手続きや関数に引数として与えることができる</li>
+<li>手続きや関数の結果として返すことができる。</li>
+</ul>
+</blockquote>
+
+<p>広義の関数である2種類について、それぞれみてみよう。</p>
+
+<p>メソッドについて考えてみると、上記のいずれも満たさない。
+よって第一級ではない。</p>
+
+<p><code>apply()</code> メソッドをもつオブジェクトはどうだろう？
+リテラルがない。よって第一級ではない。
+しかし、それ以外の特徴は満たしている。
+実行時に生成できる、変数に入れて使える、手続きや関数の引数や結果になれることがメソッドとの違いだ。</p>
+
+<h2>FunctionN trait</h2>
+
+<p><code>apply()</code> をもつオブジェクトのうち、 Function1, Function2 , &hellip; Function22 trait を継承するオブジェクト（以下 FunctionN オブジェクトと呼ぶ）は言語から特別な扱いを受ける。</p>
+
+<h3>リテラル</h3>
+
+<p>FunctionN オブジェクトにはリテラルがある。
+<a href="http://www.scala-lang.org/api/current/index.html#scala.Function1">Function1</a>
+のドキュメントに書いてあるように <code>(x: Int) =&gt; x + 1</code> と書けば、それは</p>
+
+<pre><code>new Function1[Int, Int] {
+    def apply(x: Int): Int = x + 1
+}
+</code></pre>
+
+<p>と同じ意味になる。</p>
+
+<p>FunctionN オブジェクトは <code>apply()</code> をもつオブジェクトなので、リテラルが存在することにより、晴れて第一級であるといえる。
+逆に言えば、広義の関数の中で FunctionN オブジェクトのみが第一級と呼べる。</p>
+
+<ol>
+<li>関数型言語において関数は第一級である</li>
+<li>Scala は関数型言語である</li>
+<li>三段論法により、Scala における関数は第一級である</li>
+</ol>
+
+
+<p>というとき、ここでいう「関数」は FunctionN のみを指すことになる（以下、狭義の関数と呼ぶ）。</p>
+
+<h3>パターンマッチ匿名関数</h3>
+
+<p>SLS 8.5 の Pattern Matching Anonymous Functions には <code>{ case i =&gt; i + i }</code> と(パターンマッチみたいに case がいくつあってもいい)いう記法も FunctionN オブジェクトになりうる。
+「なる」ではなく「なりうる」なのは、型的に FunctionN が要求される箇所においては FunctionN として解釈される一方で、PartialFunction が要求される箇所においては PartialFunction として解釈されるからだ。</p>
+
+<pre><code>scala&gt; { case i =&gt; i + 1 }
+&lt;console&gt;:9: error: missing parameter type for expanded function
+The argument types of an anonymous function must be fully known. (SLS 8.5)
+Expected type was: ?
+              { case i =&gt; i + 1 }
+              ^
+
+scala&gt; { case i =&gt; i + 1 }: Function1[Int,Int]
+res12: Int =&gt; Int = &lt;function1&gt;
+</code></pre>
+
+<p>書ける箇所が限定されるが、これもリテラルと呼んでいいのだろうか、、少し自信がない。</p>
+
+<h3>メソッドからの変換</h3>
+
+<p>メソッド名の後ろに <code>_</code> を置くことで、メソッドから FunctionN へ変換できる。</p>
+
+<pre><code>scala&gt; def f(i: Int) = i + 1
+f: (i: Int)Int
+
+scala&gt; f _
+res0: Int =&gt; Int = &lt;function1&gt;
+</code></pre>
+
+<p><code>f _</code> は <code>x =&gt; f(x)</code> と同じ意味であり、</p>
+
+<pre><code>new Function1[Int, Int] {
+    def apply(x: Int): Int = f(x)
+}
+</code></pre>
+
+<p>と書くのと同じである。
+この変換を eta expansion と呼ぶ。</p>
+
+<p>また、FunctionN が型として要求される箇所にメソッドを書いても同じように eta expansion される。</p>
+
+<p>なお、FunctionN からメソッドへは変換できない。</p>
+
+<p>メソッド、apply()をもつオブジェクト、FunctionN の関係を図示するとこんな感じになる。</p>
+
+<p><img src="https://docs.google.com/drawings/d/1he5RVoqmcFl62YVQviGz64SXDudPs5gtnnT0B9zyH_g/pub?w=960&amp;h=720" alt="広義の関数" /></p>
+
+<h3>違い</h3>
+
+<p>FunctionN オブジェクトは、それ以外の広義の関数と比べて違いがあるだろうか？</p>
+
+<h4>可変個引数</h4>
+
+<p>FunctionN オブジェクトは可変個引数を取ることができない
+（実は今日プログラミング中に可変個引数とれないと気付き、
+チャットで<a href="https://issues.scala-lang.org/browse/SI-4176">昔はできるバグがあった</a>
+と<a href="https://twitter.com/scalajp_gitter/status/537429122884964352">教えてもらった</a>ことがきっかけでこれを書いてます）。</p>
+
+<p>Function1 において <code>apply()</code> は次のように宣言されている。</p>
+
+<pre><code>def apply(v1: T1): R
+</code></pre>
+
+<p><code>T1</code>, <code>R</code> は型パラメータである。</p>
+
+<p>メソッドで可変個引数を宣言するときには <code>型*</code> という記法を使う。
+<code>型*</code> は型ではないので、それを <code>T1</code> として使うことはできない。</p>
+
+<p>Function2~22においても同じ事情である。</p>
+
+<p>可変個引数を取るメソッドから変換すると、<code>Seq</code> に変換される。</p>
+
+<pre><code>scala&gt; def f(i: Int*) = i.sum
+f: (i: Int*)Int
+scala&gt; f _
+res0: Seq[Int] =&gt; Int = &lt;function1&gt;
+</code></pre>
+
+<h4>デフォルト引数</h4>
+
+<p>リテラルではデフォルト引数を指定できない。
+またメソッドから変換する場合にはデフォルト引数は受け継がれない。</p>
+
+<p>自分で FunctionN の subclass を作ればできるが、実際やる人はいないよね。</p>
+
+<pre><code>scala&gt; object f extends Function1[Int, Int] { def apply(x: Int = 2) = x + 1 }
+scala&gt; f()
+res11: Int = 3
+</code></pre>
+
+<p>というわけで、実質デフォルト引数は使えない。</p>
+
+<h4>型パラメータ</h4>
+
+<p>リテラルでは型パラメータを指定できない。</p>
+
+<p>メソッドから変換する場合には、型パラメータ部分が <code>Any</code> になるようだ。</p>
+
+<pre><code>scala&gt; def f[A](i: A) = println(i)
+f: [A](i: A)Unit
+
+scala&gt; f[Int](1)
+1
+
+scala&gt; val g = f _
+g: Any =&gt; Unit = &lt;function1&gt;
+
+scala&gt; g[Int](1)
+&lt;console&gt;:10: error: value g of type Any =&gt; Unit does not take type parameters.
+          g[Int](1)
+</code></pre>
+
+<p>というわけで、型パラメータは使えない。</p>
+
+<h4>implicit 引数</h4>
+
+<p>リテラルでは implicit 引数を書けない。</p>
+
+<p>メソッドから変換する際は、変換の際に implicit が解決される。</p>
+
+<pre><code>scala&gt; def f(i: Int)(implicit j: Int) = i + j
+f: (i: Int)(implicit j: Int)Int
+
+scala&gt; f _
+&lt;console&gt;:9: error: could not find implicit value for parameter j: Int
+              f _
+              ^
+
+scala&gt; implicit val implicitInt: Int = 10
+implicitInt: Int = 10
+
+scala&gt; f _
+res1: Int =&gt; Int = &lt;function1&gt;
+</code></pre>
+
+<p>implicit 引数は使えない。</p>
+
+<h4>23個以上の引数</h4>
+
+<p>メソッドでは問題にならないが、FunctionN は Function22 までしかないので、23個以上の引数を取り扱えない。</p>
+
+<pre><code>scala&gt; (a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int, i: Int, j: Int, k: Int, l: Int, m: Int, n: Int, o: Int, p: Int, q: Int, r: Int, s: Int, t: Int, u: Int, v: Int, w: Int) =&gt; a + 1
+&lt;console&gt;:9: error: implementation restricts functions to 22 parameters
+              (a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int, i: Int, j: Int, k: Int, l: Int, m: Int, n: Int, o: Int, p: Int, q: Int, r: Int, s: Int, t: Int, u: Int, v: Int, w: Int) =&gt; a + 1
+                                                                                                                                                                                                       ^
+</code></pre>
+
+<p>メソッドから変換しようとしてもエラー。</p>
+
+<pre><code>scala&gt; def f(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int, i: Int, j: Int, k: Int, l: Int, m: Int, n: Int, o: Int, p: Int, q: Int, r: Int, s: Int, t: Int, u: Int, v: Int, w: Int) = 1
+scala&gt; f _
+&lt;console&gt;:10: error: implementation restricts functions to 22 parameters
+              f _
+              ^
+</code></pre>
+
+<p>23個以上の引数は使えない。</p>
+
+<h4>Call by name 引数</h4>
+
+<p>メソッドからの変換はうまくいく。</p>
+
+<pre><code>scala&gt; def f(i: =&gt; Int) = i + 1
+f: (i: =&gt; Int)Int
+
+scala&gt; f _
+res16: (=&gt; Int) =&gt; Int = &lt;function1&gt;
+</code></pre>
+
+<p>リテラルでは <code>(i: =&gt; Int) =&gt; i + 1</code> などと書きたくなるが、これは通らない。</p>
+
+<pre><code>scala&gt; (i: =&gt; Int) =&gt; i + 1
+&lt;console&gt;:1: error: identifier expected but '=&gt;' found.
+       (i: =&gt; Int) =&gt; i + 1
+           ^
+</code></pre>
+
+<p><a href="http://stackoverflow.com/a/15169234">StackOverflowによれば</a>、次のようにすれば良いようだ。</p>
+
+<pre><code>val f: (=&gt; Int) =&gt; Int = i =&gt; i + 1
+</code></pre>
+
+<p>たしかにこれは通る。</p>
+
+<pre><code>(i =&gt; i + 1): ((=&gt; Int) =&gt; Int)
+</code></pre>
+
+<p>変数に入れたくない場合は、型注釈を後に付けても良いようだ。</p>
+
+<p>Call by name 引数については、面倒だが使える。</p>
+
+<h2>TL;DR;</h2>
+
+<p>広義の関数は、メソッドと <code>apply()</code> をもつオブジェクトの２つに分けられる。
+<code>apply()</code> をもつオブジェクトの中に FunctionN オブジェクトがあり、第一級なのは FunctionN オブジェクトのみ。
+FunctionN オブジェクトは、その定義や利用法により出来ないことがいくつかある。</p>
+
+<p>メソッドは第一級じゃないけどいろいろ便利だな。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Try はモナドじゃない]]></title>
@@ -571,214 +874,6 @@ val f3: Future[Int] = for (v1 &lt;- f1; v2 &lt;- f2) yield v1 + v2
 <h2>まとめ</h2>
 
 <p><code>foreach</code>, <code>map</code>, <code>flatMap</code>, <code>withFilter</code> というメソッドの定義次第で for 式の使い道は無限大。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Covariantとcontravariant]]></title>
-    <link href="http://tkawachi.github.io/blog/2013/10/09/covariant-contravariant/"/>
-    <updated>2013-10-09T23:06:00+09:00</updated>
-    <id>http://tkawachi.github.io/blog/2013/10/09/covariant-contravariant</id>
-    <content type="html"><![CDATA[<p>今日 <a href="https://www.coursera.org/course/progfun">Functional Programming Principles in Scala</a> で聞いた話が難しかったのでメモ。</p>
-
-<!-- more -->
-
-
-<h2>Subtype</h2>
-
-<p>書き方として A &lt;: B と書けば A は B の subtype であることを示す。
-A >: B と書けば A は B の supertype、言い換えれば B は A の subtype であることを示す。</p>
-
-<p>Subtype とは何か？というのは Liskov substitution principle というので定義されている。
-「A &lt;: B であれば、B型の値に対して出来ることならなんでもA型の値に対して出来る」ということらしい。</p>
-
-<p>クラス階層で言えば、 A &lt;: B というのは A が B の subclass または A == B ってこと。</p>
-
-<p>Subtype の概念はクラス階層にとどまらない。
-こんな型が定義されていたら、</p>
-
-<pre><code>class Base
-class Derived extends Base
-type A = Base =&gt; Derived
-type B = Derived =&gt; Base
-</code></pre>
-
-<p>A と B の間にクラス階層はないが、B がおける場所には A もおける。
-つまり A &lt;: B。
-なぜなら</p>
-
-<ul>
-<li>B の引き数は Derived で A の引数は Base なので、B の引き数ならなんでも A の引き数として使える</li>
-<li>B の戻り値は Base で A の戻り値は Derived なので、A の戻り値ならなんでも B の戻り値として使える</li>
-</ul>
-
-
-<p>から。</p>
-
-<p>関数の場合は一般に A2 &lt;: A1 かつ B1 &lt;: B2 のときに (A1 => B1) &lt;: (A2 => B2) が成り立つ。
-理由は上と同じ。</p>
-
-<h2>Variant</h2>
-
-<p>C[T]がパラメータ化された型で A, B が A &lt;: B であるとき、C[A] と C[B] の関係は3パターン。</p>
-
-<ul>
-<li>C[A] &lt;: C[B] &ndash; このとき C は covariant（共変）</li>
-<li>C[A] >: C[B] &ndash; このとき C は contravarinat（反変）</li>
-<li>C[A] と C[B] の間に subtype の関係なし &ndash; このとき C は invariant（不変）。nonvariant とも言うらしい。</li>
-</ul>
-
-
-<p>Scala ではタイプパラメタの前に <code>+</code> とか <code>-</code> とかつけて covariant や contravariant を表現する。何も付けなかったら invariant ね。</p>
-
-<pre><code>class C[+A] // C は covariant
-class C[-A] // C は contravariant
-class C[A]  // C は invariant
-</code></pre>
-
-<p>Function object は covariant, contravariant を使ってる。</p>
-
-<pre><code>trait Function1[-T, +U] {
-    def apply(x: T): U
-}
-</code></pre>
-
-<p><code>A =&gt; B</code> は <code>Function[A, B]</code> と同じ。
-で、<code>Function1</code> の T は contravariant, U は invariant ということなので、</p>
-
-<pre><code>class A1
-class A2 extends A1
-class A3 extends A2
-</code></pre>
-
-<p>とあったときに <code>A2 =&gt; A2</code> 型の値は <code>A3 =&gt; A1</code> 型が求められるところならどこでも使える。</p>
-
-<h3>Java の配列</h3>
-
-<p>Java の配列は covariant。</p>
-
-<pre><code>class Base {…}
-class Derived1 extends Base {…}
-class Derived2 extends Base {…}
-</code></pre>
-
-<p>が定義されていてると以下の様なことができる。</p>
-
-<pre><code>Derived1[] a = new Derived1[]{ new Derived1() }
-Base[] b = a
-b[0] = new Derived2()
-Derived1 s = a[0]
-</code></pre>
-
-<p>1行目は普通。</p>
-
-<p>2行目は super class である <code>Base</code> の配列に代入しようとしている。
-<code>a</code> には <code>Base[]</code> 型がきて欲しいが、Java の配列は covariant なので <code>Base[]</code> が来れる場所には <code>Derived1[]</code> が来ても良い。
-なので2行目も通る。</p>
-
-<p>3行目では <code>b[0]</code> に値を代入している。
-<code>b[0]</code> の型は <code>Base</code>。
-<code>Derived2</code> は <code>Base</code> の subclass なので問題ない。</p>
-
-<p>4行目では <code>Derived1</code> 型の <code>a[0]</code> を別の <code>Derived1</code> 型の変数に代入している。
-これも問題無さそう。</p>
-
-<p>という訳でコンパイルは通る。
-でも <code>a</code> と <code>b</code> は同じ配列を指していて、3行目で <code>Derived2</code> 型の値に入れ替えてる。
-だから <code>a[0]</code> （と<code>b[0]</code>）には <code>Derived2</code> 型の値が入っているはず。
-4行目ではそれを <code>Derived1</code> 型の値に代入している。
-なにかおかしい。</p>
-
-<p>Javaではコンパイルエラーにはならず、3行目実行時に ArrayStoreException が投げられる。
-残念。</p>
-
-<h2>Scala の variance check</h2>
-
-<p>Java の（問題含みの）配列を scala 的に表現すると</p>
-
-<pre><code>class Array[+T] {
-    def update(x: T)
-}
-</code></pre>
-
-<p>となる。
-問題は covariant な型パラメータ T がメソッドの引数になっていること。</p>
-
-<p>Scala のコンパイラはこの問題を防ぐために variant check というものを行う。
-いろいろ細かいルールはあるそうだが、大まかには以下のとおり。</p>
-
-<ul>
-<li>covariant な型パラメータはメソッドの戻り値にしか使っちゃダメ</li>
-<li>contravariant な型パラメータはメソッドのパラメタにしか使っちゃダメ</li>
-<li>invariant な型パラメータはどこに使ってもいい</li>
-</ul>
-
-
-<p>Function1 を見なおしてみるとルールに合致していることが確認できる。</p>
-
-<pre><code>trait Function1[-T, +U] {
-    def apply(x: T): U
-}
-</code></pre>
-
-<p>contravariant な T はパラメタにきており、covariant な U は戻り値にきている。
-問題なし。</p>
-
-<p>Scala では immutable な collection は covariant, mutable な collection は invariant になっているらしい。
-きっと Java の例にあるような実行時エラーをコンパイル時に捕まえるにはそうするしか無いんだろうな。</p>
-
-<h2>List を covariant にする話</h2>
-
-<pre><code>trait List[+T] {…}
-object Nil extends List[Nothing] {…}
-class Cons[T] extends List[T] {…}
-</code></pre>
-
-<p>みたいな感じ。</p>
-
-<p><code>Nil</code> のときの <code>T</code> は <code>Nothing</code>。
-<code>Nothing</code> は全ての型の subtype（<code>Nothing</code> &lt;: なんでも）。
-List は covariant なので <code>List[Nothing]</code> &lt;: <code>List[なんでも]</code> となる。
-どの <code>T</code> の <code>List[T]</code> に対しても <code>Nil</code> を使えるので便利。</p>
-
-<p>リストの先頭に要素を追加する <code>prepend</code> メソッドを定義したい。</p>
-
-<pre><code>trait List[+T] {
-    def prepend(elem: T): List[T] = new Cons(elem, this)
-}
-</code></pre>
-
-<p>一見これで良さそうだが、
-<code>error: covariant type T occurs in contravariant position in type T of value elem</code>
-というコンパイルエラーになる。
-Variance check が活躍してる。
-たしかに covariant な型パラメータは戻り値にしか使っちゃいけなかったんだ。</p>
-
-<p>正しい定義はこうなる。</p>
-
-<pre><code>trait List[+T] {
-    def prepend[U &gt;: T](elem: U): List[U] = new Cons(elem, this)
-}
-</code></pre>
-
-<p>これは variance check を通る。U は contravariant で引き数のところに使われているから。
-戻り値型は <code>List[U]</code> だが U そのものじゃないので contravariant 扱いじゃないんだろう。</p>
-
-<pre><code>class Base
-class Derived1 extends Base
-class Derived2 extends Base
-def f(xs: List[Derived1], x: Derived2) = xs.prepend(x)
-</code></pre>
-
-<p>さてこのとき <code>f()</code> の戻り値型はなんだろうか？
-<code>prepend()</code> の戻り値なので <code>List[U]</code> 型になるはず。
-<code>xs</code> が <code>List[Derived1]</code> 型なので <code>T</code> は <code>Derived1</code> で決まり。</p>
-
-<p><code>U</code>を決めるのに型推論が活躍する。
-<code>U</code> は <code>x</code> の型なので <code>Derived2</code> だろうか？
-しかし  <code>Derived2</code> だとすると <code>U &gt;: T</code> が満たせない（<code>Derived2</code> は <code>Derived1</code> の supertype ではない）。
-というわけで型推論さんは、<code>Derived2</code> と <code>Derived1</code> の共通の親である <code>Base</code> が <code>U</code> だと結論付ける。
-したがって <code>f()</code> の戻り値型は <code>List[Base]</code> ということになる。</p>
 ]]></content>
   </entry>
   

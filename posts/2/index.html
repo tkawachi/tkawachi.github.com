@@ -9,7 +9,8 @@
   <meta name="author" content="KAWACHI Takashi">
 
   
-  <meta name="description" content="今日 Functional Programming Principles in Scala で聞いた話が難しかったのでメモ。 ">
+  <meta name="description" content="C や Java と同じように Scala にも for がある。 昔の Java におけるfor 文は、C と同じように for (初期化; 継続条件; カウンタ更新) という形しかなかった。
+Java 5.0 で導入された拡張for文（for (型 変数: コレクション)の形）では java. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -75,6 +76,57 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2013/10/14/scala-for/">Scala の For</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2013-10-14T11:35:00+09:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>14</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>11:35 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>C や Java と同じように Scala にも for がある。</p>
+
+<p>昔の Java におけるfor 文は、C と同じように <code>for (初期化; 継続条件; カウンタ更新)</code> という形しかなかった。
+Java 5.0 で導入された拡張for文（<code>for (型 変数: コレクション)</code>の形）では <code>java.lang.Iterable</code> を実装したオブジェクトならなんでも繰り返しができるようになった。
+便利になったなあと思ったのを覚えてる（2004年の話）。</p>
+
+<h2>文法</h2>
+
+<p>Scala で C の for 的なものをやろうとすると</p>
+
+<pre><code>// C では
+for (int i = 0; i &lt; 10; i++) { … }
+// Scala では
+for (i &lt;- 0 until 10) { … }
+</code></pre>
+
+<p>となるので「 <code>for (i &lt;- 初期値 until 上限)</code> という固定形なんだー」と最初は思ったのだが、そうではなく <code>for (i &lt;- 初期値.until(上限))</code> であり <code>for (i &lt;- obj)</code> が for 式のパターンである。
+ここで<code>初期値.until(上限)</code> は <code>Range</code> 型の値を返す。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2013/10/14/scala-for/">Read on &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -670,46 +722,6 @@ Google Analytics のプロパティを新しく作る必要があった。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2013/06/13/1/">s3:ListBucketVersions</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2013-06-13T16:44:00+09:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2013</span></span> <span class='time'>4:44 pm</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>IAM でアクセス権限を管理するのは面倒だ。
-まず権限の種類が覚えきれない。</p>
-
-<p>s3:ListBucket を許可していたのに、
-Ruby の AWS SDK で
-<a href="http://docs.aws.amazon.com/AWSRubySDK/latest/AWS/S3/Bucket.html#empty%3F-instance_method"><code>AWS::S3::Bucket#empty?</code></a>
-にて例外が発生した。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2013/06/13/1/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -727,6 +739,10 @@ Ruby の AWS SDK で
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2014/11/26/1/">Scala の関数</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2014/11/13/1/">CloudFormation の JSON を書くときの自分的ベスト</a>
       </li>
     
@@ -740,10 +756,6 @@ Ruby の AWS SDK で
     
       <li class="post">
         <a href="/blog/2013/11/24/try-is-not-monad/">Try はモナドじゃない</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2013/11/23/starting-play/">Play Framework 2.2 Scala 最初の1週間で困った雑多なこと</a>
       </li>
     
   </ul>

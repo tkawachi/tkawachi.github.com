@@ -1,0 +1,563 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Scala の関数 - tkawachi Blog</title>
+  <meta name="author" content="KAWACHI Takashi">
+
+  
+  <meta name="description" content="Scala での関数を自分なりに整理する。
+ここでいう関数（以下、広義の関数）は 名前(引数) の形で適用できるものを指す。 途中で出てくるコードは Scala 2.11.4 の REPL で確認した。
+間違いを見つけたら教えてほしい。 メソッドか、apply()をもつオブジェクトか &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://tkawachi.github.io/blog/2014/11/26/1">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="tkawachi Blog" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-526921-5']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">tkawachi Blog</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:tkawachi.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Scala の関数</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2014-11-26T20:09:14+09:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:09 pm</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Scala での関数を自分なりに整理する。
+ここでいう関数（以下、広義の関数）は <code>名前(引数)</code> の形で適用できるものを指す。</p>
+
+<p>途中で出てくるコードは Scala 2.11.4 の REPL で確認した。
+間違いを見つけたら教えてほしい。</p>
+
+<h2>メソッドか、apply()をもつオブジェクトか</h2>
+
+<p>広義の関数には次の2つに大別される。</p>
+
+<ul>
+<li>メソッド</li>
+<li><code>apply()</code> メソッドをもつオブジェクト</li>
+</ul>
+
+
+<p>メソッドは <code>def</code> を使って定義される。
+例えばこんな感じ。</p>
+
+<pre><code>scala&gt; def f(i: Int): Int = i + 1
+scala&gt; f(10)
+res0: Int = 11
+</code></pre>
+
+<p>一方で <code>apply()</code> メソッドをもつオブジェクトはこんな感じ。</p>
+
+<pre><code>scala&gt; object f { def apply(i: Int): Int = i + 1 }
+scala&gt; f(10)
+res1: Int = 11
+</code></pre>
+
+<p><code>apply()</code> メソッドをもてば良いので <code>class</code> のインスタンスでも良い。</p>
+
+<pre><code>scala&gt; class C { def apply(i: Int): Int = i + 1 }
+scala&gt; val f = new C
+scala&gt; f(10)
+res3: Int = 11
+</code></pre>
+
+<h3>違い</h3>
+
+<p>メソッドと <code>apply()</code> メソッドをもつオブジェクトで実用上の違いはあるだろうか？</p>
+
+<!-- more -->
+
+
+<p>関数型言語の性質として「関数が第一級である」ことがあげられる。
+次の特徴を持つものを第一級と呼ぶ（関数プログラミング実践入門より引用）。</p>
+
+<blockquote><ul>
+<li>リテラルがある</li>
+<li>実行時に生成できる</li>
+<li>変数に入れて使える</li>
+<li>手続きや関数に引数として与えることができる</li>
+<li>手続きや関数の結果として返すことができる。</li>
+</ul>
+</blockquote>
+
+<p>広義の関数である2種類について、それぞれみてみよう。</p>
+
+<p>メソッドについて考えてみると、上記のいずれも満たさない。
+よって第一級ではない。</p>
+
+<p><code>apply()</code> メソッドをもつオブジェクトはどうだろう？
+リテラルがない。よって第一級ではない。
+しかし、それ以外の特徴は満たしている。
+実行時に生成できる、変数に入れて使える、手続きや関数の引数や結果になれることがメソッドとの違いだ。</p>
+
+<h2>FunctionN trait</h2>
+
+<p><code>apply()</code> をもつオブジェクトのうち、 Function1, Function2 , &hellip; Function22 trait を継承するオブジェクト（以下 FunctionN オブジェクトと呼ぶ）は言語から特別な扱いを受ける。</p>
+
+<h3>リテラル</h3>
+
+<p>FunctionN オブジェクトにはリテラルがある。
+<a href="http://www.scala-lang.org/api/current/index.html#scala.Function1">Function1</a>
+のドキュメントに書いてあるように <code>(x: Int) =&gt; x + 1</code> と書けば、それは</p>
+
+<pre><code>new Function1[Int, Int] {
+    def apply(x: Int): Int = x + 1
+}
+</code></pre>
+
+<p>と同じ意味になる。</p>
+
+<p>FunctionN オブジェクトは <code>apply()</code> をもつオブジェクトなので、リテラルが存在することにより、晴れて第一級であるといえる。
+逆に言えば、広義の関数の中で FunctionN オブジェクトのみが第一級と呼べる。</p>
+
+<ol>
+<li>関数型言語において関数は第一級である</li>
+<li>Scala は関数型言語である</li>
+<li>三段論法により、Scala における関数は第一級である</li>
+</ol>
+
+
+<p>というとき、ここでいう「関数」は FunctionN のみを指すことになる（以下、狭義の関数と呼ぶ）。</p>
+
+<h3>パターンマッチ匿名関数</h3>
+
+<p>SLS 8.5 の Pattern Matching Anonymous Functions には <code>{ case i =&gt; i + i }</code> と(パターンマッチみたいに case がいくつあってもいい)いう記法も FunctionN オブジェクトになりうる。
+「なる」ではなく「なりうる」なのは、型的に FunctionN が要求される箇所においては FunctionN として解釈される一方で、PartialFunction が要求される箇所においては PartialFunction として解釈されるからだ。</p>
+
+<pre><code>scala&gt; { case i =&gt; i + 1 }
+&lt;console&gt;:9: error: missing parameter type for expanded function
+The argument types of an anonymous function must be fully known. (SLS 8.5)
+Expected type was: ?
+              { case i =&gt; i + 1 }
+              ^
+
+scala&gt; { case i =&gt; i + 1 }: Function1[Int,Int]
+res12: Int =&gt; Int = &lt;function1&gt;
+</code></pre>
+
+<p>書ける箇所が限定されるが、これもリテラルと呼んでいいのだろうか、、少し自信がない。</p>
+
+<h3>メソッドからの変換</h3>
+
+<p>メソッド名の後ろに <code>_</code> を置くことで、メソッドから FunctionN へ変換できる。</p>
+
+<pre><code>scala&gt; def f(i: Int) = i + 1
+f: (i: Int)Int
+
+scala&gt; f _
+res0: Int =&gt; Int = &lt;function1&gt;
+</code></pre>
+
+<p><code>f _</code> は <code>x =&gt; f(x)</code> と同じ意味であり、</p>
+
+<pre><code>new Function1[Int, Int] {
+    def apply(x: Int): Int = f(x)
+}
+</code></pre>
+
+<p>と書くのと同じである。
+この変換を eta expansion と呼ぶ。</p>
+
+<p>また、FunctionN が型として要求される箇所にメソッドを書いても同じように eta expansion される。</p>
+
+<p>なお、FunctionN からメソッドへは変換できない。</p>
+
+<p>メソッド、apply()をもつオブジェクト、FunctionN の関係を図示するとこんな感じになる。</p>
+
+<p><img src="https://docs.google.com/drawings/d/1he5RVoqmcFl62YVQviGz64SXDudPs5gtnnT0B9zyH_g/pub?w=960&amp;h=720" alt="広義の関数" /></p>
+
+<h3>違い</h3>
+
+<p>FunctionN オブジェクトは、それ以外の広義の関数と比べて違いがあるだろうか？</p>
+
+<h4>可変個引数</h4>
+
+<p>FunctionN オブジェクトは可変個引数を取ることができない
+（実は今日プログラミング中に可変個引数とれないと気付き、
+チャットで<a href="https://issues.scala-lang.org/browse/SI-4176">昔はできるバグがあった</a>
+と<a href="https://twitter.com/scalajp_gitter/status/537429122884964352">教えてもらった</a>ことがきっかけでこれを書いてます）。</p>
+
+<p>Function1 において <code>apply()</code> は次のように宣言されている。</p>
+
+<pre><code>def apply(v1: T1): R
+</code></pre>
+
+<p><code>T1</code>, <code>R</code> は型パラメータである。</p>
+
+<p>メソッドで可変個引数を宣言するときには <code>型*</code> という記法を使う。
+<code>型*</code> は型ではないので、それを <code>T1</code> として使うことはできない。</p>
+
+<p>Function2~22においても同じ事情である。</p>
+
+<p>可変個引数を取るメソッドから変換すると、<code>Seq</code> に変換される。</p>
+
+<pre><code>scala&gt; def f(i: Int*) = i.sum
+f: (i: Int*)Int
+scala&gt; f _
+res0: Seq[Int] =&gt; Int = &lt;function1&gt;
+</code></pre>
+
+<h4>デフォルト引数</h4>
+
+<p>リテラルではデフォルト引数を指定できない。
+またメソッドから変換する場合にはデフォルト引数は受け継がれない。</p>
+
+<p>自分で FunctionN の subclass を作ればできるが、実際やる人はいないよね。</p>
+
+<pre><code>scala&gt; object f extends Function1[Int, Int] { def apply(x: Int = 2) = x + 1 }
+scala&gt; f()
+res11: Int = 3
+</code></pre>
+
+<p>というわけで、実質デフォルト引数は使えない。</p>
+
+<h4>型パラメータ</h4>
+
+<p>リテラルでは型パラメータを指定できない。</p>
+
+<p>メソッドから変換する場合には、型パラメータ部分が <code>Any</code> になるようだ。</p>
+
+<pre><code>scala&gt; def f[A](i: A) = println(i)
+f: [A](i: A)Unit
+
+scala&gt; f[Int](1)
+1
+
+scala&gt; val g = f _
+g: Any =&gt; Unit = &lt;function1&gt;
+
+scala&gt; g[Int](1)
+&lt;console&gt;:10: error: value g of type Any =&gt; Unit does not take type parameters.
+          g[Int](1)
+</code></pre>
+
+<p>というわけで、型パラメータは使えない。</p>
+
+<h4>implicit 引数</h4>
+
+<p>リテラルでは implicit 引数を書けない。</p>
+
+<p>メソッドから変換する際は、変換の際に implicit が解決される。</p>
+
+<pre><code>scala&gt; def f(i: Int)(implicit j: Int) = i + j
+f: (i: Int)(implicit j: Int)Int
+
+scala&gt; f _
+&lt;console&gt;:9: error: could not find implicit value for parameter j: Int
+              f _
+              ^
+
+scala&gt; implicit val implicitInt: Int = 10
+implicitInt: Int = 10
+
+scala&gt; f _
+res1: Int =&gt; Int = &lt;function1&gt;
+</code></pre>
+
+<p>implicit 引数は使えない。</p>
+
+<h4>23個以上の引数</h4>
+
+<p>メソッドでは問題にならないが、FunctionN は Function22 までしかないので、23個以上の引数を取り扱えない。</p>
+
+<pre><code>scala&gt; (a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int, i: Int, j: Int, k: Int, l: Int, m: Int, n: Int, o: Int, p: Int, q: Int, r: Int, s: Int, t: Int, u: Int, v: Int, w: Int) =&gt; a + 1
+&lt;console&gt;:9: error: implementation restricts functions to 22 parameters
+              (a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int, i: Int, j: Int, k: Int, l: Int, m: Int, n: Int, o: Int, p: Int, q: Int, r: Int, s: Int, t: Int, u: Int, v: Int, w: Int) =&gt; a + 1
+                                                                                                                                                                                                       ^
+</code></pre>
+
+<p>メソッドから変換しようとしてもエラー。</p>
+
+<pre><code>scala&gt; def f(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int, i: Int, j: Int, k: Int, l: Int, m: Int, n: Int, o: Int, p: Int, q: Int, r: Int, s: Int, t: Int, u: Int, v: Int, w: Int) = 1
+scala&gt; f _
+&lt;console&gt;:10: error: implementation restricts functions to 22 parameters
+              f _
+              ^
+</code></pre>
+
+<p>23個以上の引数は使えない。</p>
+
+<h4>Call by name 引数</h4>
+
+<p>メソッドからの変換はうまくいく。</p>
+
+<pre><code>scala&gt; def f(i: =&gt; Int) = i + 1
+f: (i: =&gt; Int)Int
+
+scala&gt; f _
+res16: (=&gt; Int) =&gt; Int = &lt;function1&gt;
+</code></pre>
+
+<p>リテラルでは <code>(i: =&gt; Int) =&gt; i + 1</code> などと書きたくなるが、これは通らない。</p>
+
+<pre><code>scala&gt; (i: =&gt; Int) =&gt; i + 1
+&lt;console&gt;:1: error: identifier expected but '=&gt;' found.
+       (i: =&gt; Int) =&gt; i + 1
+           ^
+</code></pre>
+
+<p><a href="http://stackoverflow.com/a/15169234">StackOverflowによれば</a>、次のようにすれば良いようだ。</p>
+
+<pre><code>val f: (=&gt; Int) =&gt; Int = i =&gt; i + 1
+</code></pre>
+
+<p>たしかにこれは通る。</p>
+
+<pre><code>(i =&gt; i + 1): ((=&gt; Int) =&gt; Int)
+</code></pre>
+
+<p>変数に入れたくない場合は、型注釈を後に付けても良いようだ。</p>
+
+<p>Call by name 引数については、面倒だが使える。</p>
+
+<h2>TL;DR;</h2>
+
+<p>広義の関数は、メソッドと <code>apply()</code> をもつオブジェクトの２つに分けられる。
+<code>apply()</code> をもつオブジェクトの中に FunctionN オブジェクトがあり、第一級なのは FunctionN オブジェクトのみ。
+FunctionN オブジェクトは、その定義や利用法により出来ないことがいくつかある。</p>
+
+<p>メソッドは第一級じゃないけどいろいろ便利だな。</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">KAWACHI Takashi</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2014-11-26T20:09:14+09:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:09 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/scala/'>scala</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://tkawachi.github.io/blog/2014/11/26/1/" data-via="" data-counturl="http://tkawachi.github.io/blog/2014/11/26/1/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2014/11/13/1/" title="Previous Post: CloudFormation の JSON を書くときの自分的ベスト">&laquo; CloudFormation の JSON を書くときの自分的ベスト</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2014/11/26/1/">Scala の関数</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/13/1/">CloudFormation の JSON を書くときの自分的ベスト</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/06/1/">DDD読書メモ 1</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/12/22/python-data-analysis/">Pythonによるデータ分析入門 レビュー</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2013/11/24/try-is-not-monad/">Try はモナドじゃない</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/110309119188108264538?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+<div class="fb-activity" data-site="http://tkawachi.github.io" data-app-id="445203802205922" data-width="260" data-height="300" data-header="true" data-linktarget="_top" data-recommendations="false"></div>
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - KAWACHI Takashi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'tkawachiblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://tkawachi.github.io/blog/2014/11/26/1/';
+        var disqus_url = 'http://tkawachi.github.io/blog/2014/11/26/1/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id; js.async = true;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
