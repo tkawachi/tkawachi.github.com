@@ -1,0 +1,277 @@
+---
+layout: post
+title: Scala の関数
+date: 2014-11-26 20:09:14 +0900
+comments: true
+categories: Scala
+---
+
+Scala での関数を自分なりに整理する。
+ここでいう関数（以下、広義の関数）は `名前(引数)` の形で適用できるものを指す。
+
+途中で出てくるコードは Scala 2.11.4 の REPL で確認した。
+間違いを見つけたら教えてほしい。
+
+## メソッドか、apply()をもつオブジェクトか
+
+広義の関数には次の2つに大別される。
+
+* メソッド
+* `apply()` メソッドをもつオブジェクト
+
+メソッドは `def` を使って定義される。
+例えばこんな感じ。
+
+	scala> def f(i: Int): Int = i + 1
+	scala> f(10)
+	res0: Int = 11
+
+一方で `apply()` メソッドをもつオブジェクトはこんな感じ。
+
+	scala> object f { def apply(i: Int): Int = i + 1 }
+	scala> f(10)
+	res1: Int = 11
+
+`apply()` メソッドをもてば良いので `class` のインスタンスでも良い。
+
+	scala> class C { def apply(i: Int): Int = i + 1 }
+	scala> val f = new C
+	scala> f(10)
+	res3: Int = 11
+
+### 違い
+
+メソッドと `apply()` メソッドをもつオブジェクトで実用上の違いはあるだろうか？
+
+<!-- more -->
+
+関数型言語の性質として「関数が第一級である」ことがあげられる。
+次の特徴を持つものを第一級と呼ぶ（関数プログラミング実践入門より引用）。
+
+>
+* リテラルがある
+* 実行時に生成できる
+* 変数に入れて使える
+* 手続きや関数に引数として与えることができる
+* 手続きや関数の結果として返すことができる。
+
+広義の関数である2種類について、それぞれみてみよう。
+
+メソッドについて考えてみると、上記のいずれも満たさない。
+よって第一級ではない。
+
+`apply()` メソッドをもつオブジェクトはどうだろう？
+リテラルがない。よって第一級ではない。
+しかし、それ以外の特徴は満たしている。
+実行時に生成できる、変数に入れて使える、手続きや関数の引数や結果になれることがメソッドとの違いだ。
+
+## FunctionN trait
+
+`apply()` をもつオブジェクトのうち、 Function1, Function2 , ... Function22 trait を継承するオブジェクト（以下 FunctionN オブジェクトと呼ぶ）は言語から特別な扱いを受ける。
+
+### リテラル
+
+FunctionN オブジェクトにはリテラルがある。
+[Function1](http://www.scala-lang.org/api/current/index.html#scala.Function1)
+のドキュメントに書いてあるように `(x: Int) => x + 1` と書けば、それは
+
+	new Function1[Int, Int] {
+		def apply(x: Int): Int = x + 1
+	}
+
+と同じ意味になる。
+
+FunctionN オブジェクトは `apply()` をもつオブジェクトなので、リテラルが存在することにより、晴れて第一級であるといえる。
+逆に言えば、広義の関数の中で FunctionN オブジェクトのみが第一級と呼べる。
+
+1. 関数型言語において関数は第一級である
+2. Scala は関数型言語である
+3. 三段論法により、Scala における関数は第一級である
+
+というとき、ここでいう「関数」は FunctionN のみを指すことになる（以下、狭義の関数と呼ぶ）。
+
+### パターンマッチ匿名関数
+
+SLS 8.5 の Pattern Matching Anonymous Functions には `{ case i => i + i }` と(パターンマッチみたいに case がいくつあってもいい)いう記法も FunctionN オブジェクトになりうる。
+「なる」ではなく「なりうる」なのは、型的に FunctionN が要求される箇所においては FunctionN として解釈される一方で、PartialFunction が要求される箇所においては PartialFunction として解釈されるからだ。
+
+	scala> { case i => i + 1 }
+	<console>:9: error: missing parameter type for expanded function
+	The argument types of an anonymous function must be fully known. (SLS 8.5)
+	Expected type was: ?
+	              { case i => i + 1 }
+	              ^
+
+	scala> { case i => i + 1 }: Function1[Int,Int]
+	res12: Int => Int = <function1>
+
+書ける箇所が限定されるが、これもリテラルと呼んでいいのだろうか、、少し自信がない。
+
+### メソッドからの変換
+
+メソッド名の後ろに `_` を置くことで、メソッドから FunctionN へ変換できる。
+
+	scala> def f(i: Int) = i + 1
+	f: (i: Int)Int
+
+	scala> f _
+	res0: Int => Int = <function1>
+
+`f _` は `x => f(x)` と同じ意味であり、
+
+	new Function1[Int, Int] {
+		def apply(x: Int): Int = f(x)
+	}
+
+と書くのと同じである。
+この変換を eta expansion と呼ぶ。
+
+また、FunctionN が型として要求される箇所にメソッドを書いても同じように eta expansion される。
+
+なお、FunctionN からメソッドへは変換できない。
+
+メソッド、apply()をもつオブジェクト、FunctionN の関係を図示するとこんな感じになる。
+
+![広義の関数](https://docs.google.com/drawings/d/1he5RVoqmcFl62YVQviGz64SXDudPs5gtnnT0B9zyH_g/pub?w=960&h=720)
+
+### 違い
+
+FunctionN オブジェクトは、それ以外の広義の関数と比べて違いがあるだろうか？
+
+#### 可変個引数
+
+FunctionN オブジェクトは可変個引数を取ることができない
+（実は今日プログラミング中に可変個引数とれないと気付き、
+チャットで[昔はできるバグがあった](https://issues.scala-lang.org/browse/SI-4176)
+と[教えてもらった](https://twitter.com/scalajp_gitter/status/537429122884964352)ことがきっかけでこれを書いてます）。
+
+Function1 において `apply()` は次のように宣言されている。
+
+	def apply(v1: T1): R
+
+`T1`, `R` は型パラメータである。
+
+メソッドで可変個引数を宣言するときには `型*` という記法を使う。
+`型*` は型ではないので、それを `T1` として使うことはできない。
+
+Function2~22においても同じ事情である。
+
+可変個引数を取るメソッドから変換すると、`Seq` に変換される。
+
+	scala> def f(i: Int*) = i.sum
+	f: (i: Int*)Int
+	scala> f _
+	res0: Seq[Int] => Int = <function1>
+
+#### デフォルト引数
+
+リテラルではデフォルト引数を指定できない。
+またメソッドから変換する場合にはデフォルト引数は受け継がれない。
+
+自分で FunctionN の subclass を作ればできるが、実際やる人はいないよね。
+
+	scala> object f extends Function1[Int, Int] { def apply(x: Int = 2) = x + 1 }
+	scala> f()
+	res11: Int = 3
+
+というわけで、実質デフォルト引数は使えない。
+
+#### 型パラメータ
+
+リテラルでは型パラメータを指定できない。
+
+メソッドから変換する場合には、型パラメータ部分が `Any` になるようだ。
+
+	scala> def f[A](i: A) = println(i)
+	f: [A](i: A)Unit
+
+	scala> f[Int](1)
+	1
+
+	scala> val g = f _
+	g: Any => Unit = <function1>
+
+	scala> g[Int](1)
+	<console>:10: error: value g of type Any => Unit does not take type parameters.
+              g[Int](1)
+
+というわけで、型パラメータは使えない。
+
+#### implicit 引数
+
+リテラルでは implicit 引数を書けない。
+
+メソッドから変換する際は、変換の際に implicit が解決される。
+
+	scala> def f(i: Int)(implicit j: Int) = i + j
+	f: (i: Int)(implicit j: Int)Int
+
+	scala> f _
+	<console>:9: error: could not find implicit value for parameter j: Int
+	              f _
+	              ^
+
+	scala> implicit val implicitInt: Int = 10
+	implicitInt: Int = 10
+
+	scala> f _
+	res1: Int => Int = <function1>
+
+implicit 引数は使えない。
+
+#### 23個以上の引数
+
+メソッドでは問題にならないが、FunctionN は Function22 までしかないので、23個以上の引数を取り扱えない。
+
+	scala> (a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int, i: Int, j: Int, k: Int, l: Int, m: Int, n: Int, o: Int, p: Int, q: Int, r: Int, s: Int, t: Int, u: Int, v: Int, w: Int) => a + 1
+	<console>:9: error: implementation restricts functions to 22 parameters
+	              (a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int, i: Int, j: Int, k: Int, l: Int, m: Int, n: Int, o: Int, p: Int, q: Int, r: Int, s: Int, t: Int, u: Int, v: Int, w: Int) => a + 1
+	                                                                                                                                                                                                       ^
+
+
+メソッドから変換しようとしてもエラー。
+
+	scala> def f(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int, h: Int, i: Int, j: Int, k: Int, l: Int, m: Int, n: Int, o: Int, p: Int, q: Int, r: Int, s: Int, t: Int, u: Int, v: Int, w: Int) = 1
+	scala> f _
+	<console>:10: error: implementation restricts functions to 22 parameters
+	              f _
+	              ^
+
+23個以上の引数は使えない。
+
+#### Call by name 引数
+
+メソッドからの変換はうまくいく。
+
+	scala> def f(i: => Int) = i + 1
+	f: (i: => Int)Int
+
+	scala> f _
+	res16: (=> Int) => Int = <function1>
+
+リテラルでは `(i: => Int) => i + 1` などと書きたくなるが、これは通らない。
+
+	scala> (i: => Int) => i + 1
+	<console>:1: error: identifier expected but '=>' found.
+	       (i: => Int) => i + 1
+	           ^
+
+[StackOverflowによれば](http://stackoverflow.com/a/15169234)、次のようにすれば良いようだ。
+
+	val f: (=> Int) => Int = i => i + 1
+
+たしかにこれは通る。
+
+	(i => i + 1): ((=> Int) => Int)
+
+変数に入れたくない場合は、型注釈を後に付けても良いようだ。
+
+Call by name 引数については、面倒だが使える。
+
+## TL;DR;
+
+広義の関数は、メソッドと `apply()` をもつオブジェクトの２つに分けられる。
+`apply()` をもつオブジェクトの中に FunctionN オブジェクトがあり、第一級なのは FunctionN オブジェクトのみ。
+FunctionN オブジェクトは、その定義や利用法により出来ないことがいくつかある。
+
+メソッドは第一級じゃないけどいろいろ便利だな。
